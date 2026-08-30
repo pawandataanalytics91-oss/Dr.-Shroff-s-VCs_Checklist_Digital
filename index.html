@@ -2,195 +2,187 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Dr. Shroff's - Vision Centre Monitoring Checklist</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 10px; color: #333; }
-  .container { max-width: 1300px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
-  header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-  .header-left h1 { font-size: 18px; margin-bottom: 3px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .header-left .org-name { font-size: 12px; opacity: 0.9; font-weight: 600; color: #ffc107; }
-  .header-left p { opacity: 0.85; font-size: 11px; }
-  .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .user-badge { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 12px; }
-  .user-badge.admin { background: #ffc107; color: #000; }
-  .btn-settings, .btn-logout { padding: 5px 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: 600; color: #fff; }
-  .btn-settings { background: #17a2b8; } .btn-logout { background: #dc3545; }
-  .eye-logo { display: inline-block; vertical-align: middle; animation: eyeBlink 3.5s infinite ease-in-out; transform-origin: center; }
-  @keyframes eyeBlink { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.05); } }
-  .login-screen { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 15px; }
-  .login-card { background: #fff; border-radius: 14px; padding: 25px 20px; max-width: 400px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-  .login-logo { text-align: center; margin-bottom: 12px; }
-  .login-logo .org { font-size: 13px; color: #2a5298; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-  .login-logo h2 { color: #1e3c72; margin: 5px 0; font-size: 20px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px; }
-  .login-card .subtitle { text-align: center; color: #6c757d; font-size: 12px; margin-bottom: 20px; }
-  .login-tabs { display: flex; margin-bottom: 15px; border-bottom: 2px solid #e9ecef; }
-  .login-tab { flex: 1; padding: 8px; text-align: center; cursor: pointer; font-weight: 600; color: #6c757d; border-bottom: 3px solid transparent; font-size: 13px; }
-  .login-tab.active { color: #2a5298; border-bottom-color: #2a5298; }
-  .login-form { display: none; } .login-form.active { display: block; }
-  .login-form label { display: block; font-size: 11px; font-weight: 600; color: #495057; margin-bottom: 3px; margin-top: 10px; text-transform: uppercase; }
-  .login-form input, .login-form select { width: 100%; padding: 9px 10px; border: 1px solid #ced4da; border-radius: 5px; font-size: 13px; }
-  .login-form input:focus { outline: none; border-color: #2a5298; box-shadow: 0 0 0 2px rgba(42,82,152,0.15); }
-  .login-btn { width: 100%; padding: 10px; margin-top: 15px; background: linear-gradient(135deg, #1e3c72, #2a5298); color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; }
-  .login-error, .login-success { padding: 7px 10px; border-radius: 5px; font-size: 12px; margin-top: 8px; display: none; }
-  .login-error { background: #f8d7da; color: #721c24; }
-  .login-success { background: #d4edda; color: #155724; }
-  .forgot-link { text-align: center; margin-top: 10px; font-size: 12px; }
-  .forgot-link a { color: #007bff; text-decoration: none; cursor: pointer; }
-  .privacy-box { margin-top: 15px; padding: 10px; background: #d4edda; border-radius: 6px; font-size: 11px; color: #155724; text-align: center; }
-  .app-hidden { display: none; }
-  .read-only-banner { background: #fff3cd; color: #856404; padding: 8px; text-align: center; font-weight: bold; font-size: 12px; border-bottom: 2px solid #ffc107; display: none; }
-  .read-only-banner.active { display: block; }
-  .visit-bar { background: #fff3cd; padding: 10px 15px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-bottom: 2px solid #ffc107; }
-  .visit-bar label { font-weight: 600; font-size: 12px; color: #856404; }
-  .visit-bar select { flex: 1; min-width: 150px; padding: 7px 10px; border: 1px solid #ffc107; border-radius: 5px; background: #fff; font-size: 13px; }
-  .visit-bar button { padding: 7px 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: 600; color: #fff; }
-  .btn-new-visit { background: #28a745; } .btn-manage-visit { background: #17a2b8; }
-  .toolbar { background: #f8f9fa; padding: 10px 15px; display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 2px solid #e9ecef; align-items: center; }
-  .toolbar button { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; font-weight: 600; color: #fff; }
-  .btn-save { background: #28a745; } .btn-excel { background: #1d6f42; } .btn-print { background: #007bff; }
-  .btn-clear { background: #dc3545; } .btn-export-j { background: #6f42c1; } .btn-load { background: #ffc107; color: #000; }
-  .btn-dashboard { background: #17a2b8; } .btn-duplicate { background: #fd7e14; }
-  .progress-wrap { flex: 1; min-width: 150px; display: flex; align-items: center; gap: 8px; }
-  .progress-bar { flex: 1; height: 18px; background: #e9ecef; border-radius: 9px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #28a745, #20c997); width: 0%; transition: width 0.3s; }
-  .progress-text { font-size: 11px; font-weight: 600; color: #495057; min-width: 70px; }
-  .save-status { font-size: 11px; color: #6c757d; padding: 3px 8px; background: #fff; border-radius: 4px; }
-  .save-status.saved { color: #28a745; }
-  form { padding: 15px; }
-  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #2a5298; }
-  .info-grid label { display: block; font-size: 11px; font-weight: 600; color: #495057; margin-bottom: 3px; text-transform: uppercase; }
-  .info-grid input, .info-grid textarea, .info-grid select { width: 100%; padding: 7px 10px; border: 1px solid #ced4da; border-radius: 5px; font-size: 13px; font-family: inherit; }
-  .info-grid input:focus, .info-grid textarea:focus { outline: none; border-color: #2a5298; }
-  .time-row { display: flex; gap: 6px; align-items: center; }
-  .time-row select { flex: 1; padding: 7px 5px; }
-  .gps-box { grid-column: 1 / -1; background: #e7f3ff; border: 1px solid #b3d9ff; padding: 12px; border-radius: 6px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-  .gps-box strong { color: #004085; font-size: 12px; }
-  .gps-coords { font-family: monospace; font-size: 11px; color: #004085; }
-  .gps-btn { padding: 6px 12px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; }
-  .gps-btn:hover { background: #0056b3; }
-  .gps-link { color: #004085; text-decoration: underline; font-size: 11px; }
-  .gps-error { width: 100%; margin-top: 8px; padding: 10px; background: #f8d7da; color: #721c24; border-radius: 4px; font-size: 12px; display: none; }
-  .gps-error.show { display: block; }
-  .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 15px; border: 1px solid #dee2e6; border-radius: 8px; }
-  .section { margin-bottom: 15px; }
-  .section-header { background: linear-gradient(90deg, #2a5298, #1e3c72); color: #fff; padding: 10px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; }
-  .section-header h2 { font-size: 14px; } .section-header .toggle { font-size: 16px; transition: transform 0.3s; }
-  .section-header.collapsed .toggle { transform: rotate(-90deg); }
-  .section-body { padding: 0; } .section-body.collapsed { display: none; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; }
-  thead { background: #e9ecef; position: sticky; top: 0; }
-  th { padding: 8px 6px; text-align: left; font-weight: 600; color: #495057; border-bottom: 2px solid #dee2e6; font-size: 12px; white-space: nowrap; }
-  td { padding: 8px 6px; border-bottom: 1px solid #f1f3f5; vertical-align: top; font-size: 12px; }
-  tr:hover { background: #f8f9fa; }
-  tr.sub-header td { background: #d1ecf1; color: #0c5460; font-weight: 700; font-style: italic; padding: 6px 10px; }
-  tr.answered-yes { background: #d4edda !important; } tr.answered-no { background: #f8d7da !important; } tr.answered-partial { background: #fff3cd !important; }
-  .param-text { font-weight: 500; min-width: 180px; }
-  .radio-group { display: flex; gap: 5px; flex-wrap: wrap; }
-  .radio-group label { display: inline-flex; align-items: center; gap: 3px; cursor: pointer; padding: 3px 8px; border-radius: 4px; border: 1px solid #dee2e6; font-size: 11px; }
-  .radio-group label:hover { background: #e9ecef; }
-  .radio-group label.yes-label:has(input:checked) { background: #28a745; color: #fff; border-color: #28a745; }
-  .radio-group label.no-label:has(input:checked) { background: #dc3545; color: #fff; border-color: #dc3545; }
-  .radio-group label.partial-label:has(input:checked) { background: #ffc107; color: #000; border-color: #ffc107; }
-  textarea, select { width: 100%; padding: 5px 8px; border: 1px solid #ced4da; border-radius: 4px; font-family: inherit; font-size: 12px; }
-  textarea { min-height: 40px; resize: vertical; }
-  
-  .photo-area { margin-top: 8px; padding: 8px; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ced4da; }
-  .photo-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #6c757d; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
-  .photo-btn:hover { background: #5a6268; }
-  .photo-list { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
-  .photo-preview { display: inline-block; position: relative; border: 3px solid #28a745; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.15); background: #fff; }
-  .photo-preview img { width: 100px; height: 100px; object-fit: cover; cursor: pointer; display: block; }
-  .photo-preview .del-photo { position: absolute; top: 3px; right: 3px; background: #dc3545; color: #fff; border: 2px solid #fff; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-  .photo-preview .download-photo { position: absolute; bottom: 3px; right: 3px; background: #007bff; color: #fff; border: 2px solid #fff; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
-  .photo-preview .download-photo:hover { background: #0056b3; }
-  .photo-preview .del-photo:hover { background: #c82333; }
-  
-  .char-count { font-size: 10px; color: #6c757d; text-align: right; margin-top: 2px; }
-  .char-count.warn { color: #dc3545; font-weight: 600; }
-  .signature-section { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-  .signature-section label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 3px; color: #495057; }
-  .signature-section input, .signature-section textarea { width: 100%; padding: 7px 10px; border: 1px solid #ced4da; border-radius: 5px; font-family: inherit; }
-  .footer-note { text-align: center; padding: 10px; font-size: 11px; color: #6c757d; background: #f8f9fa; border-top: 1px solid #e9ecef; }
-  .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; padding: 15px; }
-  .modal-overlay.active { display: flex; }
-  .modal { background: #fff; border-radius: 10px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-  .modal-header { padding: 14px 20px; background: #2a5298; color: #fff; display: flex; justify-content: space-between; align-items: center; border-radius: 10px 10px 0 0; }
-  .modal-header h3 { font-size: 16px; } .modal-close { background: transparent; border: none; color: #fff; font-size: 22px; cursor: pointer; }
-  .modal-body { padding: 15px 20px; }
-  .settings-section { margin-bottom: 15px; padding: 12px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #2a5298; }
-  .settings-section h4 { font-size: 13px; color: #1e3c72; margin-bottom: 8px; }
-  .settings-section label { display: block; font-size: 11px; font-weight: 600; color: #495057; margin-bottom: 3px; margin-top: 6px; }
-  .settings-section input, .settings-section select { width: 100%; padding: 7px 10px; border: 1px solid #ced4da; border-radius: 5px; font-size: 13px; }
-  .settings-section .btn-update { margin-top: 8px; padding: 7px 14px; background: #28a745; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 12px; }
-  .settings-msg { margin-top: 6px; padding: 5px 8px; border-radius: 4px; font-size: 12px; display: none; }
-  .settings-msg.success { background: #d4edda; color: #155724; display: block; }
-  .settings-msg.error { background: #f8d7da; color: #721c24; display: block; }
-  .dashboard-search { width: 100%; padding: 8px 12px; border: 1px solid #ced4da; border-radius: 5px; font-size: 13px; margin-bottom: 12px; }
-  .stats-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; padding: 10px; background: #e7f3ff; border-radius: 6px; }
-  .stat-item { flex: 1; min-width: 100px; text-align: center; padding: 8px; background: #fff; border-radius: 5px; }
-  .stat-item .num { font-size: 20px; font-weight: 700; color: #2a5298; }
-  .stat-item .lbl { font-size: 11px; color: #6c757d; }
-  @media (max-width: 768px) {
-    body { padding: 5px; }
-    header { padding: 12px 15px; }
-    .header-left h1 { font-size: 15px; }
-    .toolbar, .visit-bar { padding: 8px 10px; }
-    .toolbar button, .visit-bar button { padding: 6px 10px; font-size: 11px; }
-    .signature-section { grid-template-columns: 1fr; }
-    .radio-group label { padding: 2px 6px; font-size: 10px; }
-    .info-grid { grid-template-columns: 1fr; padding: 12px; }
-    .photo-preview img { width: 80px; height: 80px; }
-  }
-  
-  @media print {
-    body { background: #fff; padding: 0; }
-    .toolbar, .footer-note, .visit-bar, .photo-btn, .gps-btn, .header-right, .read-only-banner, 
-    .photo-preview .del-photo, .photo-preview .download-photo { display: none !important; }
-    .container { box-shadow: none; } .section-body.collapsed { display: block !important; }
-    .section-header { background: #2a5298 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    tr.answered-yes, tr.answered-no, tr.answered-partial, tr.sub-header td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .photo-area { border: 1px solid #ccc; background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .photo-preview { border: 2px solid #28a745 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .photo-preview img { width: 90px; height: 90px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .table-wrapper { overflow: visible; }
-    @page { margin: 0.5cm; size: landscape; }
-  }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:10px;color:#333}
+.container{max-width:1300px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden}
+header{background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.header-left h1{font-size:18px;margin-bottom:3px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.header-left .org-name{font-size:12px;opacity:0.9;font-weight:600;color:#ffc107}
+.header-left p{opacity:0.85;font-size:11px}
+.header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.user-badge{background:rgba(255,255,255,0.2);padding:5px 12px;border-radius:20px;font-size:12px}
+.user-badge.admin{background:#ffc107;color:#000}
+.btn-settings,.btn-logout{padding:5px 12px;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;color:#fff}
+.btn-settings{background:#17a2b8}.btn-logout{background:#dc3545}
+.eye-logo{display:inline-block;vertical-align:middle;animation:eyeBlink 3.5s infinite ease-in-out;transform-origin:center}
+@keyframes eyeBlink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(0.05)}}
+.login-screen{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:15px}
+.login-card{background:#fff;border-radius:14px;padding:25px 20px;max-width:400px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.login-logo{text-align:center;margin-bottom:12px}
+.login-logo .org{font-size:13px;color:#2a5298;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.login-logo h2{color:#1e3c72;margin:5px 0;font-size:20px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px}
+.login-card .subtitle{text-align:center;color:#6c757d;font-size:12px;margin-bottom:20px}
+.login-tabs{display:flex;margin-bottom:15px;border-bottom:2px solid #e9ecef}
+.login-tab{flex:1;padding:8px;text-align:center;cursor:pointer;font-weight:600;color:#6c757d;border-bottom:3px solid transparent;font-size:13px}
+.login-tab.active{color:#2a5298;border-bottom-color:#2a5298}
+.login-form{display:none}.login-form.active{display:block}
+.login-form label{display:block;font-size:11px;font-weight:600;color:#495057;margin-bottom:3px;margin-top:10px;text-transform:uppercase}
+.login-form input,.login-form select{width:100%;padding:9px 10px;border:1px solid #ced4da;border-radius:5px;font-size:13px}
+.login-form input:focus{outline:none;border-color:#2a5298;box-shadow:0 0 0 2px rgba(42,82,152,0.15)}
+.login-btn{width:100%;padding:10px;margin-top:15px;background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer}
+.login-error,.login-success{padding:7px 10px;border-radius:5px;font-size:12px;margin-top:8px;display:none}
+.login-error{background:#f8d7da;color:#721c24}
+.login-success{background:#d4edda;color:#155724}
+.forgot-link{text-align:center;margin-top:10px;font-size:12px}
+.forgot-link a{color:#007bff;text-decoration:none;cursor:pointer}
+.privacy-box{margin-top:15px;padding:10px;background:#d4edda;border-radius:6px;font-size:11px;color:#155724;text-align:center}
+.app-hidden{display:none}
+.read-only-banner{background:#fff3cd;color:#856404;padding:8px;text-align:center;font-weight:bold;font-size:12px;border-bottom:2px solid #ffc107;display:none}
+.read-only-banner.active{display:block}
+.visit-bar{background:#fff3cd;padding:10px 15px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;border-bottom:2px solid #ffc107}
+.visit-bar label{font-weight:600;font-size:12px;color:#856404}
+.visit-bar select{flex:1;min-width:150px;padding:7px 10px;border:1px solid #ffc107;border-radius:5px;background:#fff;font-size:13px}
+.visit-bar button{padding:7px 12px;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;color:#fff}
+.btn-new-visit{background:#28a745}.btn-manage-visit{background:#17a2b8}
+.toolbar{background:#f8f9fa;padding:10px 15px;display:flex;flex-wrap:wrap;gap:8px;border-bottom:2px solid #e9ecef;align-items:center}
+.toolbar button{padding:8px 12px;border:none;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;color:#fff}
+.btn-save{background:#28a745}.btn-excel{background:#1d6f42}.btn-print{background:#007bff}
+.btn-clear{background:#dc3545}.btn-export-j{background:#6f42c1}.btn-load{background:#ffc107;color:#000}
+.btn-dashboard{background:#17a2b8}.btn-duplicate{background:#fd7e14}
+.progress-wrap{flex:1;min-width:150px;display:flex;align-items:center;gap:8px}
+.progress-bar{flex:1;height:18px;background:#e9ecef;border-radius:9px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#28a745,#20c997);width:0%;transition:width 0.3s}
+.progress-text{font-size:11px;font-weight:600;color:#495057;min-width:70px}
+.save-status{font-size:11px;color:#6c757d;padding:3px 8px;background:#fff;border-radius:4px}
+.save-status.saved{color:#28a745}
+form{padding:15px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-bottom:20px;padding:15px;background:#f8f9fa;border-radius:8px;border-left:4px solid #2a5298}
+.info-grid label{display:block;font-size:11px;font-weight:600;color:#495057;margin-bottom:3px;text-transform:uppercase}
+.info-grid input,.info-grid textarea,.info-grid select{width:100%;padding:7px 10px;border:1px solid #ced4da;border-radius:5px;font-size:13px;font-family:inherit}
+.info-grid input:focus,.info-grid textarea:focus{outline:none;border-color:#2a5298}
+.time-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.time-row select{flex:1;min-width:80px;padding:7px 5px}
+.gps-box{grid-column:1/-1;background:#e7f3ff;border:1px solid #b3d9ff;padding:12px;border-radius:6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gps-box strong{color:#004085;font-size:12px}
+.gps-coords{font-family:monospace;font-size:11px;color:#004085}
+.gps-btn{padding:6px 12px;background:#007bff;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:11px}
+.gps-btn:hover{background:#0056b3}
+.gps-link{color:#004085;text-decoration:underline;font-size:11px}
+.gps-error{width:100%;margin-top:8px;padding:10px;background:#f8d7da;color:#721c24;border-radius:4px;font-size:12px;display:none}
+.gps-error.show{display:block}
+.table-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:15px;border:1px solid #dee2e6;border-radius:8px}
+.section{margin-bottom:15px}
+.section-header{background:linear-gradient(90deg,#2a5298,#1e3c72);color:#fff;padding:10px 14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.section-header h2{font-size:14px}.section-header .toggle{font-size:16px;transition:transform 0.3s}
+.section-header.collapsed .toggle{transform:rotate(-90deg)}
+.section-body{padding:0}.section-body.collapsed{display:none}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+thead{background:#e9ecef;position:sticky;top:0}
+th{padding:8px 6px;text-align:left;font-weight:600;color:#495057;border-bottom:2px solid #dee2e6;font-size:12px;white-space:nowrap}
+td{padding:8px 6px;border-bottom:1px solid #f1f3f5;vertical-align:top;font-size:12px}
+tr:hover{background:#f8f9fa}
+tr.sub-header td{background:#d1ecf1;color:#0c5460;font-weight:700;font-style:italic;padding:6px 10px}
+tr.answered-yes{background:#d4edda!important}tr.answered-no{background:#f8d7da!important}tr.answered-partial{background:#fff3cd!important}
+.param-text{font-weight:500;min-width:180px}
+.radio-group{display:flex;gap:5px;flex-wrap:wrap}
+.radio-group label{display:inline-flex;align-items:center;gap:3px;cursor:pointer;padding:3px 8px;border-radius:4px;border:1px solid #dee2e6;font-size:11px}
+.radio-group label:hover{background:#e9ecef}
+.radio-group label.yes-label:has(input:checked){background:#28a745;color:#fff;border-color:#28a745}
+.radio-group label.no-label:has(input:checked){background:#dc3545;color:#fff;border-color:#dc3545}
+.radio-group label.partial-label:has(input:checked){background:#ffc107;color:#000;border-color:#ffc107}
+textarea,select{width:100%;padding:5px 8px;border:1px solid #ced4da;border-radius:4px;font-family:inherit;font-size:12px}
+textarea{min-height:40px;resize:vertical}
+.photo-area{margin-top:10px;padding:10px;background:#fff;border-radius:6px;border:2px dashed #ced4da;min-height:60px}
+.photo-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:#6c757d;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;margin-bottom:8px}
+.photo-btn:hover{background:#5a6268}
+.photo-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;min-height:20px}
+.photo-list:empty::before{content:'No photos uploaded yet';color:#6c757d;font-style:italic;font-size:11px}
+.photo-preview{display:inline-flex;position:relative;border:3px solid #28a745;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.15);background:#fff;flex-shrink:0}
+.photo-preview img{width:100px;height:100px;object-fit:cover;cursor:pointer;display:block;background:#f8f9fa}
+.photo-preview .del-photo{position:absolute;top:3px;right:3px;background:#dc3545;color:#fff;border:2px solid #fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;font-weight:bold;z-index:10}
+.photo-preview .download-photo{position:absolute;bottom:3px;right:3px;background:#007bff;color:#fff;border:2px solid #fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:10}
+.photo-preview .download-photo:hover{background:#0056b3}
+.photo-preview .del-photo:hover{background:#c82333}
+.char-count{font-size:10px;color:#6c757d;text-align:right;margin-top:2px}
+.char-count.warn{color:#dc3545;font-weight:600}
+.signature-section{margin-top:20px;padding:15px;background:#f8f9fa;border-radius:8px;display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.signature-section label{display:block;font-size:11px;font-weight:600;margin-bottom:3px;color:#495057}
+.signature-section input,.signature-section textarea{width:100%;padding:7px 10px;border:1px solid #ced4da;border-radius:5px;font-family:inherit}
+.footer-note{text-align:center;padding:10px;font-size:11px;color:#6c757d;background:#f8f9fa;border-top:1px solid #e9ecef}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center;padding:15px}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:10px;max-width:900px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.modal-header{padding:14px 20px;background:#2a5298;color:#fff;display:flex;justify-content:space-between;align-items:center;border-radius:10px 10px 0 0}
+.modal-header h3{font-size:16px}.modal-close{background:transparent;border:none;color:#fff;font-size:22px;cursor:pointer}
+.modal-body{padding:15px 20px}
+.settings-section{margin-bottom:15px;padding:12px;background:#f8f9fa;border-radius:6px;border-left:4px solid #2a5298}
+.settings-section h4{font-size:13px;color:#1e3c72;margin-bottom:8px}
+.settings-section label{display:block;font-size:11px;font-weight:600;color:#495057;margin-bottom:3px;margin-top:6px}
+.settings-section input,.settings-section select{width:100%;padding:7px 10px;border:1px solid #ced4da;border-radius:5px;font-size:13px}
+.settings-section .btn-update{margin-top:8px;padding:7px 14px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;font-weight:600;font-size:12px}
+.settings-msg{margin-top:6px;padding:5px 8px;border-radius:4px;font-size:12px;display:none}
+.settings-msg.success{background:#d4edda;color:#155724;display:block}
+.settings-msg.error{background:#f8d7da;color:#721c24;display:block}
+.dashboard-search{width:100%;padding:8px 12px;border:1px solid #ced4da;border-radius:5px;font-size:13px;margin-bottom:12px}
+.stats-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;padding:10px;background:#e7f3ff;border-radius:6px}
+.stat-item{flex:1;min-width:100px;text-align:center;padding:8px;background:#fff;border-radius:5px}
+.stat-item .num{font-size:20px;font-weight:700;color:#2a5298}
+.stat-item .lbl{font-size:11px;color:#6c757d}
+@media(max-width:768px){
+body{padding:5px}header{padding:12px 15px}.header-left h1{font-size:15px}
+.toolbar,.visit-bar{padding:8px 10px}.toolbar button,.visit-bar button{padding:6px 10px;font-size:11px}
+.signature-section{grid-template-columns:1fr}.radio-group label{padding:2px 6px;font-size:10px}
+.info-grid{grid-template-columns:1fr;padding:12px}.photo-preview img{width:80px;height:80px}
+table{font-size:11px}.param-text{min-width:120px;font-size:11px}
+}
+@media print{
+body{background:#fff;padding:0}
+.toolbar,.footer-note,.visit-bar,.photo-btn,.gps-btn,.header-right,.read-only-banner,.photo-preview .del-photo,.photo-preview .download-photo{display:none!important}
+.container{box-shadow:none}.section-body.collapsed{display:block!important}
+.section-header{background:#2a5298!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;color:#fff!important}
+tr.answered-yes,tr.answered-no,tr.answered-partial,tr.sub-header td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.photo-area{border:1px solid #ccc;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:5px}
+.photo-preview{border:2px solid #28a745!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block!important}
+.photo-preview img{width:90px;height:90px;-webkit-print-color-adjust:exact;print-color-adjust:exact;display:block!important}
+.photo-list{display:flex!important;flex-wrap:wrap!important;gap:5px!important}
+.table-wrapper{overflow:visible}
+@page{margin:0.5cm;size:landscape}
+}
 </style>
 </head>
 <body>
-
-<!-- ============ LOGIN SCREEN ============ -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="login-logo">
       <div class="org">🏥 Dr. Shroff's Charity Eye Hospital</div>
       <h2>
         <svg class="eye-logo" viewBox="0 0 100 60" width="45" height="27" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5,30 Q50,-5 95,30 Q50,65 5,30 Z" fill="#fff" stroke="#ffc107" stroke-width="4"/>
-            <circle cx="50" cy="30" r="14" fill="#ffc107"/>
-            <circle cx="50" cy="30" r="6" fill="#1e3c72"/>
+          <path d="M5,30 Q50,-5 95,30 Q50,65 5,30 Z" fill="#fff" stroke="#ffc107" stroke-width="4"/>
+          <circle cx="50" cy="30" r="14" fill="#ffc107"/>
+          <circle cx="50" cy="30" r="6" fill="#1e3c72"/>
         </svg>
         Vision Centre Checklist
       </h2>
     </div>
     <p class="subtitle">Secure Employee Login</p>
     <div class="login-tabs">
-      <div class="login-tab active" onclick="switchLoginTab('login')"> Login</div>
-      <div class="login-tab" onclick="switchLoginTab('register')"> Register</div>
+      <div class="login-tab active" onclick="switchLoginTab('login')">🔑 Login</div>
+      <div class="login-tab" onclick="switchLoginTab('register')">📝 Register</div>
     </div>
     <div class="login-form active" id="loginForm">
       <label>Employee ID / Username</label>
       <input type="text" id="loginUser" placeholder="Enter username" autocomplete="username">
       <label>Password</label>
       <input type="password" id="loginPass" placeholder="Enter password" autocomplete="current-password">
-      <label style="display:flex; align-items:center; gap:5px; text-transform:none; font-size:12px; margin-top:10px;">
+      <label style="display:flex;align-items:center;gap:5px;text-transform:none;font-size:12px;margin-top:10px;">
         <input type="checkbox" id="rememberMe" style="width:auto;"> Remember me
       </label>
-      <button class="login-btn" onclick="doLogin()"> Login</button>
-      <div class="forgot-link"><a onclick="openForgotPassword()"> Forgot Password?</a></div>
+      <button class="login-btn" onclick="doLogin()">🔓 Login</button>
+      <div class="forgot-link"><a onclick="openForgotPassword()">🔑 Forgot Password?</a></div>
       <div class="login-error" id="loginError"></div>
     </div>
     <div class="login-form" id="registerForm">
@@ -221,17 +213,15 @@
     <div class="privacy-box">🔒 <strong>100% Private:</strong> Data sirf aapke device pe save hota hai.</div>
   </div>
 </div>
-
-<!-- ============ MAIN APP ============ -->
 <div class="container app-hidden" id="mainApp">
   <header>
     <div class="header-left">
       <div class="org-name">🏥 Dr. Shroff's Charity Eye Hospital</div>
       <h1>
         <svg class="eye-logo" viewBox="0 0 100 60" width="40" height="24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5,30 Q50,-5 95,30 Q50,65 5,30 Z" fill="#fff" stroke="#ffc107" stroke-width="4"/>
-            <circle cx="50" cy="30" r="14" fill="#ffc107"/>
-            <circle cx="50" cy="30" r="6" fill="#1e3c72"/>
+          <path d="M5,30 Q50,-5 95,30 Q50,65 5,30 Z" fill="#fff" stroke="#ffc107" stroke-width="4"/>
+          <circle cx="50" cy="30" r="14" fill="#ffc107"/>
+          <circle cx="50" cy="30" r="6" fill="#1e3c72"/>
         </svg>
         Vision Centre (VC) Monitoring Checklist
       </h1>
@@ -239,25 +229,25 @@
     </div>
     <div class="header-right">
       <span class="user-badge" id="userBadge">👤 User</span>
-      <button class="btn-settings" id="settingsBtn" onclick="openSettings()">️ Settings</button>
-      <button class="btn-logout" onclick="doLogout()"> Logout</button>
+      <button class="btn-settings" id="settingsBtn" onclick="openSettings()">⚙️ Settings</button>
+      <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
     </div>
   </header>
-  <div class="read-only-banner" id="readOnlyBanner">🔒 READ-ONLY MODE: Aap kisi aur ki checklist dekh rahe hain. Edit/Delete nahi kar sakte. Photos download kar sakte hain.</div>
+  <div class="read-only-banner" id="readOnlyBanner"> READ-ONLY MODE: Aap kisi aur ki checklist dekh rahe hain. Edit/Delete nahi kar sakte. Photos download kar sakte hain.</div>
   <div class="visit-bar">
     <label>📂 Visit:</label>
     <select id="visitSelector" onchange="switchVisit(this.value)"></select>
     <button class="btn-new-visit" onclick="createNewVisit()">➕ New</button>
     <button class="btn-duplicate" onclick="duplicateVisit()">📋 Duplicate</button>
-    <button class="btn-manage-visit" onclick="openManageModal()">📋 Manage</button>
+    <button class="btn-manage-visit" onclick="openManageModal()"> Manage</button>
   </div>
   <div class="toolbar">
     <button class="btn-save" id="btnSave" onclick="manualSave()">💾 Save</button>
-    <button class="btn-excel" onclick="exportExcel()">📊 Excel</button>
+    <button class="btn-excel" onclick="exportExcel()"> Excel</button>
     <button class="btn-print" onclick="window.print()">🖨️ PDF</button>
     <button class="btn-dashboard" onclick="openEmployeeDashboard()">👥 Dashboard</button>
     <button class="btn-export-j" onclick="exportMyJSON()">📤 Backup</button>
-    <button class="btn-load" onclick="document.getElementById('importJSONInput').click()">📥 Import</button>
+    <button class="btn-load" onclick="document.getElementById('importJSONInput').click()"> Import</button>
     <input type="file" id="importJSONInput" accept=".json" style="display:none" onchange="importJSON(event)">
     <button class="btn-clear" id="btnClear" onclick="clearCurrentVisit()">🗑️ Clear</button>
     <div class="progress-wrap">
@@ -303,10 +293,10 @@
         <button type="button" class="gps-btn" onclick="toggleManualGPS()" style="background:#6c757d;">✏️ Manual</button>
         <span class="gps-coords" id="gpsCoords">Not captured</span>
         <a href="#" class="gps-link" id="gpsLink" target="_blank" style="display:none;">🗺️ Maps</a>
-        <div id="manualGPSBox" style="display:none; width:100%; margin-top:8px; padding:8px; background:#fff; border-radius:4px;">
-          <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
-            <label style="font-size:11px;">Lat:</label><input type="text" id="manualLat" placeholder="28.6139" style="width:110px; padding:4px 6px; border:1px solid #ced4da; border-radius:4px;">
-            <label style="font-size:11px;">Lng:</label><input type="text" id="manualLng" placeholder="77.2090" style="width:110px; padding:4px 6px; border:1px solid #ced4da; border-radius:4px;">
+        <div id="manualGPSBox" style="display:none;width:100%;margin-top:8px;padding:8px;background:#fff;border-radius:4px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+            <label style="font-size:11px;">Lat:</label><input type="text" id="manualLat" placeholder="28.6139" style="width:110px;padding:4px 6px;border:1px solid #ced4da;border-radius:4px;">
+            <label style="font-size:11px;">Lng:</label><input type="text" id="manualLng" placeholder="77.2090" style="width:110px;padding:4px 6px;border:1px solid #ced4da;border-radius:4px;">
             <button type="button" class="gps-btn" onclick="saveManualGPS()" style="background:#28a745;">✓ Save</button>
           </div>
         </div>
@@ -317,472 +307,404 @@
     <div class="signature-section">
       <div>
         <label>Other Observation points (If any)</label>
-        <textarea name="other_observations" rows="3" oninput="markDirty()"></textarea>
+        <textarea name="other_observations" rows="3" oninput="markDirty()" placeholder="Enter any additional observations..."></textarea>
       </div>
       <div>
-        <label>Signature</label>
-        <input type="text" name="signature" oninput="markDirty()">
-        <label style="margin-top:8px;">Date</label>
+        <label>Signature *</label>
+        <input type="text" name="signature" oninput="markDirty()" placeholder="Type your name here">
+        <label style="margin-top:8px;">Date *</label>
         <input type="date" name="signature_date" oninput="markDirty()">
       </div>
     </div>
   </form>
   <div class="footer-note">🏥 <strong>Dr. Shroff's Charity Eye Hospital</strong> | 🔐 Data stays on your device only.</div>
 </div>
-
-<!-- Modals -->
 <div class="modal-overlay" id="manageModal"><div class="modal"><div class="modal-header"><h3>📋 Manage My Visits</h3><button class="modal-close" onclick="closeManageModal()">×</button></div><div class="modal-body" id="visitList"></div></div></div>
-<div class="modal-overlay" id="photoModal" onclick="closePhotoModal()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-header"><h3>🖼️ Photo</h3><button class="modal-close" onclick="closePhotoModal()">×</button></div><div class="modal-body" style="text-align:center;"><img id="photoViewerImg" src="" style="max-width:100%; max-height:80vh; border-radius:6px;"></div></div></div>
-<div class="modal-overlay" id="settingsModal"><div class="modal"><div class="modal-header"><h3>️ Settings</h3><button class="modal-close" onclick="closeSettings()">×</button></div><div class="modal-body">
+<div class="modal-overlay" id="photoModal" onclick="closePhotoModal()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-header"><h3>🖼️ Photo</h3><button class="modal-close" onclick="closePhotoModal()">×</button></div><div class="modal-body" style="text-align:center;"><img id="photoViewerImg" src="" style="max-width:100%;max-height:80vh;border-radius:6px;"></div></div></div>
+<div class="modal-overlay" id="settingsModal"><div class="modal"><div class="modal-header"><h3>⚙️ Settings</h3><button class="modal-close" onclick="closeSettings()">×</button></div><div class="modal-body">
   <div class="settings-section"><h4>👤 Update Profile</h4><label>Full Name</label><input type="text" id="profileName"><label>Designation</label><input type="text" id="profileDesig"><button class="btn-update" onclick="updateProfile()">✓ Update</button><div class="settings-msg" id="profileMsg"></div></div>
   <div class="settings-section"><h4>🔑 Change Username</h4><label>Current</label><input type="text" id="currentUsername" readonly style="background:#e9ecef;"><label>New Username</label><input type="text" id="newUsername"><label>Confirm Password</label><input type="password" id="confirmPassForUser"><button class="btn-update" onclick="changeUsername()">✓ Update</button><div class="settings-msg" id="usernameMsg"></div></div>
   <div class="settings-section"><h4>🔒 Change Password</h4><label>Current Password</label><input type="password" id="oldPassword"><label>New Password</label><input type="password" id="newPassword"><label>Confirm New</label><input type="password" id="confirmPassword"><button class="btn-update" onclick="changePassword()">✓ Update</button><div class="settings-msg" id="passwordMsg"></div></div>
-  <div class="settings-section" id="adminDashboardSection" style="display:none;"><h4>👑 Admin: Manage Employees</h4><div id="employeeListContainer"></div><button class="btn-update" onclick="renderEmployeeDashboard()" style="background:#17a2b8; margin-top:8px;">🔄 Refresh</button></div>
+  <div class="settings-section" id="adminDashboardSection" style="display:none;"><h4>👑 Admin: Manage Employees</h4><div id="employeeListContainer"></div><button class="btn-update" onclick="renderEmployeeDashboard()" style="background:#17a2b8;margin-top:8px;">🔄 Refresh</button></div>
 </div></div></div>
 <div class="modal-overlay" id="dashboardModal"><div class="modal"><div class="modal-header"><h3>👥 Employee Dashboard</h3><button class="modal-close" onclick="closeEmployeeDashboard()">×</button></div><div class="modal-body">
-  <div style="background:#e7f3ff; padding:10px; border-radius:6px; margin-bottom:12px; font-size:12px;"><strong>ℹ️ Note:</strong> Sab employees ki checklists yahan hain. VIEW/PDF/Excel sab kar sakte hain. <strong>Edit/Delete sirf apni checklist ka</strong> kar sakte hain.</div>
+  <div style="background:#e7f3ff;padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;"><strong>ℹ️ Note:</strong> Sab employees ki checklists yahan hain. VIEW/PDF/Excel sab kar sakte hain. <strong>Edit/Delete sirf apni checklist ka</strong> kar sakte hain.</div>
   <input type="text" class="dashboard-search" id="dashboardSearch" placeholder="🔍 Search by employee name, username, or VC name..." oninput="filterDashboard()">
   <div id="allEmployeesContainer"></div>
 </div></div></div>
 <div class="modal-overlay" id="forgotModal"><div class="modal" style="max-width:450px;"><div class="modal-header"><h3>🔑 Forgot Password</h3><button class="modal-close" onclick="closeForgotPassword()">×</button></div><div class="modal-body">
   <div class="settings-section"><h4>Step 1: Enter Username</h4><label>Username</label><input type="text" id="forgotUser" placeholder="Enter your username"><button class="btn-update" onclick="forgotStep1()" style="background:#007bff;">Next →</button><div class="settings-msg" id="forgotMsg1"></div></div>
-  <div class="settings-section" id="forgotStep2Section" style="display:none;"><h4>Step 2: Answer Security Question</h4><p id="forgotQuestionText" style="font-size:13px; color:#495057; margin-bottom:8px;"></p><label>Your Answer</label><input type="text" id="forgotAnswer" placeholder="Enter answer"><button class="btn-update" onclick="forgotStep2()" style="background:#007bff;">Verify →</button><div class="settings-msg" id="forgotMsg2"></div></div>
+  <div class="settings-section" id="forgotStep2Section" style="display:none;"><h4>Step 2: Answer Security Question</h4><p id="forgotQuestionText" style="font-size:13px;color:#495057;margin-bottom:8px;"></p><label>Your Answer</label><input type="text" id="forgotAnswer" placeholder="Enter answer"><button class="btn-update" onclick="forgotStep2()" style="background:#007bff;">Verify →</button><div class="settings-msg" id="forgotMsg2"></div></div>
   <div class="settings-section" id="forgotStep3Section" style="display:none;"><h4>Step 3: Set New Password</h4><label>New Password (min 4 chars)</label><input type="password" id="forgotNewPass"><label>Confirm Password</label><input type="password" id="forgotConfirmPass"><button class="btn-update" onclick="forgotStep3()" style="background:#28a745;">✓ Reset Password</button><div class="settings-msg" id="forgotMsg3"></div></div>
 </div></div></div>
-
 <script>
-const ORG_NAME = "Dr. Shroff's Charity Eye Hospital";
-const USERS_KEY = 'vc_users_final';
-const SESSION_KEY = 'vc_session_final';
-const REMARKS_MAX = 1000;
-
-function formatDateTime12hr(date) {
-  if (!date) return '';
-  const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = d.getFullYear();
-  let hours = d.getHours();
-  const minutes = String(d.getMinutes()).padStart(2, '0');
-  const seconds = String(d.getSeconds()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12;
-  const hoursStr = String(hours).padStart(2, '0');
-  return `${day}/${month}/${year}, ${hoursStr}:${minutes}:${seconds} ${ampm}`;
+const ORG_NAME="Dr. Shroff's Charity Eye Hospital";
+const USERS_KEY='vc_users_final';
+const SESSION_KEY='vc_session_final';
+const REMARKS_MAX=1000;
+const MAX_PHOTO_SIZE=10*1024*1024;
+function formatDateTime12hr(date){
+  if(!date)return'';
+  const d=new Date(date);
+  const day=String(d.getDate()).padStart(2,'0');
+  const month=String(d.getMonth()+1).padStart(2,'0');
+  const year=d.getFullYear();
+  let hours=d.getHours();
+  const minutes=String(d.getMinutes()).padStart(2,'0');
+  const seconds=String(d.getSeconds()).padStart(2,'0');
+  const ampm=hours>=12?'PM':'AM';
+  hours=hours%12;hours=hours?hours:12;
+  const hoursStr=String(hours).padStart(2,'0');
+  return`${day}/${month}/${year}, ${hoursStr}:${minutes}:${seconds} ${ampm}`;
 }
-
-const sections = [
-  { id: "B", title: "B. CLEANLINESS & WASTE MANAGEMENT", items: [
-    {n:"1", p:"VC clean (floor, walls, table, equipment etc.)", ov:"Observation"},
-    {n:"2", p:"Toilet clean & usable", ov:"Observation"},
-    {n:"3", p:"Dustbin available & being used", ov:"Observation"},
-    {n:"4", p:"Drinking water available", ov:"Observation"},
-    {n:"5", p:"Water in toilets available", ov:"Observation"},
-    {n:"6", p:"Wash basin available and usable", ov:"Observation"},
-    {n:"7", p:"Needle cutter/hub cutter available", ov:"Observation"},
-    {n:"8", p:"Place of Waste disposal available", ov:"Observation", hint:"Explain waste disposal system:"},
-    {n:"9", p:"Hand hygiene protocol available and displayed", ov:"Observation"},
-    {n:"10", p:"Frequency of VC cleaning in a month (Check filled checklist)", ov:"Observation"}
+const sections=[
+  {id:"B",title:"B. CLEANLINESS & WASTE MANAGEMENT",items:[
+    {n:"1",p:"VC clean (floor, walls, table, equipment etc.)",ov:"Observation"},
+    {n:"2",p:"Toilet clean & usable",ov:"Observation"},
+    {n:"3",p:"Dustbin available & being used",ov:"Observation"},
+    {n:"4",p:"Drinking water available",ov:"Observation"},
+    {n:"5",p:"Water in toilets available",ov:"Observation"},
+    {n:"6",p:"Wash basin available and usable",ov:"Observation"},
+    {n:"7",p:"Needle cutter/hub cutter available",ov:"Observation"},
+    {n:"8",p:"Place of Waste disposal available",ov:"Observation",hint:"Explain waste disposal system:"},
+    {n:"9",p:"Hand hygiene protocol available and displayed",ov:"Observation"},
+    {n:"10",p:"Frequency of VC cleaning in a month (Check filled checklist)",ov:"Observation"}
   ]},
-  { id: "C", title: "C. TIMING, ATTENDANCE, STAFF DISCIPLINE & FIELD ACTIVITY", items: [
-    {n:"1", p:"VC opened on time (Cross check HR portal & CCTV)", ov:"Observation"},
-    {n:"2", p:"VC closed on time (Cross check HR portal & CCTV)", ov:"Observation"},
-    {n:"3", p:"First & Last check-in & check-out time of patient (VCMS)", ov:"Validation"},
-    {n:"4", p:"Check Attendance Register for visiting staff", ov:"Observation"},
-    {n:"4.1", p:"Last visit date of VC Coordinator", ov:"Validation"},
-    {n:"4.2", p:"Last visit date of Community Lead", ov:"Validation"},
-    {n:"4.3", p:"Last visit date of Administrator", ov:"Validation"},
-    {n:"4.4", p:"Last visit date of Maintenance Official", ov:"Validation"},
-    {n:"4.5", p:"Last visit date of IT Official", ov:"Validation"},
-    {n:"4.6", p:"Last visit date of Optical Official", ov:"Validation"},
-    {n:"4.7", p:"Last visit date of Finance Official", ov:"Validation"},
-    {n:"4.8", p:"Last visit date of HR Official", ov:"Validation"},
-    {n:"4.9", p:"Last visit date of Civil works Official", ov:"Validation"},
-    {n:"5", p:"Last visit date of any other staff (specify)", ov:"Validation", hint:"Specify staff name"},
-    {n:"6", p:"VT/Optom in proper dress code", ov:"Observation"},
-    {n:"7", p:"CHW in proper dress code", ov:"Observation"},
-    {n:"8", p:"All VC Staff wearing ID cards", ov:"Observation"},
-    {n:"9", p:"CHW log book updated", ov:"Validation"},
-    {n:"10", p:"CHW travel plan available", ov:"Validation"}
+  {id:"C",title:"C. TIMING, ATTENDANCE, STAFF DISCIPLINE & FIELD ACTIVITY",items:[
+    {n:"1",p:"VC opened on time (Cross check HR portal & CCTV)",ov:"Observation"},
+    {n:"2",p:"VC closed on time (Cross check HR portal & CCTV)",ov:"Observation"},
+    {n:"3",p:"First & Last check-in & check-out time of patient (VCMS)",ov:"Validation"},
+    {n:"4",p:"Check Attendance Register for visiting staff",ov:"Observation"},
+    {n:"4.1",p:"Last visit date of VC Coordinator",ov:"Validation"},
+    {n:"4.2",p:"Last visit date of Community Lead",ov:"Validation"},
+    {n:"4.3",p:"Last visit date of Administrator",ov:"Validation"},
+    {n:"4.4",p:"Last visit date of Maintenance Official",ov:"Validation"},
+    {n:"4.5",p:"Last visit date of IT Official",ov:"Validation"},
+    {n:"4.6",p:"Last visit date of Optical Official",ov:"Validation"},
+    {n:"4.7",p:"Last visit date of Finance Official",ov:"Validation"},
+    {n:"4.8",p:"Last visit date of HR Official",ov:"Validation"},
+    {n:"4.9",p:"Last visit date of Civil works Official",ov:"Validation"},
+    {n:"5",p:"Last visit date of any other staff (specify)",ov:"Validation",hint:"Specify staff name"},
+    {n:"6",p:"VT/Optom in proper dress code",ov:"Observation"},
+    {n:"7",p:"CHW in proper dress code",ov:"Observation"},
+    {n:"8",p:"All VC Staff wearing ID cards",ov:"Observation"},
+    {n:"9",p:"CHW log book updated",ov:"Validation"},
+    {n:"10",p:"CHW travel plan available",ov:"Validation"}
   ]},
-  { id: "D", title: "D. REGISTERS, FORMS & RECORD MAINTENANCE", items: [
-    {n:"1", p:"Fixed Asset Register available and updated", ov:"Validation"},
-    {n:"2", p:"Handing over and Taking over process implemented", ov:"Validation"},
-    {n:"3", p:"Cataract patients (not-treated) follow-ups (VCMS + forms)", ov:"Validation"},
-    {n:"4", p:"Post-op. follow-up (1 week and final FW)", ov:"Validation"},
-    {n:"5", p:"Stock register available and updated", ov:"Validation"},
-    {n:"6", p:"Socio-Economic Assessment forms filled (except AB patients)", ov:"Validation"},
-    {n:"7", p:"SOPs available (Clinical, Teleconsultation, ABFV etc.)", ov:"Observation"},
-    {n:"8", p:"D2D referral slips available (cross check VCMS, prev month)", ov:"Validation"},
-    {n:"9", p:"Equipment breakdown registers available", ov:"Validation"},
-    {n:"10", p:"Visitor register available and updated", ov:"Validation"}
+  {id:"D",title:"D. REGISTERS, FORMS & RECORD MAINTENANCE",items:[
+    {n:"1",p:"Fixed Asset Register available and updated",ov:"Validation"},
+    {n:"2",p:"Handing over and Taking over process implemented",ov:"Validation"},
+    {n:"3",p:"Cataract patients (not-treated) follow-ups (VCMS + forms)",ov:"Validation"},
+    {n:"4",p:"Post-op. follow-up (1 week and final FW)",ov:"Validation"},
+    {n:"5",p:"Stock register available and updated",ov:"Validation"},
+    {n:"6",p:"Socio-Economic Assessment forms filled (except AB patients)",ov:"Validation"},
+    {n:"7",p:"SOPs available (Clinical, Teleconsultation, ABFV etc.)",ov:"Observation"},
+    {n:"8",p:"D2D referral slips available (cross check VCMS, prev month)",ov:"Validation"},
+    {n:"9",p:"Equipment breakdown registers available",ov:"Validation"},
+    {n:"10",p:"Visitor register available and updated",ov:"Validation"}
   ]},
-  { id: "E", title: "E. CASH & FINANCIAL MANAGEMENT", subHeader: "Revenue and Expenses", items: [
-    {n:"1", p:"Cash in hand as per SOP (OPD, Optical, Fitness)", ov:"Validation", hint:"Amount in hand:"},
-    {n:"2", p:"Cash matches with Quick Bill/VCMS", ov:"Validation"},
-    {n:"3", p:"Any amount taken from D2D activity (last 1 month)", ov:"Validation", hint:"Any deviation:"},
-    {n:"4", p:"Telephonic call 5 patients to cross-check spectacle amount", ov:"Validation", hint:"Details & findings:"},
-    {n:"5", p:"Check Petty cash details against expenses", ov:"Validation"},
-    {n:"6", p:"Expenses entry in VCMS", ov:"Validation", hint:"Partial/Complete entry"},
-    {n:"7", p:"Expenses bill submitted to hospital by 5th of every month", ov:"Observation"}
+  {id:"E",title:"E. CASH & FINANCIAL MANAGEMENT",subHeader:"Revenue and Expenses",items:[
+    {n:"1",p:"Cash in hand as per SOP (OPD, Optical, Fitness)",ov:"Validation",hint:"Amount in hand:"},
+    {n:"2",p:"Cash matches with Quick Bill/VCMS",ov:"Validation"},
+    {n:"3",p:"Any amount taken from D2D activity (last 1 month)",ov:"Validation",hint:"Any deviation:"},
+    {n:"4",p:"Telephonic call 5 patients to cross-check spectacle amount",ov:"Validation",hint:"Details & findings:"},
+    {n:"5",p:"Check Petty cash details against expenses",ov:"Validation"},
+    {n:"6",p:"Expenses entry in VCMS",ov:"Validation",hint:"Partial/Complete entry"},
+    {n:"7",p:"Expenses bill submitted to hospital by 5th of every month",ov:"Observation"}
   ]},
-  { id: "F", title: "F. OPTICAL MANAGEMENT", items: [
-    {n:"1", p:"All types of optical stocks available", ov:"Observation"},
-    {n:"2", p:"Physical stock count matches with Quick Bill", ov:"Validation"},
-    {n:"3", p:"Any shortage/excess of optical stock found", ov:"Validation"},
-    {n:"4", p:"Any undelivered spectacles >15 days found", ov:"Validation"},
-    {n:"5", p:"Optical frames properly displayed", ov:"Observation"},
-    {n:"6", p:"Optical counter condition", ov:"Observation", hint:"Mention condition:"},
-    {n:"7", p:"Self assessment checklist (updated/not updated)", ov:"Validation"}
+  {id:"F",title:"F. OPTICAL MANAGEMENT",items:[
+    {n:"1",p:"All types of optical stocks available",ov:"Observation"},
+    {n:"2",p:"Physical stock count matches with Quick Bill",ov:"Validation"},
+    {n:"3",p:"Any shortage/excess of optical stock found",ov:"Validation"},
+    {n:"4",p:"Any undelivered spectacles >15 days found",ov:"Validation"},
+    {n:"5",p:"Optical frames properly displayed",ov:"Observation"},
+    {n:"6",p:"Optical counter condition",ov:"Observation",hint:"Mention condition:"},
+    {n:"7",p:"Self assessment checklist (updated/not updated)",ov:"Validation"}
   ]},
-  { id: "G", title: "G. IT SYSTEMS & DIGITAL RECORDS", items: [
-    {n:"1", p:"All two Computers working properly", ov:"Observation"},
-    {n:"2", p:"Printer working properly", ov:"Observation"},
-    {n:"3", p:"Internet/WiFi working properly", ov:"Observation"},
-    {n:"4", p:"VCMS working properly", ov:"Observation"},
-    {n:"5", p:"CCTV working properly", ov:"Observation"},
-    {n:"6", p:"Quick bill software working properly", ov:"Observation"},
-    {n:"7", p:"Display board with VC performance updated", ov:"Observation/Validation"}
+  {id:"G",title:"G. IT SYSTEMS & DIGITAL RECORDS",items:[
+    {n:"1",p:"All two Computers working properly",ov:"Observation"},
+    {n:"2",p:"Printer working properly",ov:"Observation"},
+    {n:"3",p:"Internet/WiFi working properly",ov:"Observation"},
+    {n:"4",p:"VCMS working properly",ov:"Observation"},
+    {n:"5",p:"CCTV working properly",ov:"Observation"},
+    {n:"6",p:"Quick bill software working properly",ov:"Observation"},
+    {n:"7",p:"Display board with VC performance updated",ov:"Observation/Validation"}
   ]},
-  { id: "H", title: "H. EQUIPMENT & INFRASTRUCTURE (working/not working)", items: [
-    {n:"1", p:"All equipments instruments available and working", ov:"Observation"},
-    {n:"2", p:"All clinical equipments (Slit lamp, Lensometer etc.) have covers", ov:"Observation"},
-    {n:"3", p:"All furnitures are in good condition", ov:"Observation"},
-    {n:"4", p:"Cooler, fan available and working", ov:"Observation"},
-    {n:"5", p:"Power backup available and working", ov:"Observation"},
-    {n:"6", p:"Proper lighting in VC available", ov:"Observation"}
+  {id:"H",title:"H. EQUIPMENT & INFRASTRUCTURE (working/not working)",items:[
+    {n:"1",p:"All equipments instruments available and working",ov:"Observation"},
+    {n:"2",p:"All clinical equipments (Slit lamp, Lensometer etc.) have covers",ov:"Observation"},
+    {n:"3",p:"All furnitures are in good condition",ov:"Observation"},
+    {n:"4",p:"Cooler, fan available and working",ov:"Observation"},
+    {n:"5",p:"Power backup available and working",ov:"Observation"},
+    {n:"6",p:"Proper lighting in VC available",ov:"Observation"}
   ]},
-  { id: "I", title: "I. STORE & PROCUREMENT OF MEDICINES AND FIXED ASSETS", items: [
-    {n:"1", p:"Sufficient Stock of Medicines/Consumeables available", ov:"Validation"},
-    {n:"2", p:"Physically available all stocks as per register/inventory", ov:"Validation", hint:"Any deviation:"},
-    {n:"3", p:"All equipments and furnitures tagged with bar code by SCEH", ov:"Validation", hint:"Any deviation:"}
+  {id:"I",title:"I. STORE & PROCUREMENT OF MEDICINES AND FIXED ASSETS",items:[
+    {n:"1",p:"Sufficient Stock of Medicines/Consumeables available",ov:"Validation"},
+    {n:"2",p:"Physically available all stocks as per register/inventory",ov:"Validation",hint:"Any deviation:"},
+    {n:"3",p:"All equipments and furnitures tagged with bar code by SCEH",ov:"Validation",hint:"Any deviation:"}
   ]},
-  { id: "J", title: "J. LOCATION, BRANDING & DISPLAY COMPLIANCE", items: [
-    {n:"1", p:"VC branding available and in proper condition", ov:"Observation", hint:"Replacement/repair needed:"},
-    {n:"2", p:"Direction board available", ov:"Observation"},
-    {n:"3", p:"Govt scheme posters displayed", ov:"Observation"},
-    {n:"4", p:"Rate & service list displayed", ov:"Observation"},
-    {n:"5", p:"IEC materials (Pamphlets) for patients available", ov:"Observation"}
+  {id:"J",title:"J. LOCATION, BRANDING & DISPLAY COMPLIANCE",items:[
+    {n:"1",p:"VC branding available and in proper condition",ov:"Observation",hint:"Replacement/repair needed:"},
+    {n:"2",p:"Direction board available",ov:"Observation"},
+    {n:"3",p:"Govt scheme posters displayed",ov:"Observation"},
+    {n:"4",p:"Rate & service list displayed",ov:"Observation"},
+    {n:"5",p:"IEC materials (Pamphlets) for patients available",ov:"Observation"}
   ]},
-  { id: "K", title: "K. COMMUNICATION (OBSERVATION)", items: [
-    {n:"1", p:"VT/Optom communication with patients at VC", ov:"Observation"},
-    {n:"2", p:"CHW communication with patients at VC", ov:"Observation"},
-    {n:"4", p:"CHW communication with patients in the community", ov:"Observation"}
+  {id:"K",title:"K. COMMUNICATION (OBSERVATION)",items:[
+    {n:"1",p:"VT/Optom communication with patients at VC",ov:"Observation"},
+    {n:"2",p:"CHW communication with patients at VC",ov:"Observation"},
+    {n:"4",p:"CHW communication with patients in the community",ov:"Observation"}
   ]}
 ];
-
-let currentUser = null, currentVisitId = null, dirty = false, totalParams = 0;
-let viewingOtherEmployee = false, originalCurrentUser = null, forgotTempUser = null;
-
-async function hashPassword(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password + '_vc_salt_2026');
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+let currentUser=null,currentVisitId=null,dirty=false,totalParams=0;
+let viewingOtherEmployee=false,originalCurrentUser=null,forgotTempUser=null;
+async function hashPassword(password){
+  const encoder=new TextEncoder();
+  const data=encoder.encode(password+'_vc_salt_2026');
+  const hashBuffer=await crypto.subtle.digest('SHA-256',data);
+  return Array.from(new Uint8Array(hashBuffer)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-
-function getUsers() {
-  try {
-    const users = JSON.parse(localStorage.getItem(USERS_KEY)) || {};
-    if (!users['admin']) {
-      users['admin'] = { username: 'admin', name: 'Administrator', designation: 'Admin', passwordHash: null, isAdmin: true, createdAt: Date.now(), defaultPassword: true, securityQ: '', securityA: '' };
-      localStorage.setItem(USERS_KEY, JSON.stringify(users));
+function getUsers(){
+  try{
+    const users=JSON.parse(localStorage.getItem(USERS_KEY))||{};
+    if(!users['admin']){
+      users['admin']={username:'admin',name:'Administrator',designation:'Admin',passwordHash:null,isAdmin:true,createdAt:Date.now(),defaultPassword:true,securityQ:'',securityA:''};
+      localStorage.setItem(USERS_KEY,JSON.stringify(users));
     }
     return users;
-  } catch(e) { return {}; }
+  }catch(e){return{};}
 }
-
-function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-function getVisitsKey(u) { return `vc_visits_${u}_final`; }
-function getMetaKey(u) { return `vc_meta_${u}_final`; }
-
-function getMyVisits() { 
-  if (!currentUser) return {}; 
-  try { return JSON.parse(localStorage.getItem(getVisitsKey(currentUser.username))) || {}; } 
-  catch(e) { return {}; } 
-}
-
-function saveMyVisits(v) { 
-  if (!currentUser) return; 
-  try { localStorage.setItem(getVisitsKey(currentUser.username), JSON.stringify(v)); } 
-  catch(e) { alert('Storage full!'); } 
-}
-
-function getMyMeta() { 
-  if (!currentUser) return { currentVisitId: null }; 
-  try { return JSON.parse(localStorage.getItem(getMetaKey(currentUser.username))) || { currentVisitId: null }; } 
-  catch(e) { return { currentVisitId: null }; } 
-}
-
-function saveMyMeta(m) { 
-  if (!currentUser) return; 
-  localStorage.setItem(getMetaKey(currentUser.username), JSON.stringify(m)); 
-}
-
-function getVisit(id) { return getMyVisits()[id]; }
-
-function initTimePickers() {
-  const hours = ['1','2','3','4','5','6','7','8','9','10','11','12'];
-  ['time_from_h','time_to_h'].forEach(name => {
-    const sel = document.querySelector(`[name="${name}"]`);
-    if (sel) sel.innerHTML = '<option value="">H</option>' + hours.map(h => `<option value="${h}">${h}</option>`).join('');
+function saveUsers(users){localStorage.setItem(USERS_KEY,JSON.stringify(users));}
+function getVisitsKey(u){return`vc_visits_${u}_final`;}
+function getMetaKey(u){return`vc_meta_${u}_final`;}
+function getMyVisits(){if(!currentUser)return{};try{return JSON.parse(localStorage.getItem(getVisitsKey(currentUser.username)))||{};}catch(e){return{};}}
+function saveMyVisits(v){if(!currentUser)return;try{localStorage.setItem(getVisitsKey(currentUser.username),JSON.stringify(v));}catch(e){alert('Storage full!');}}
+function getMyMeta(){if(!currentUser)return{currentVisitId:null};try{return JSON.parse(localStorage.getItem(getMetaKey(currentUser.username)))||{currentVisitId:null};}catch(e){return{currentVisitId:null};}}
+function saveMyMeta(m){if(!currentUser)return;localStorage.setItem(getMetaKey(currentUser.username),JSON.stringify(m));}
+function getVisit(id){return getMyVisits()[id];}
+function initTimePickers(){
+  const hours=['1','2','3','4','5','6','7','8','9','10','11','12'];
+  ['time_from_h','time_to_h'].forEach(name=>{
+    const sel=document.querySelector(`[name="${name}"]`);
+    if(sel)sel.innerHTML='<option value="">H</option>'+hours.map(h=>`<option value="${h}">${h}</option>`).join('');
   });
 }
-
-function updateTimeField() {
-  const form = document.getElementById('checklistForm');
-  const fh = form.querySelector('[name="time_from_h"]').value;
-  const fm = form.querySelector('[name="time_from_m"]').value;
-  const fa = form.querySelector('[name="time_from_ap"]').value;
-  const th = form.querySelector('[name="time_to_h"]').value;
-  const tm = form.querySelector('[name="time_to_m"]').value;
-  const ta = form.querySelector('[name="time_to_ap"]').value;
-  let timeStr = '';
-  if (fh && th) timeStr = `${fh}:${fm} ${fa} to ${th}:${tm} ${ta}`;
-  else if (fh) timeStr = `${fh}:${fm} ${fa}`;
-  form.querySelector('[name="visit_time"]').value = timeStr;
+function updateTimeField(){
+  const form=document.getElementById('checklistForm');
+  const fh=form.querySelector('[name="time_from_h"]').value;
+  const fm=form.querySelector('[name="time_from_m"]').value;
+  const fa=form.querySelector('[name="time_from_ap"]').value;
+  const th=form.querySelector('[name="time_to_h"]').value;
+  const tm=form.querySelector('[name="time_to_m"]').value;
+  const ta=form.querySelector('[name="time_to_ap"]').value;
+  let timeStr='';
+  if(fh&&th)timeStr=`${fh}:${fm} ${fa} to ${th}:${tm} ${ta}`;
+  else if(fh)timeStr=`${fh}:${fm} ${fa}`;
+  form.querySelector('[name="visit_time"]').value=timeStr;
   markDirty();
 }
-
-function parseTimeToFields(timeStr) {
-  if (!timeStr) return;
-  const form = document.getElementById('checklistForm');
-  const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)\s*(?:to\s+(\d{1,2}):(\d{2})\s*(AM|PM))?/i);
-  if (match) {
-    form.querySelector('[name="time_from_h"]').value = match[1];
-    form.querySelector('[name="time_from_m"]').value = match[2];
-    form.querySelector('[name="time_from_ap"]').value = match[3].toUpperCase();
-    if (match[4]) {
-      form.querySelector('[name="time_to_h"]').value = match[4];
-      form.querySelector('[name="time_to_m"]').value = match[5];
-      form.querySelector('[name="time_to_ap"]').value = match[6].toUpperCase();
+function parseTimeToFields(timeStr){
+  if(!timeStr)return;
+  const form=document.getElementById('checklistForm');
+  const match=timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)\s*(?:to\s+(\d{1,2}):(\d{2})\s*(AM|PM))?/i);
+  if(match){
+    form.querySelector('[name="time_from_h"]').value=match[1];
+    form.querySelector('[name="time_from_m"]').value=match[2];
+    form.querySelector('[name="time_from_ap"]').value=match[3].toUpperCase();
+    if(match[4]){
+      form.querySelector('[name="time_to_h"]').value=match[4];
+      form.querySelector('[name="time_to_m"]').value=match[5];
+      form.querySelector('[name="time_to_ap"]').value=match[6].toUpperCase();
     }
   }
 }
-
-function switchLoginTab(tab) {
-  document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
-  if (tab === 'login') { document.querySelectorAll('.login-tab')[0].classList.add('active'); document.getElementById('loginForm').classList.add('active'); }
-  else { document.querySelectorAll('.login-tab')[1].classList.add('active'); document.getElementById('registerForm').classList.add('active'); }
-  ['loginError','regError','regSuccess'].forEach(id => document.getElementById(id).style.display = 'none');
+function switchLoginTab(tab){
+  document.querySelectorAll('.login-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.login-form').forEach(f=>f.classList.remove('active'));
+  if(tab==='login'){document.querySelectorAll('.login-tab')[0].classList.add('active');document.getElementById('loginForm').classList.add('active');}
+  else{document.querySelectorAll('.login-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active');}
+  ['loginError','regError','regSuccess'].forEach(id=>document.getElementById(id).style.display='none');
 }
-
-function showLoginError(msg) { const el = document.getElementById('loginError'); el.textContent = '❌ ' + msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 5000); }
-function showRegError(msg) { const el = document.getElementById('regError'); el.textContent = '❌ ' + msg; el.style.display = 'block'; document.getElementById('regSuccess').style.display = 'none'; setTimeout(() => el.style.display = 'none', 5000); }
-function showRegSuccess(msg) { const el = document.getElementById('regSuccess'); el.textContent = '✅ ' + msg; el.style.display = 'block'; document.getElementById('regError').style.display = 'none'; }
-
-async function doLogin() {
-  const username = document.getElementById('loginUser').value.trim().toLowerCase();
-  const password = document.getElementById('loginPass').value;
-  if (!username || !password) { showLoginError('Username aur password dono daalo'); return; }
-  const users = getUsers(); const user = users[username];
-  if (!user) { showLoginError('User not found. Register karo pehle.'); return; }
-  const hash = await hashPassword(password);
-  if (user.isAdmin && user.defaultPassword) {
-    if (password === 'admin123') { user.passwordHash = hash; user.defaultPassword = false; saveUsers(users); }
-    else { showLoginError('Admin password galat. Default: admin123'); return; }
-  } else if (user.passwordHash !== hash) { showLoginError('Password galat hai'); return; }
-  currentUser = { username: user.username, name: user.name, designation: user.designation, isAdmin: !!user.isAdmin };
-  const session = { username: user.username, ts: Date.now() };
-  if (document.getElementById('rememberMe').checked) localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  else sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+function showLoginError(msg){const el=document.getElementById('loginError');el.textContent='❌ '+msg;el.style.display='block';setTimeout(()=>el.style.display='none',5000);}
+function showRegError(msg){const el=document.getElementById('regError');el.textContent='❌ '+msg;el.style.display='block';document.getElementById('regSuccess').style.display='none';setTimeout(()=>el.style.display='none',5000);}
+function showRegSuccess(msg){const el=document.getElementById('regSuccess');el.textContent='✅ '+msg;el.style.display='block';document.getElementById('regError').style.display='none';}
+async function doLogin(){
+  const username=document.getElementById('loginUser').value.trim().toLowerCase();
+  const password=document.getElementById('loginPass').value;
+  if(!username||!password){showLoginError('Username aur password dono daalo');return;}
+  const users=getUsers();const user=users[username];
+  if(!user){showLoginError('User not found. Register karo pehle.');return;}
+  const hash=await hashPassword(password);
+  if(user.isAdmin&&user.defaultPassword){
+    if(password==='admin123'){user.passwordHash=hash;user.defaultPassword=false;saveUsers(users);}
+    else{showLoginError('Admin password galat. Default: admin123');return;}
+  }else if(user.passwordHash!==hash){showLoginError('Password galat hai');return;}
+  currentUser={username:user.username,name:user.name,designation:user.designation,isAdmin:!!user.isAdmin};
+  const session={username:user.username,ts:Date.now()};
+  if(document.getElementById('rememberMe').checked)localStorage.setItem(SESSION_KEY,JSON.stringify(session));
+  else sessionStorage.setItem(SESSION_KEY,JSON.stringify(session));
   enterApp();
 }
-
-async function doRegister() {
-  const name = document.getElementById('regName').value.trim();
-  const username = document.getElementById('regUser').value.trim().toLowerCase();
-  const desig = document.getElementById('regDesig').value.trim();
-  const pass = document.getElementById('regPass').value;
-  const pass2 = document.getElementById('regPass2').value;
-  const secQ = document.getElementById('regSecQ').value;
-  const secA = document.getElementById('regSecA').value.trim().toLowerCase();
-  if (!name || !username || !desig || !pass) { showRegError('Saare required fields bharo'); return; }
-  if (username === 'admin') { showRegError('"admin" reserved hai'); return; }
-  if (pass.length < 4) { showRegError('Password min 4 characters'); return; }
-  if (pass !== pass2) { showRegError('Passwords match nahi'); return; }
-  if (!secQ || !secA) { showRegError('Security Question & Answer required hai'); return; }
-  const users = getUsers();
-  if (users[username]) { showRegError('Username already registered'); return; }
-  const hash = await hashPassword(pass);
-  users[username] = { username, name, designation: desig, passwordHash: hash, isAdmin: false, createdAt: Date.now(), securityQ: secQ, securityA: secA };
+async function doRegister(){
+  const name=document.getElementById('regName').value.trim();
+  const username=document.getElementById('regUser').value.trim().toLowerCase();
+  const desig=document.getElementById('regDesig').value.trim();
+  const pass=document.getElementById('regPass').value;
+  const pass2=document.getElementById('regPass2').value;
+  const secQ=document.getElementById('regSecQ').value;
+  const secA=document.getElementById('regSecA').value.trim().toLowerCase();
+  if(!name||!username||!desig||!pass){showRegError('Saare required fields bharo');return;}
+  if(username==='admin'){showRegError('"admin" reserved hai');return;}
+  if(pass.length<4){showRegError('Password min 4 characters');return;}
+  if(pass!==pass2){showRegError('Passwords match nahi');return;}
+  if(!secQ||!secA){showRegError('Security Question & Answer required hai');return;}
+  const users=getUsers();
+  if(users[username]){showRegError('Username already registered');return;}
+  const hash=await hashPassword(pass);
+  users[username]={username,name,designation:desig,passwordHash:hash,isAdmin:false,createdAt:Date.now(),securityQ:secQ,securityA:secA};
   saveUsers(users);
   showRegSuccess('Account ban gaya! Ab login karo.');
-  setTimeout(() => { switchLoginTab('login'); document.getElementById('loginUser').value = username; document.getElementById('loginPass').focus(); }, 1500);
+  setTimeout(()=>{switchLoginTab('login');document.getElementById('loginUser').value=username;document.getElementById('loginPass').focus();},1500);
 }
-
-function doLogout() {
-  if (dirty && !confirm('Unsaved changes auto-save ho jayenge. Continue?')) return;
-  if (dirty) manualSave();
-  localStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_KEY);
-  currentUser = null; currentVisitId = null;
+function doLogout(){
+  if(dirty&&!confirm('Unsaved changes auto-save ho jayenge. Continue?'))return;
+  if(dirty)manualSave();
+  localStorage.removeItem(SESSION_KEY);sessionStorage.removeItem(SESSION_KEY);
+  currentUser=null;currentVisitId=null;
   document.getElementById('mainApp').classList.add('app-hidden');
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('loginPass').value = ''; document.getElementById('loginUser').value = '';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginPass').value='';document.getElementById('loginUser').value='';
 }
-
-function enterApp() {
-  document.getElementById('loginScreen').style.display = 'none';
+function enterApp(){
+  document.getElementById('loginScreen').style.display='none';
   document.getElementById('mainApp').classList.remove('app-hidden');
-  const badge = document.getElementById('userBadge');
-  badge.textContent = `👤 ${currentUser.name}${currentUser.isAdmin?' (Admin)':''}`;
-  if (currentUser.isAdmin) badge.classList.add('admin'); else badge.classList.remove('admin');
-  document.getElementById('settingsBtn').style.display = 'inline-block';
+  const badge=document.getElementById('userBadge');
+  badge.textContent=`👤 ${currentUser.name}${currentUser.isAdmin?' (Admin)':''}`;
+  if(currentUser.isAdmin)badge.classList.add('admin');else badge.classList.remove('admin');
+  document.getElementById('settingsBtn').style.display='inline-block';
   initApp();
 }
-
-async function checkSession() {
-  const raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
-  if (!raw) return;
-  try {
-    const session = JSON.parse(raw);
-    const users = getUsers(); const user = users[session.username];
-    if (user) { currentUser = { username: user.username, name: user.name, designation: user.designation, isAdmin: !!user.isAdmin }; enterApp(); }
-  } catch(e) {}
+async function checkSession(){
+  const raw=localStorage.getItem(SESSION_KEY)||sessionStorage.getItem(SESSION_KEY);
+  if(!raw)return;
+  try{
+    const session=JSON.parse(raw);
+    const users=getUsers();const user=users[session.username];
+    if(user){currentUser={username:user.username,name:user.name,designation:user.designation,isAdmin:!!user.isAdmin};enterApp();}
+  }catch(e){}
 }
-
-function openForgotPassword() {
-  document.getElementById('forgotUser').value = '';
-  document.getElementById('forgotAnswer').value = '';
-  document.getElementById('forgotNewPass').value = '';
-  document.getElementById('forgotConfirmPass').value = '';
-  document.getElementById('forgotStep2Section').style.display = 'none';
-  document.getElementById('forgotStep3Section').style.display = 'none';
-  ['forgotMsg1','forgotMsg2','forgotMsg3'].forEach(id => { const el = document.getElementById(id); el.className = 'settings-msg'; el.textContent = ''; });
+function openForgotPassword(){
+  document.getElementById('forgotUser').value='';
+  document.getElementById('forgotAnswer').value='';
+  document.getElementById('forgotNewPass').value='';
+  document.getElementById('forgotConfirmPass').value='';
+  document.getElementById('forgotStep2Section').style.display='none';
+  document.getElementById('forgotStep3Section').style.display='none';
+  ['forgotMsg1','forgotMsg2','forgotMsg3'].forEach(id=>{const el=document.getElementById(id);el.className='settings-msg';el.textContent='';});
   document.getElementById('forgotModal').classList.add('active');
 }
-
-function closeForgotPassword() { document.getElementById('forgotModal').classList.remove('active'); }
-
-function forgotStep1() {
-  const username = document.getElementById('forgotUser').value.trim().toLowerCase();
-  const msg = document.getElementById('forgotMsg1');
-  if (!username) { msg.textContent = '❌ Username daalo'; msg.className = 'settings-msg error'; return; }
-  const users = getUsers(); const user = users[username];
-  if (!user) { msg.textContent = '❌ User not found'; msg.className = 'settings-msg error'; return; }
-  if (!user.securityQ) { msg.textContent = '❌ Security question set nahi. Admin se contact karo.'; msg.className = 'settings-msg error'; return; }
-  forgotTempUser = user;
-  const qText = { pet: "What is your pet's name?", city: "In which city were you born?", school: "What is your school name?", father: "What is your father's name?" };
-  document.getElementById('forgotQuestionText').textContent = `❓ ${qText[user.securityQ] || user.securityQ}`;
-  document.getElementById('forgotStep2Section').style.display = 'block';
-  msg.textContent = '✅ Username verified. Ab answer do.';
-  msg.className = 'settings-msg success';
+function closeForgotPassword(){document.getElementById('forgotModal').classList.remove('active');}
+function forgotStep1(){
+  const username=document.getElementById('forgotUser').value.trim().toLowerCase();
+  const msg=document.getElementById('forgotMsg1');
+  if(!username){msg.textContent=' Username daalo';msg.className='settings-msg error';return;}
+  const users=getUsers();const user=users[username];
+  if(!user){msg.textContent='❌ User not found';msg.className='settings-msg error';return;}
+  if(!user.securityQ){msg.textContent='❌ Security question set nahi. Admin se contact karo.';msg.className='settings-msg error';return;}
+  forgotTempUser=user;
+  const qText={pet:"What is your pet's name?",city:"In which city were you born?",school:"What is your school name?",father:"What is your father's name?"};
+  document.getElementById('forgotQuestionText').textContent=`❓ ${qText[user.securityQ]||user.securityQ}`;
+  document.getElementById('forgotStep2Section').style.display='block';
+  msg.textContent='✅ Username verified. Ab answer do.';
+  msg.className='settings-msg success';
 }
-
-function forgotStep2() {
-  const answer = document.getElementById('forgotAnswer').value.trim().toLowerCase();
-  const msg = document.getElementById('forgotMsg2');
-  if (!answer) { msg.textContent = '❌ Answer daalo'; msg.className = 'settings-msg error'; return; }
-  if (answer !== forgotTempUser.securityA) { msg.textContent = '❌ Answer galat hai.'; msg.className = 'settings-msg error'; return; }
-  document.getElementById('forgotStep3Section').style.display = 'block';
-  msg.textContent = '✅ Answer sahi! Ab naya password set karo.';
-  msg.className = 'settings-msg success';
+function forgotStep2(){
+  const answer=document.getElementById('forgotAnswer').value.trim().toLowerCase();
+  const msg=document.getElementById('forgotMsg2');
+  if(!answer){msg.textContent='❌ Answer daalo';msg.className='settings-msg error';return;}
+  if(answer!==forgotTempUser.securityA){msg.textContent='❌ Answer galat hai.';msg.className='settings-msg error';return;}
+  document.getElementById('forgotStep3Section').style.display='block';
+  msg.textContent='✅ Answer sahi! Ab naya password set karo.';
+  msg.className='settings-msg success';
 }
-
-async function forgotStep3() {
-  const newPass = document.getElementById('forgotNewPass').value;
-  const confirmPass = document.getElementById('forgotConfirmPass').value;
-  const msg = document.getElementById('forgotMsg3');
-  if (!newPass || !confirmPass) { msg.textContent = '❌ Dono passwords daalo'; msg.className = 'settings-msg error'; return; }
-  if (newPass.length < 4) { msg.textContent = '❌ Min 4 characters'; msg.className = 'settings-msg error'; return; }
-  if (newPass !== confirmPass) { msg.textContent = '❌ Passwords match nahi'; msg.className = 'settings-msg error'; return; }
-  const users = getUsers();
-  users[forgotTempUser.username].passwordHash = await hashPassword(newPass);
+async function forgotStep3(){
+  const newPass=document.getElementById('forgotNewPass').value;
+  const confirmPass=document.getElementById('forgotConfirmPass').value;
+  const msg=document.getElementById('forgotMsg3');
+  if(!newPass||!confirmPass){msg.textContent='❌ Dono passwords daalo';msg.className='settings-msg error';return;}
+  if(newPass.length<4){msg.textContent='❌ Min 4 characters';msg.className='settings-msg error';return;}
+  if(newPass!==confirmPass){msg.textContent='❌ Passwords match nahi';msg.className='settings-msg error';return;}
+  const users=getUsers();
+  users[forgotTempUser.username].passwordHash=await hashPassword(newPass);
   saveUsers(users);
-  msg.textContent = '✅ Password reset ho gaya! Ab login karo.';
-  msg.className = 'settings-msg success';
-  setTimeout(() => { closeForgotPassword(); switchLoginTab('login'); document.getElementById('loginUser').value = forgotTempUser.username; }, 2000);
+  msg.textContent='✅ Password reset ho gaya! Ab login karo.';
+  msg.className='settings-msg success';
+  setTimeout(()=>{closeForgotPassword();switchLoginTab('login');document.getElementById('loginUser').value=forgotTempUser.username;},2000);
 }
-
-function openSettings() {
-  if (!currentUser) return;
-  document.getElementById('currentUsername').value = currentUser.username;
-  ['newUsername','confirmPassForUser','oldPassword','newPassword','confirmPassword'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('profileName').value = currentUser.name;
-  document.getElementById('profileDesig').value = currentUser.designation;
-  ['usernameMsg','passwordMsg','profileMsg'].forEach(id => { const el = document.getElementById(id); el.className = 'settings-msg'; el.textContent = ''; });
-  const dashboardSection = document.getElementById('adminDashboardSection');
-  if (currentUser.isAdmin) { dashboardSection.style.display = 'block'; renderEmployeeDashboard(); }
-  else { dashboardSection.style.display = 'none'; }
+function openSettings(){
+  if(!currentUser)return;
+  document.getElementById('currentUsername').value=currentUser.username;
+  ['newUsername','confirmPassForUser','oldPassword','newPassword','confirmPassword'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('profileName').value=currentUser.name;
+  document.getElementById('profileDesig').value=currentUser.designation;
+  ['usernameMsg','passwordMsg','profileMsg'].forEach(id=>{const el=document.getElementById(id);el.className='settings-msg';el.textContent='';});
+  const dashboardSection=document.getElementById('adminDashboardSection');
+  if(currentUser.isAdmin){dashboardSection.style.display='block';renderEmployeeDashboard();}
+  else{dashboardSection.style.display='none';}
   document.getElementById('settingsModal').classList.add('active');
 }
-
-function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
-function showSettingsMsg(id, msg, isError) { const el = document.getElementById(id); el.textContent = (isError ? '❌ ' : '✅ ') + msg; el.className = 'settings-msg ' + (isError ? 'error' : 'success'); setTimeout(() => { el.className = 'settings-msg'; el.textContent = ''; }, 4000); }
-
-async function changeUsername() {
-  const newUsername = document.getElementById('newUsername').value.trim().toLowerCase();
-  const confirmPass = document.getElementById('confirmPassForUser').value;
-  if (!newUsername) { showSettingsMsg('usernameMsg', 'Naya username daalo', true); return; }
-  if (newUsername === currentUser.username) { showSettingsMsg('usernameMsg', 'Same username', true); return; }
-  if (!/^[a-z0-9_]+$/.test(newUsername)) { showSettingsMsg('usernameMsg', 'Sirf lowercase, numbers, underscore', true); return; }
-  if (!confirmPass) { showSettingsMsg('usernameMsg', 'Password daalo', true); return; }
-  const users = getUsers(); const hash = await hashPassword(confirmPass);
-  if (users[currentUser.username].passwordHash !== hash) { showSettingsMsg('usernameMsg', 'Password galat', true); return; }
-  if (users[newUsername]) { showSettingsMsg('usernameMsg', 'Username already exists', true); return; }
-  const oldUsername = currentUser.username;
-  users[newUsername] = {...users[oldUsername], username: newUsername}; delete users[oldUsername]; saveUsers(users);
-  const visitsData = localStorage.getItem(getVisitsKey(oldUsername)); const metaData = localStorage.getItem(getMetaKey(oldUsername));
-  if (visitsData) { localStorage.setItem(getVisitsKey(newUsername), visitsData); localStorage.removeItem(getVisitsKey(oldUsername)); }
-  if (metaData) { localStorage.setItem(getMetaKey(newUsername), metaData); localStorage.removeItem(getMetaKey(oldUsername)); }
-  currentUser.username = newUsername;
-  const session = { username: newUsername, ts: Date.now() }; localStorage.setItem(SESSION_KEY, JSON.stringify(session)); sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
-  showSettingsMsg('usernameMsg', `Username changed: ${newUsername}`, false);
-  document.getElementById('currentUsername').value = newUsername; document.getElementById('newUsername').value = ''; document.getElementById('confirmPassForUser').value = '';
-  document.getElementById('userBadge').textContent = ` ${currentUser.name} (Admin)`;
+function closeSettings(){document.getElementById('settingsModal').classList.remove('active');}
+function showSettingsMsg(id,msg,isError){const el=document.getElementById(id);el.textContent=(isError?'❌ ':'✅ ')+msg;el.className='settings-msg '+(isError?'error':'success');setTimeout(()=>{el.className='settings-msg';el.textContent='';},4000);}
+async function changeUsername(){
+  const newUsername=document.getElementById('newUsername').value.trim().toLowerCase();
+  const confirmPass=document.getElementById('confirmPassForUser').value;
+  if(!newUsername){showSettingsMsg('usernameMsg','Naya username daalo',true);return;}
+  if(newUsername===currentUser.username){showSettingsMsg('usernameMsg','Same username',true);return;}
+  if(!/^[a-z0-9_]+$/.test(newUsername)){showSettingsMsg('usernameMsg','Sirf lowercase, numbers, underscore',true);return;}
+  if(!confirmPass){showSettingsMsg('usernameMsg','Password daalo',true);return;}
+  const users=getUsers();const hash=await hashPassword(confirmPass);
+  if(users[currentUser.username].passwordHash!==hash){showSettingsMsg('usernameMsg','Password galat',true);return;}
+  if(users[newUsername]){showSettingsMsg('usernameMsg','Username already exists',true);return;}
+  const oldUsername=currentUser.username;
+  users[newUsername]={...users[oldUsername],username:newUsername};delete users[oldUsername];saveUsers(users);
+  const visitsData=localStorage.getItem(getVisitsKey(oldUsername));const metaData=localStorage.getItem(getMetaKey(oldUsername));
+  if(visitsData){localStorage.setItem(getVisitsKey(newUsername),visitsData);localStorage.removeItem(getVisitsKey(oldUsername));}
+  if(metaData){localStorage.setItem(getMetaKey(newUsername),metaData);localStorage.removeItem(getMetaKey(oldUsername));}
+  currentUser.username=newUsername;
+  const session={username:newUsername,ts:Date.now()};localStorage.setItem(SESSION_KEY,JSON.stringify(session));sessionStorage.setItem(SESSION_KEY,JSON.stringify(session));
+  showSettingsMsg('usernameMsg',`Username changed: ${newUsername}`,false);
+  document.getElementById('currentUsername').value=newUsername;document.getElementById('newUsername').value='';document.getElementById('confirmPassForUser').value='';
+  document.getElementById('userBadge').textContent=`👤 ${currentUser.name} (Admin)`;
 }
-
-async function changePassword() {
-  const oldPass = document.getElementById('oldPassword').value; const newPass = document.getElementById('newPassword').value; const confirmPass = document.getElementById('confirmPassword').value;
-  if (!oldPass || !newPass || !confirmPass) { showSettingsMsg('passwordMsg', 'Saare fields bharo', true); return; }
-  if (newPass.length < 4) { showSettingsMsg('passwordMsg', 'Min 4 characters', true); return; }
-  if (newPass !== confirmPass) { showSettingsMsg('passwordMsg', 'Passwords match nahi', true); return; }
-  const users = getUsers(); const oldHash = await hashPassword(oldPass);
-  if (users[currentUser.username].passwordHash !== oldHash) { showSettingsMsg('passwordMsg', 'Current password galat', true); return; }
-  users[currentUser.username].passwordHash = await hashPassword(newPass); saveUsers(users);
-  showSettingsMsg('passwordMsg', 'Password changed!', false);
-  document.getElementById('oldPassword').value = ''; document.getElementById('newPassword').value = ''; document.getElementById('confirmPassword').value = '';
+async function changePassword(){
+  const oldPass=document.getElementById('oldPassword').value;const newPass=document.getElementById('newPassword').value;const confirmPass=document.getElementById('confirmPassword').value;
+  if(!oldPass||!newPass||!confirmPass){showSettingsMsg('passwordMsg','Saare fields bharo',true);return;}
+  if(newPass.length<4){showSettingsMsg('passwordMsg','Min 4 characters',true);return;}
+  if(newPass!==confirmPass){showSettingsMsg('passwordMsg','Passwords match nahi',true);return;}
+  const users=getUsers();const oldHash=await hashPassword(oldPass);
+  if(users[currentUser.username].passwordHash!==oldHash){showSettingsMsg('passwordMsg','Current password galat',true);return;}
+  users[currentUser.username].passwordHash=await hashPassword(newPass);saveUsers(users);
+  showSettingsMsg('passwordMsg','Password changed!',false);
+  document.getElementById('oldPassword').value='';document.getElementById('newPassword').value='';document.getElementById('confirmPassword').value='';
 }
-
-function updateProfile() {
-  const name = document.getElementById('profileName').value.trim(); const desig = document.getElementById('profileDesig').value.trim();
-  if (!name || !desig) { showSettingsMsg('profileMsg', 'Naam aur designation daalo', true); return; }
-  const users = getUsers(); users[currentUser.username].name = name; users[currentUser.username].designation = desig; saveUsers(users);
-  currentUser.name = name; currentUser.designation = desig;
-  document.getElementById('userBadge').textContent = `👤 ${name}${currentUser.isAdmin?' (Admin)':''}`;
-  showSettingsMsg('profileMsg', 'Profile updated!', false);
+function updateProfile(){
+  const name=document.getElementById('profileName').value.trim();const desig=document.getElementById('profileDesig').value.trim();
+  if(!name||!desig){showSettingsMsg('profileMsg','Naam aur designation daalo',true);return;}
+  const users=getUsers();users[currentUser.username].name=name;users[currentUser.username].designation=desig;saveUsers(users);
+  currentUser.name=name;currentUser.designation=desig;
+  document.getElementById('userBadge').textContent=`👤 ${name}${currentUser.isAdmin?' (Admin)':''}`;
+  showSettingsMsg('profileMsg','Profile updated!',false);
 }
-
-function updateVisitName() {
-  if (!currentVisitId) return;
-  const visits = getMyVisits();
-  const visit = visits[currentVisitId];
-  if (!visit) return;
-  const form = document.getElementById('checklistForm');
-  const vcName = form.querySelector('[name="vc_name"]').value.trim();
-  const visitDate = form.querySelector('[name="visit_date"]').value;
-  const createdTime = formatDateTime12hr(visit.createdAt);
-  if (vcName || visitDate) {
-    visit.name = [currentUser.name, vcName, visitDate, createdTime].filter(x => x).join(' - ');
-  } else {
-    visit.name = `${currentUser.name} - ${createdTime}`;
-  }
-  saveMyVisits(visits);
-  refreshVisitSelector();
-}
-
-function buildSections() {
-  const container = document.getElementById('sectionsContainer'); container.innerHTML = ''; totalParams = 0;
-  sections.forEach(sec => {
-    const sectionDiv = document.createElement('div'); sectionDiv.className = 'section';
-    let rowsHtml = '';
-    if (sec.subHeader) rowsHtml += `<tr class="sub-header"><td colspan="5">▸ ${sec.subHeader}</td></tr>`;
-    sec.items.forEach(it => {
-      totalParams++; const key = `${sec.id}_${it.n}`;
-      const defaultOV = it.ov.includes('/') ? it.ov.split('/')[0] : it.ov;
-      rowsHtml += `<tr data-key="${key}">
+function buildSections(){
+  const container=document.getElementById('sectionsContainer');container.innerHTML='';totalParams=0;
+  sections.forEach(sec=>{
+    const sectionDiv=document.createElement('div');sectionDiv.className='section';
+    let rowsHtml='';
+    if(sec.subHeader)rowsHtml+=`<tr class="sub-header"><td colspan="5">▸ ${sec.subHeader}</td></tr>`;
+    sec.items.forEach(it=>{
+      totalParams++;const key=`${sec.id}_${it.n}`;
+      const defaultOV=it.ov.includes('/')?it.ov.split('/')[0]:it.ov;
+      rowsHtml+=`<tr data-key="${key}">
         <td style="width:5%">${it.n}</td>
         <td class="param-text" style="width:30%">${it.p}</td>
         <td style="width:20%"><div class="radio-group">
@@ -791,11 +713,11 @@ function buildSections() {
           <label class="partial-label"><input type="radio" name="${key}" value="Partial" onchange="onAnswer(this)"> Partial</label>
         </div></td>
         <td style="width:25%">
-          <textarea name="remark_${key}" placeholder="${it.hint||'Remarks (max '+REMARKS_MAX+' chars)'}" maxlength="${REMARKS_MAX}" oninput="markDirty(); updateCharCount('${key}', this);" style="margin-top:5px;"></textarea>
+          <textarea name="remark_${key}" placeholder="${it.hint||'Remarks (max '+REMARKS_MAX+' chars)'}" maxlength="${REMARKS_MAX}" oninput="markDirty();updateCharCount('${key}',this);" style="margin-top:5px;"></textarea>
           <div class="char-count" id="charCount_${key}">0/${REMARKS_MAX}</div>
           <div class="photo-area">
-            <input type="file" accept="image/*" capture="environment" style="display:none" id="photoInput_${key}" onchange="handlePhotoUpload(event, '${key}')">
-            <button type="button" class="photo-btn" onclick="document.getElementById('photoInput_${key}').click()">📷 Add Photo</button>
+            <input type="file" accept="image/*" capture="environment" style="display:none" id="photoInput_${key}" onchange="handlePhotoUpload(event,'${key}')">
+            <button type="button" class="photo-btn" onclick="document.getElementById('photoInput_${key}').click()">📷 Add Photo (Max 10MB)</button>
             <div class="photo-list" id="photoList_${key}"></div>
           </div>
         </td>
@@ -809,557 +731,491 @@ function buildSections() {
         </td>
       </tr>`;
     });
-    sectionDiv.innerHTML = `<div class="section-header" onclick="toggleSection(this)"><h2>${sec.title}</h2><span class="toggle">▼</span></div><div class="section-body"><div class="table-wrapper"><table><thead><tr><th>Sl.</th><th>Parameter</th><th>Yes/No/Partial</th><th>Remarks</th><th>Obs/Val</th></tr></thead><tbody>${rowsHtml}</tbody></table></div></div>`;
+    sectionDiv.innerHTML=`<div class="section-header" onclick="toggleSection(this)"><h2>${sec.title}</h2><span class="toggle">▼</span></div><div class="section-body"><div class="table-wrapper"><table><thead><tr><th>Sl.</th><th>Parameter</th><th>Yes/No/Partial</th><th>Remarks</th><th>Obs/Val</th></tr></thead><tbody>${rowsHtml}</tbody></table></div></div>`;
     container.appendChild(sectionDiv);
   });
-  document.getElementById('progressText').textContent = `0 / ${totalParams}`;
+  document.getElementById('progressText').textContent=`0 / ${totalParams}`;
 }
-
-function updateCharCount(key, textarea) {
-  const countEl = document.getElementById(`charCount_${key}`);
-  if (countEl) {
-    const current = textarea.value.length;
-    countEl.textContent = `${current}/${REMARKS_MAX}`;
-    if (current > REMARKS_MAX * 0.9) countEl.classList.add('warn');
+function updateCharCount(key,textarea){
+  const countEl=document.getElementById(`charCount_${key}`);
+  if(countEl){
+    const current=textarea.value.length;
+    countEl.textContent=`${current}/${REMARKS_MAX}`;
+    if(current>REMARKS_MAX*0.9)countEl.classList.add('warn');
     else countEl.classList.remove('warn');
   }
 }
-
-function toggleSection(header) { header.classList.toggle('collapsed'); header.nextElementSibling.classList.toggle('collapsed'); }
-function markDirty() { dirty = true; const s = document.getElementById('saveStatus'); s.textContent = 'Unsaved...'; s.classList.remove('saved'); }
-function onAnswer(radio) { markDirty(); const tr = radio.closest('tr'); tr.classList.remove('answered-yes','answered-no','answered-partial'); tr.classList.add('answered-' + radio.value.toLowerCase()); updateProgress(); }
-
-function updateProgress() {
-  let answered = 0;
-  sections.forEach(sec => sec.items.forEach(it => { if (document.querySelector(`input[name="${sec.id}_${it.n}"]:checked`)) answered++; }));
-  const pct = (answered / totalParams) * 100;
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressText').textContent = `${answered} / ${totalParams} (${Math.round(pct)}%)`;
+function toggleSection(header){header.classList.toggle('collapsed');header.nextElementSibling.classList.toggle('collapsed');}
+function markDirty(){dirty=true;const s=document.getElementById('saveStatus');s.textContent='Unsaved...';s.classList.remove('saved');}
+function onAnswer(radio){markDirty();const tr=radio.closest('tr');tr.classList.remove('answered-yes','answered-no','answered-partial');tr.classList.add('answered-'+radio.value.toLowerCase());updateProgress();}
+function updateProgress(){
+  let answered=0;
+  sections.forEach(sec=>sec.items.forEach(it=>{if(document.querySelector(`input[name="${sec.id}_${it.n}"]:checked`))answered++;}));
+  const pct=(answered/totalParams)*100;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressText').textContent=`${answered} / ${totalParams} (${Math.round(pct)}%)`;
 }
-
-function compressImage(file, maxWidth=800, quality=0.7) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (e) => { 
-      const img = new Image(); 
-      img.onload = () => { 
-        const canvas = document.createElement('canvas'); 
-        let w = img.width, h = img.height; 
-        if (w > maxWidth) { h = Math.round(h * maxWidth / w); w = maxWidth; } 
-        canvas.width = w; canvas.height = h; 
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h); 
-        resolve(canvas.toDataURL('image/jpeg', quality)); 
-      }; 
-      img.src = e.target.result; 
+function compressImage(file,maxWidth=800,quality=0.7){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=(e)=>{
+      const img=new Image();
+      img.onload=()=>{
+        try{
+          const canvas=document.createElement('canvas');
+          let w=img.width,h=img.height;
+          if(w>maxWidth){h=Math.round(h*maxWidth/w);w=maxWidth;}
+          canvas.width=w;canvas.height=h;
+          canvas.getContext('2d').drawImage(img,0,0,w,h);
+          resolve(canvas.toDataURL('image/jpeg',quality));
+        }catch(err){reject(err);}
+      };
+      img.onerror=()=>reject(new Error('Image load failed'));
+      img.src=e.target.result;
     };
+    reader.onerror=()=>reject(new Error('File read failed'));
     reader.readAsDataURL(file);
   });
 }
-
-async function handlePhotoUpload(event, key) {
-  const file = event.target.files[0]; 
-  if (!file) return;
-  if (file.size > 10 * 1024 * 1024) { alert('Max 10MB!'); return; }
+async function handlePhotoUpload(event,key){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(file.size>MAX_PHOTO_SIZE){alert('❌ Photo size 10MB se zyada hai! Please choti photo select karein.');event.target.value='';return;}
+  if(!file.type.startsWith('image/')){alert('❌ Please sirf image file select karein.');event.target.value='';return;}
   
-  try {
-    const list = document.getElementById(`photoList_${key}`);
-    if (list) list.innerHTML = '<div style="padding:10px; color:#6c757d;">⏳ Processing photo...</div>';
+  try{
+    const list=document.getElementById(`photoList_${key}`);
+    if(list)list.innerHTML='<div style="padding:10px;color:#6c757d;font-size:11px;">⏳ Processing photo...</div>';
     
-    const compressed = await compressImage(file);
-    const visit = getVisit(currentVisitId);
-    if (!visit.data.photos) visit.data.photos = {}; 
-    if (!visit.data.photos[key]) visit.data.photos[key] = [];
-    visit.data.photos[key].push({ data: compressed, ts: Date.now(), name: file.name });
+    const compressed=await compressImage(file);
+    const visit=getVisit(currentVisitId);
+    if(!visit.data.photos)visit.data.photos={};
+    if(!visit.data.photos[key])visit.data.photos[key]=[];
+    visit.data.photos[key].push({data:compressed,ts:Date.now(),name:file.name});
     
     renderPhotos(key);
-    markDirty(); 
-    event.target.value = '';
+    markDirty();
+    event.target.value='';
     
-    setTimeout(() => { if (currentVisitId) manualSave(); }, 1000);
-  } catch (err) {
-    alert('Photo upload error: ' + err.message);
+    setTimeout(()=>{if(currentVisitId)manualSave();},1000);
+  }catch(err){
+    console.error('Photo upload error:',err);
+    alert('❌ Photo upload error: '+err.message);
     renderPhotos(key);
   }
 }
-
-function renderPhotos(key) {
-  const visit = getVisit(currentVisitId); 
-  const list = document.getElementById(`photoList_${key}`); 
-  if (!list) return;
-  const photos = (visit.data.photos && visit.data.photos[key]) || [];
+function renderPhotos(key){
+  const visit=getVisit(currentVisitId);
+  const list=document.getElementById(`photoList_${key}`);
+  if(!list)return;
+  const photos=(visit.data.photos&&visit.data.photos[key])||[];
   
-  if (photos.length === 0) {
-    list.innerHTML = '';
+  if(photos.length===0){
+    list.innerHTML='';
     return;
   }
   
-  list.innerHTML = photos.map((p, idx) => `
+  list.innerHTML=photos.map((p,idx)=>`
     <span class="photo-preview">
-      <img src="${p.data}" onclick="viewPhoto('${key}', ${idx})" title="Click to view full size" alt="Photo ${idx + 1}">
-      <button type="button" class="del-photo" onclick="deletePhoto('${key}', ${idx})" title="Delete">×</button>
-      <button type="button" class="download-photo" onclick="downloadSinglePhoto('${key}', ${idx})" title="Download"></button>
+      <img src="${p.data}" onclick="viewPhoto('${key}',${idx})" title="Click to view full size" alt="Photo ${idx+1}">
+      <button type="button" class="del-photo" onclick="deletePhoto('${key}',${idx})" title="Delete">×</button>
+      <button type="button" class="download-photo" onclick="downloadSinglePhoto('${key}',${idx})" title="Download">⬇</button>
     </span>
   `).join('');
 }
-
-function renderAllPhotos() { sections.forEach(sec => sec.items.forEach(it => renderPhotos(`${sec.id}_${it.n}`))); }
-function viewPhoto(key, idx) { document.getElementById('photoViewerImg').src = getVisit(currentVisitId).data.photos[key][idx].data; document.getElementById('photoModal').classList.add('active'); }
-function closePhotoModal() { document.getElementById('photoModal').classList.remove('active'); }
-function deletePhoto(key, idx) { if (!confirm('Delete photo?')) return; getVisit(currentVisitId).data.photos[key].splice(idx, 1); markDirty(); renderPhotos(key); }
-function downloadSinglePhoto(key, idx) {
-  const visit = getVisit(currentVisitId);
-  const photo = visit.data.photos[key][idx];
-  if (!photo) return;
-  const link = document.createElement('a');
-  link.href = photo.data;
-  link.download = `Photo_${key}_${idx}_${new Date().getTime()}.jpg`;
+function renderAllPhotos(){sections.forEach(sec=>sec.items.forEach(it=>renderPhotos(`${sec.id}_${it.n}`)));}
+function viewPhoto(key,idx){document.getElementById('photoViewerImg').src=getVisit(currentVisitId).data.photos[key][idx].data;document.getElementById('photoModal').classList.add('active');}
+function closePhotoModal(){document.getElementById('photoModal').classList.remove('active');}
+function deletePhoto(key,idx){if(!confirm('Delete photo?'))return;getVisit(currentVisitId).data.photos[key].splice(idx,1);markDirty();renderPhotos(key);}
+function downloadSinglePhoto(key,idx){
+  const visit=getVisit(currentVisitId);
+  const photo=visit.data.photos[key][idx];
+  if(!photo)return;
+  const link=document.createElement('a');
+  link.href=photo.data;
+  link.download=`Photo_${key}_${idx}_${new Date().getTime()}.jpg`;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
-
-function showGPSError(msg, showRetry=true) { 
-  const errEl = document.getElementById('gpsError'); 
-  errEl.innerHTML = ' ' + msg + (showRetry ? ' <button type="button" class="gps-btn" onclick="captureGPS()" style="padding:3px 8px;margin-left:5px;">Retry</button>' : ''); 
+function showGPSError(msg,showRetry=true){
+  const errEl=document.getElementById('gpsError');
+  errEl.innerHTML='❌ '+msg+(showRetry?' <button type="button" class="gps-btn" onclick="captureGPS()" style="padding:3px 8px;margin-left:5px;">Retry</button>':'');
   errEl.classList.add('show');
 }
-function hideGPSError() { document.getElementById('gpsError').classList.remove('show'); }
-
-function captureGPS() {
-  hideGPSError(); 
-  if (!navigator.geolocation) { 
-    showGPSError('GPS not supported by this browser. Manual entry use karein.', false); 
-    return; 
-  }
-  document.getElementById('gpsCoords').textContent = '📡 Capturing...';
-  navigator.geolocation.getCurrentPosition((pos) => {
-    const lat = pos.coords.latitude.toFixed(6); const lng = pos.coords.longitude.toFixed(6); const acc = Math.round(pos.coords.accuracy);
-    const visit = getVisit(currentVisitId);
-    if (visit) {
-      visit.data.gps = { lat, lng, acc, ts: Date.now(), source: 'auto' };
-      saveMyVisits(getMyVisits());
+function hideGPSError(){document.getElementById('gpsError').classList.remove('show');}
+function captureGPS(){
+  hideGPSError();
+  if(!navigator.geolocation){showGPSError('GPS not supported by this browser. Manual entry use karein.',false);return;}
+  document.getElementById('gpsCoords').textContent='📡 Capturing...';
+  navigator.geolocation.getCurrentPosition((pos)=>{
+    const lat=pos.coords.latitude.toFixed(6);const lng=pos.coords.longitude.toFixed(6);const acc=Math.round(pos.coords.accuracy);
+    const visit=getVisit(currentVisitId);
+    if(visit){visit.data.gps={lat,lng,acc,ts:Date.now(),source:'auto'};saveMyVisits(getMyVisits());}
+    document.getElementById('gpsCoords').textContent=`✅ ${lat}, ${lng} (±${acc}m)`;
+    document.getElementById('gpsLink').href=`https://www.google.com/maps?q=${lat},${lng}&z=18`;
+    document.getElementById('gpsLink').style.display='inline';
+    hideGPSError();markDirty();
+  },(err)=>{
+    let msg='';
+    switch(err.code){
+      case 1:msg='Permission denied! Browser settings mein Location allow karein.';break;
+      case 2:msg='Location unavailable. Check your device GPS.';break;
+      case 3:msg='Request timeout. Dobara try karein.';break;
+      default:msg=err.message;
     }
-    document.getElementById('gpsCoords').textContent = `✅ ${lat}, ${lng} (±${acc}m)`;
-    document.getElementById('gpsLink').href = `https://www.google.com/maps?q=${lat},${lng}&z=18`; 
-    document.getElementById('gpsLink').style.display = 'inline';
-    hideGPSError(); 
-    markDirty();
-  }, (err) => { 
-    let msg = '';
-    switch(err.code) {
-      case 1: msg = 'Permission denied! Browser settings mein Location allow karein.'; break;
-      case 2: msg = 'Location unavailable. Check your device GPS.'; break;
-      case 3: msg = 'Request timeout. Dobara try karein.'; break;
-      default: msg = err.message;
-    }
-    document.getElementById('gpsCoords').textContent = '❌ Not captured'; 
-    document.getElementById('gpsLink').style.display = 'none'; 
-    showGPSError(msg); 
-  }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
+    document.getElementById('gpsCoords').textContent='❌ Not captured';
+    document.getElementById('gpsLink').style.display='none';
+    showGPSError(msg);
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
-
-function toggleManualGPS() { const box = document.getElementById('manualGPSBox'); box.style.display = box.style.display === 'none' ? 'block' : 'none'; const visit = getVisit(currentVisitId); if (visit && visit.data.gps) { document.getElementById('manualLat').value = visit.data.gps.lat; document.getElementById('manualLng').value = visit.data.gps.lng; } }
-
-function saveManualGPS() {
-  const lat = document.getElementById('manualLat').value.trim(); const lng = document.getElementById('manualLng').value.trim();
-  if (!lat || !lng || isNaN(lat) || isNaN(lng)) { alert('Invalid coordinates'); return; }
-  const visit = getVisit(currentVisitId);
-  if (visit) {
-    visit.data.gps = { lat, lng, acc: 'manual', ts: Date.now(), source: 'manual' };
-    saveMyVisits(getMyVisits());
-  }
-  document.getElementById('gpsCoords').textContent = `✅ ${lat}, ${lng} (Manual)`;
-  document.getElementById('gpsLink').href = `https://www.google.com/maps?q=${lat},${lng}&z=18`; 
-  document.getElementById('gpsLink').style.display = 'inline';
-  hideGPSError(); 
-  document.getElementById('manualGPSBox').style.display = 'none'; 
-  markDirty();
+function toggleManualGPS(){const box=document.getElementById('manualGPSBox');box.style.display=box.style.display==='none'?'block':'none';const visit=getVisit(currentVisitId);if(visit&&visit.data.gps){document.getElementById('manualLat').value=visit.data.gps.lat;document.getElementById('manualLng').value=visit.data.gps.lng;}}
+function saveManualGPS(){
+  const lat=document.getElementById('manualLat').value.trim();const lng=document.getElementById('manualLng').value.trim();
+  if(!lat||!lng||isNaN(lat)||isNaN(lng)){alert('Invalid coordinates');return;}
+  const visit=getVisit(currentVisitId);
+  if(visit){visit.data.gps={lat,lng,acc:'manual',ts:Date.now(),source:'manual'};saveMyVisits(getMyVisits());}
+  document.getElementById('gpsCoords').textContent=`✅ ${lat}, ${lng} (Manual)`;
+  document.getElementById('gpsLink').href=`https://www.google.com/maps?q=${lat},${lng}&z=18`;
+  document.getElementById('gpsLink').style.display='inline';
+  hideGPSError();document.getElementById('manualGPSBox').style.display='none';markDirty();
 }
-
-function restoreGPS() {
-  const visit = getVisit(currentVisitId); const coordsEl = document.getElementById('gpsCoords'); const linkEl = document.getElementById('gpsLink');
-  if (visit && visit.data.gps) { 
-    const { lat, lng, acc, source } = visit.data.gps; 
-    coordsEl.textContent = `✅ ${lat}, ${lng} (${source==='manual'?'Manual':`±${acc}m`})`; 
-    linkEl.href = `https://www.google.com/maps?q=${lat},${lng}&z=18`; 
-    linkEl.style.display = 'inline'; 
-    document.getElementById('manualLat').value = lat; 
-    document.getElementById('manualLng').value = lng; 
-  } else { 
-    coordsEl.textContent = 'Not captured'; 
-    linkEl.style.display = 'none'; 
-  }
+function restoreGPS(){
+  const visit=getVisit(currentVisitId);const coordsEl=document.getElementById('gpsCoords');const linkEl=document.getElementById('gpsLink');
+  if(visit&&visit.data.gps){
+    const{lat,lng,acc,source}=visit.data.gps;
+    coordsEl.textContent=`✅ ${lat}, ${lng} (${source==='manual'?'Manual':`±${acc}m`})`;
+    linkEl.href=`https://www.google.com/maps?q=${lat},${lng}&z=18`;
+    linkEl.style.display='inline';
+    document.getElementById('manualLat').value=lat;
+    document.getElementById('manualLng').value=lng;
+  }else{coordsEl.textContent='Not captured';linkEl.style.display='none';}
   hideGPSError();
 }
-
-function createNewVisit() {
-  if (dirty && !confirm('Unsaved changes save ho jayenge. Continue?')) return;
-  if (dirty) manualSave();
-  const visits = getMyVisits(); const id = 'visit_' + Date.now();
-  const timeStr = formatDateTime12hr(Date.now());
-  visits[id] = { id, name: `${currentUser.name} - ${timeStr}`, owner: currentUser.username, createdAt: Date.now(), data: { info: {}, answers: {}, remarks: {}, ov: {}, photos: {}, gps: null } };
-  saveMyVisits(visits); const meta = getMyMeta(); meta.currentVisitId = id; saveMyMeta(meta);
-  currentVisitId = id; resetForm(); refreshVisitSelector(); dirty = false;
-  document.getElementById('saveStatus').textContent = '✓ New visit'; document.getElementById('saveStatus').classList.add('saved');
+function createNewVisit(){
+  if(dirty&&!confirm('Unsaved changes save ho jayenge. Continue?'))return;
+  if(dirty)manualSave();
+  const visits=getMyVisits();const id='visit_'+Date.now();
+  const timeStr=formatDateTime12hr(Date.now());
+  visits[id]={id,name:`${currentUser.name} - ${timeStr}`,owner:currentUser.username,createdAt:Date.now(),data:{info:{},answers:{},remarks:{},ov:{},photos:{},gps:null}};
+  saveMyVisits(visits);const meta=getMyMeta();meta.currentVisitId=id;saveMyMeta(meta);
+  currentVisitId=id;resetForm();refreshVisitSelector();dirty=false;
+  document.getElementById('saveStatus').textContent='✓ New visit';document.getElementById('saveStatus').classList.add('saved');
 }
-
-function duplicateVisit() {
-  if (!currentVisitId) { alert('Pehle koi visit select karo'); return; }
-  if (!confirm('Current visit ka duplicate banayein?')) return;
-  const sourceVisit = getVisit(currentVisitId); if (!sourceVisit) return;
-  const visits = getMyVisits(); const newId = 'visit_' + Date.now();
-  const newData = JSON.parse(JSON.stringify(sourceVisit.data)); newData.savedAt = null;
-  visits[newId] = { id: newId, name: `[Copy] ${sourceVisit.name}`, owner: currentUser.username, createdAt: Date.now(), data: newData };
+function duplicateVisit(){
+  if(!currentVisitId){alert('Pehle koi visit select karo');return;}
+  if(!confirm('Current visit ka duplicate banayein?'))return;
+  const sourceVisit=getVisit(currentVisitId);if(!sourceVisit)return;
+  const visits=getMyVisits();const newId='visit_'+Date.now();
+  const newData=JSON.parse(JSON.stringify(sourceVisit.data));newData.savedAt=null;
+  visits[newId]={id:newId,name:`[Copy] ${sourceVisit.name}`,owner:currentUser.username,createdAt:Date.now(),data:newData};
   saveMyVisits(visits);
-  const meta = getMyMeta(); meta.currentVisitId = newId; saveMyMeta(meta);
-  currentVisitId = newId; loadCurrentVisitToForm(); refreshVisitSelector();
+  const meta=getMyMeta();meta.currentVisitId=newId;saveMyMeta(meta);
+  currentVisitId=newId;loadCurrentVisitToForm();refreshVisitSelector();
   alert('✅ Visit duplicated! Ab isme changes karke save karo.');
 }
-
-function switchVisit(id) {
-  if (!id) return; if (dirty && !confirm('Unsaved changes auto-save ho jayenge.')) { refreshVisitSelector(); return; }
-  if (dirty) manualSave(); const meta = getMyMeta(); meta.currentVisitId = id; saveMyMeta(meta); currentVisitId = id; loadCurrentVisitToForm(); dirty = false;
-  document.getElementById('saveStatus').textContent = '✓ Visit loaded'; document.getElementById('saveStatus').classList.add('saved');
+function switchVisit(id){
+  if(!id)return;if(dirty&&!confirm('Unsaved changes auto-save ho jayenge.')){refreshVisitSelector();return;}
+  if(dirty)manualSave();const meta=getMyMeta();meta.currentVisitId=id;saveMyMeta(meta);currentVisitId=id;loadCurrentVisitToForm();dirty=false;
+  document.getElementById('saveStatus').textContent='✓ Visit loaded';document.getElementById('saveStatus').classList.add('saved');
 }
-
-function loadCurrentVisitToForm() {
-  const visit = getVisit(currentVisitId); if (!visit) return; const form = document.getElementById('checklistForm'); const data = visit.data;
-  if (data.info) Object.keys(data.info).forEach(k => { const el = form.querySelector(`[name="${k}"]`); if (el) el.value = data.info[k] || ''; });
-  parseTimeToFields(data.info?.visit_time || '');
-  if (data.answers) Object.keys(data.answers).forEach(key => { const radio = document.querySelector(`input[name="${key}"][value="${data.answers[key]}"]`); if (radio) { radio.checked = true; const tr = radio.closest('tr'); tr.classList.remove('answered-yes','answered-no','answered-partial'); tr.classList.add('answered-' + data.answers[key].toLowerCase()); } });
-  if (data.remarks) Object.keys(data.remarks).forEach(key => { const el = form.querySelector(`[name="remark_${key}"]`); if (el) { el.value = data.remarks[key]; updateCharCount(key, el); } });
-  if (data.ov) Object.keys(data.ov).forEach(key => { const el = form.querySelector(`[name="ov_${key}"]`); if (el) el.value = data.ov[key]; });
-  renderAllPhotos(); restoreGPS(); updateProgress();
+function loadCurrentVisitToForm(){
+  const visit=getVisit(currentVisitId);if(!visit)return;const form=document.getElementById('checklistForm');const data=visit.data;
+  if(data.info)Object.keys(data.info).forEach(k=>{const el=form.querySelector(`[name="${k}"]`);if(el)el.value=data.info[k]||'';});
+  parseTimeToFields(data.info?.visit_time||'');
+  if(data.answers)Object.keys(data.answers).forEach(key=>{const radio=document.querySelector(`input[name="${key}"][value="${data.answers[key]}"]`);if(radio){radio.checked=true;const tr=radio.closest('tr');tr.classList.remove('answered-yes','answered-no','answered-partial');tr.classList.add('answered-'+data.answers[key].toLowerCase());}});
+  if(data.remarks)Object.keys(data.remarks).forEach(key=>{const el=form.querySelector(`[name="remark_${key}"]`);if(el){el.value=data.remarks[key];updateCharCount(key,el);}});
+  if(data.ov)Object.keys(data.ov).forEach(key=>{const el=form.querySelector(`[name="ov_${key}"]`);if(el)el.value=data.ov[key];});
+  renderAllPhotos();restoreGPS();updateProgress();
 }
-
-function resetForm() { document.getElementById('checklistForm').reset(); document.querySelectorAll('tr').forEach(tr => tr.classList.remove('answered-yes','answered-no','answered-partial')); renderAllPhotos(); restoreGPS(); updateProgress(); }
-
-function refreshVisitSelector() {
-  const visits = getMyVisits(); const sel = document.getElementById('visitSelector'); sel.innerHTML = '<option value="">-- Select Visit --</option>';
-  Object.values(visits).sort((a,b) => b.createdAt - a.createdAt).forEach(v => { const opt = document.createElement('option'); opt.value = v.id; opt.textContent = v.name; if (v.id === currentVisitId) opt.selected = true; sel.appendChild(opt); });
+function resetForm(){document.getElementById('checklistForm').reset();document.querySelectorAll('tr').forEach(tr=>tr.classList.remove('answered-yes','answered-no','answered-partial'));renderAllPhotos();restoreGPS();updateProgress();}
+function refreshVisitSelector(){
+  const visits=getMyVisits();const sel=document.getElementById('visitSelector');sel.innerHTML='<option value="">-- Select Visit --</option>';
+  Object.values(visits).sort((a,b)=>b.createdAt-a.createdAt).forEach(v=>{const opt=document.createElement('option');opt.value=v.id;opt.textContent=v.name;if(v.id===currentVisitId)opt.selected=true;sel.appendChild(opt);});
 }
-
-function openManageModal() {
-  const visits = getMyVisits(); const list = document.getElementById('visitList'); const arr = Object.values(visits).sort((a,b) => b.createdAt - a.createdAt);
-  if (arr.length === 0) { list.innerHTML = '<p style="text-align:center;color:#6c757d; padding:20px;">Koi visit nahi. "➕ New" click karo.</p>'; }
-  else {
-    list.innerHTML = arr.map(v => {
-      const isCurrent = v.id === currentVisitId;
-      const photoCount = v.data.photos ? Object.values(v.data.photos).reduce((s,a) => s + a.length, 0) : 0;
-      const answeredCount = Object.keys(v.data.answers || {}).length;
-      const isOwn = v.owner === currentUser.username || currentUser.isAdmin;
-      const createdStr = formatDateTime12hr(v.createdAt);
-      return `<div style="padding:10px; margin-bottom:8px; background:#f8f9fa; border-radius:6px; border-left:4px solid ${isCurrent?'#28a745':'#2a5298'}; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-        <div style="flex:1; min-width:180px;"><div style="font-weight:600; font-size:13px;">${isCurrent?'🟢 ':''}${escapeHtml(v.name)}</div><div style="font-size:11px; color:#6c757d;">Created: ${createdStr}<br>Params: ${answeredCount}/${totalParams} | Photos: ${photoCount}</div></div>
-        <div style="display:flex; gap:5px; flex-wrap:wrap;">
-          ${!isCurrent ? `<button onclick="loadVisitFromModal('${v.id}')" style="padding:4px 8px; background:#007bff; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:11px;">Load</button>` : '<span style="color:#28a745;font-weight:600; font-size:11px;">Current</span>'}
-          <button onclick="renameVisit('${v.id}')" style="padding:4px 8px; background:#ffc107; color:#000; border:none; border-radius:4px; cursor:pointer; font-size:11px;">Rename</button>
-          ${isOwn ? `<button onclick="deleteVisit('${v.id}')" style="padding:4px 8px; background:#dc3545; color:#fff; border:none; border-radius:4px; cursor:pointer; font-size:11px;">Delete</button>` : '<span style="font-size:10px; color:#6c757d;">🔒 Others</span>'}
+function openManageModal(){
+  const visits=getMyVisits();const list=document.getElementById('visitList');const arr=Object.values(visits).sort((a,b)=>b.createdAt-a.createdAt);
+  if(arr.length===0){list.innerHTML='<p style="text-align:center;color:#6c757d;padding:20px;">Koi visit nahi. "➕ New" click karo.</p>';}
+  else{
+    list.innerHTML=arr.map(v=>{
+      const isCurrent=v.id===currentVisitId;
+      const photoCount=v.data.photos?Object.values(v.data.photos).reduce((s,a)=>s+a.length,0):0;
+      const answeredCount=Object.keys(v.data.answers||{}).length;
+      const isOwn=v.owner===currentUser.username||currentUser.isAdmin;
+      const createdStr=formatDateTime12hr(v.createdAt);
+      return`<div style="padding:10px;margin-bottom:8px;background:#f8f9fa;border-radius:6px;border-left:4px solid ${isCurrent?'#28a745':'#2a5298'};display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <div style="flex:1;min-width:180px;"><div style="font-weight:600;font-size:13px;">${isCurrent?'🟢 ':''}${escapeHtml(v.name)}</div><div style="font-size:11px;color:#6c757d;">Created: ${createdStr}<br>Params: ${answeredCount}/${totalParams} | Photos: ${photoCount}</div></div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;">
+          ${!isCurrent?`<button onclick="loadVisitFromModal('${v.id}')" style="padding:4px 8px;background:#007bff;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Load</button>`:'<span style="color:#28a745;font-weight:600;font-size:11px;">Current</span>'}
+          <button onclick="renameVisit('${v.id}')" style="padding:4px 8px;background:#ffc107;color:#000;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Rename</button>
+          ${isOwn?`<button onclick="deleteVisit('${v.id}')" style="padding:4px 8px;background:#dc3545;color:#fff;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Delete</button>`:'<span style="font-size:10px;color:#6c757d;">🔒 Others</span>'}
         </div>
       </div>`;
     }).join('');
   }
   document.getElementById('manageModal').classList.add('active');
 }
-
-function closeManageModal() { document.getElementById('manageModal').classList.remove('active'); }
-function loadVisitFromModal(id) { closeManageModal(); switchVisit(id); }
-function renameVisit(id) { const visits = getMyVisits(); const newName = prompt('Naya naam:', visits[id].name); if (newName && newName.trim()) { visits[id].name = newName.trim(); saveMyVisits(visits); refreshVisitSelector(); openManageModal(); } }
-
-function deleteVisit(id) {
-  const visit = getVisit(id); if (!visit) return;
-  if (visit.owner !== currentUser.username && !currentUser.isAdmin) { alert('❌ Aap sirf apni checklist delete kar sakte hain.'); return; }
-  if (!confirm('Ye visit permanently delete ho jayega. Sure?')) return;
-  if (!confirm('FINAL: Photos bhi delete ho jayengi. Delete karein?')) return;
-  const visits = getMyVisits(); delete visits[id]; saveMyVisits(visits);
-  const meta = getMyMeta();
-  if (meta.currentVisitId === id) { const remaining = Object.keys(visits); meta.currentVisitId = remaining.length ? remaining[0] : null; saveMyMeta(meta); if (meta.currentVisitId) { currentVisitId = meta.currentVisitId; loadCurrentVisitToForm(); } else { createNewVisit(); return; } }
-  refreshVisitSelector(); openManageModal();
+function closeManageModal(){document.getElementById('manageModal').classList.remove('active');}
+function loadVisitFromModal(id){closeManageModal();switchVisit(id);}
+function renameVisit(id){const visits=getMyVisits();const newName=prompt('Naya naam:',visits[id].name);if(newName&&newName.trim()){visits[id].name=newName.trim();saveMyVisits(visits);refreshVisitSelector();openManageModal();}}
+function deleteVisit(id){
+  const visit=getVisit(id);if(!visit)return;
+  if(visit.owner!==currentUser.username&&!currentUser.isAdmin){alert('❌ Aap sirf apni checklist delete kar sakte hain.');return;}
+  if(!confirm('Ye visit permanently delete ho jayega. Sure?'))return;
+  if(!confirm('FINAL: Photos bhi delete ho jayengi. Delete karein?'))return;
+  const visits=getMyVisits();delete visits[id];saveMyVisits(visits);
+  const meta=getMyMeta();
+  if(meta.currentVisitId===id){const remaining=Object.keys(visits);meta.currentVisitId=remaining.length?remaining[0]:null;saveMyMeta(meta);if(meta.currentVisitId){currentVisitId=meta.currentVisitId;loadCurrentVisitToForm();}else{createNewVisit();return;}}
+  refreshVisitSelector();openManageModal();
 }
-
-function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-function collectData() {
-  const visit = getVisit(currentVisitId); if (!visit) return null;
-  visit.data.savedAt = new Date().toISOString(); visit.data.info = {}; visit.data.answers = {}; visit.data.remarks = {}; visit.data.ov = {};
-  const form = document.getElementById('checklistForm');
-  form.querySelectorAll('.info-grid input, .info-grid select, .signature-section input, .signature-section textarea').forEach(el => { if (el.name) visit.data.info[el.name] = el.value; });
-  visit.data.info.other_observations = form.querySelector('[name="other_observations"]').value;
-  sections.forEach(sec => sec.items.forEach(it => { const key = `${sec.id}_${it.n}`; const checked = document.querySelector(`input[name="${key}"]:checked`); if (checked) visit.data.answers[key] = checked.value; const rem = form.querySelector(`[name="remark_${key}"]`); if (rem && rem.value) visit.data.remarks[key] = rem.value; const ov = form.querySelector(`[name="ov_${key}"]`); if (ov && ov.value) visit.data.ov[key] = ov.value; }));
-  const vcName = visit.data.info.vc_name || ''; 
-  const visitDate = visit.data.info.visit_date || '';
-  const createdTime = formatDateTime12hr(visit.createdAt);
-  if (vcName || visitDate) {
-    visit.name = [currentUser.name, vcName, visitDate, createdTime].filter(x=>x).join(' - ');
-  }
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function collectData(){
+  const visit=getVisit(currentVisitId);if(!visit)return null;
+  visit.data.savedAt=new Date().toISOString();visit.data.info={};visit.data.answers={};visit.data.remarks={};visit.data.ov={};
+  const form=document.getElementById('checklistForm');
+  form.querySelectorAll('.info-grid input,.info-grid select,.signature-section input,.signature-section textarea').forEach(el=>{if(el.name)visit.data.info[el.name]=el.value;});
+  visit.data.info.other_observations=form.querySelector('[name="other_observations"]').value;
+  sections.forEach(sec=>sec.items.forEach(it=>{const key=`${sec.id}_${it.n}`;const checked=document.querySelector(`input[name="${key}"]:checked`);if(checked)visit.data.answers[key]=checked.value;const rem=form.querySelector(`[name="remark_${key}"]`);if(rem&&rem.value)visit.data.remarks[key]=rem.value;const ov=form.querySelector(`[name="ov_${key}"]`);if(ov&&ov.value)visit.data.ov[key]=ov.value;}));
+  const vcName=visit.data.info.vc_name||'';
+  const visitDate=visit.data.info.visit_date||'';
+  const createdTime=formatDateTime12hr(visit.createdAt);
+  if(vcName||visitDate){visit.name=[currentUser.name,vcName,visitDate,createdTime].filter(x=>x).join(' - ');}
   return visit;
 }
-
-function manualSave() {
-  if (!currentVisitId) { createNewVisit(); return; }
-  const visit = collectData(); const visits = getMyVisits(); visits[currentVisitId] = visit; saveMyVisits(visits); refreshVisitSelector(); dirty = false;
-  const s = document.getElementById('saveStatus'); s.textContent = '✓ Saved ' + new Date().toLocaleTimeString(); s.classList.add('saved');
+function manualSave(){
+  if(!currentVisitId){createNewVisit();return;}
+  const visit=collectData();const visits=getMyVisits();visits[currentVisitId]=visit;saveMyVisits(visits);refreshVisitSelector();dirty=false;
+  const s=document.getElementById('saveStatus');s.textContent='✓ Saved '+new Date().toLocaleTimeString();s.classList.add('saved');
 }
-
-function clearCurrentVisit() {
-  if (!confirm('Current visit ka sab data clear ho jayega. Sure?')) return;
-  if (!confirm('Really sure? Photos bhi delete ho jayengi.')) return;
-  const visit = getVisit(currentVisitId); visit.data = { info: {}, answers: {}, remarks: {}, ov: {}, photos: {}, gps: null };
-  const visits = getMyVisits(); visits[currentVisitId] = visit; saveMyVisits(visits); resetForm(); dirty = false;
-  document.getElementById('saveStatus').textContent = 'Cleared'; document.getElementById('saveStatus').classList.remove('saved');
+function clearCurrentVisit(){
+  if(!confirm('Current visit ka sab data clear ho jayega. Sure?'))return;
+  if(!confirm('Really sure? Photos bhi delete ho jayengi.'))return;
+  const visit=getVisit(currentVisitId);visit.data={info:{},answers:{},remarks:{},ov:{},photos:{},gps:null};
+  const visits=getMyVisits();visits[currentVisitId]=visit;saveMyVisits(visits);resetForm();dirty=false;
+  document.getElementById('saveStatus').textContent='Cleared';document.getElementById('saveStatus').classList.remove('saved');
 }
-
-setInterval(() => { if (dirty && currentVisitId) manualSave(); }, 5000);
-window.addEventListener('beforeunload', () => { if (dirty && currentVisitId) manualSave(); });
-
-function exportMyJSON() {
-  const visits = getMyVisits(); if (Object.keys(visits).length === 0) { alert('Koi visit nahi.'); return; }
-  const exportData = { version: 'vc_final', org: ORG_NAME, exportedAt: new Date().toISOString(), exportedBy: currentUser.name, ownerUsername: currentUser.username, totalVisits: Object.keys(visits).length, visits: visits };
-  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href = url; a.download = `DrShroff_VC_${currentUser.username}_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+setInterval(()=>{if(dirty&&currentVisitId)manualSave();},5000);
+window.addEventListener('beforeunload',()=>{if(dirty&&currentVisitId)manualSave();});
+function exportMyJSON(){
+  const visits=getMyVisits();if(Object.keys(visits).length===0){alert('Koi visit nahi.');return;}
+  const exportData={version:'vc_final',org:ORG_NAME,exportedAt:new Date().toISOString(),exportedBy:currentUser.name,ownerUsername:currentUser.username,totalVisits:Object.keys(visits).length,visits:visits};
+  const blob=new Blob([JSON.stringify(exportData,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`DrShroff_VC_${currentUser.username}_${new Date().toISOString().split('T')[0]}.json`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
   alert(`✅ ${exportData.totalVisits} visit(s) exported.`);
 }
-
-function importJSON(event) {
-  const file = event.target.files[0]; if (!file) return;
-  const reader = new FileReader(); reader.onload = (e) => {
-    try {
-      const data = JSON.parse(e.target.result); if (!data.visits) throw new Error('Invalid file');
-      const existing = getMyVisits(); const imported = data.visits; const count = Object.keys(imported).length;
-      Object.keys(imported).forEach(id => { if (existing[id]) { const newId = id + '_imp_' + Date.now(); imported[newId] = imported[id]; imported[newId].id = newId; imported[newId].name = '[Imported] ' + imported[newId].name; delete imported[id]; } });
-      Object.assign(existing, imported); saveMyVisits(existing); refreshVisitSelector(); alert(`✅ ${count} visit(s) imported!`);
-    } catch(err) { alert('❌ Invalid file: ' + err.message); }
-    event.target.value = '';
-  }; reader.readAsText(file);
+function importJSON(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();reader.onload=(e)=>{
+    try{
+      const data=JSON.parse(e.target.result);if(!data.visits)throw new Error('Invalid file');
+      const existing=getMyVisits();const imported=data.visits;const count=Object.keys(imported).length;
+      Object.keys(imported).forEach(id=>{if(existing[id]){const newId=id+'_imp_'+Date.now();imported[newId]=imported[id];imported[newId].id=newId;imported[newId].name='[Imported] '+imported[newId].name;delete imported[id];}});
+      Object.assign(existing,imported);saveMyVisits(existing);refreshVisitSelector();alert(`✅ ${count} visit(s) imported!`);
+    }catch(err){alert('❌ Invalid file: '+err.message);}
+    event.target.value='';
+  };reader.readAsText(file);
 }
-
-function exportExcel() {
-  const visit = getVisit(currentVisitId); if (!visit) { alert('Koi visit loaded nahi.'); return; }
-  const info = visit.data.info || {}; const gps = visit.data.gps;
-  const wb = XLSX.utils.book_new(); const data = [];
-  data.push([ORG_NAME]); data.push(['VISION CENTRE (VC) MONITORING CHECKLIST']); data.push([]);
-  data.push(['Filled By:', `${currentUser.name} (${currentUser.username}) - ${currentUser.designation}`]);
-  data.push(['VC Name:', info.vc_name || '']); data.push(['Address:', info.vc_address || '']); data.push(['Visit Date:', info.visit_date || '']);
-  data.push(['Visit Time:', info.visit_time || '']); data.push(['Visitor:', info.visitor_name || '']);
-  data.push(['VT/Optom:', info.vt_name || '']); data.push(['CHW:', info.chw_name || '']);
-  data.push(['VC Phone:', info.vc_phone || '']); data.push(['Counselor:', info.counselor_name || '']);
-  data.push(['GPS:', gps ? `${gps.lat}, ${gps.lng} (${gps.source || 'auto'})` : 'Not captured']);
-  data.push(['Created:', formatDateTime12hr(visit.createdAt)]); data.push([]);
-  data.push(['Sl. No.', 'Parameter', 'Yes/No/Partial', 'Remarks', 'Observation/Validation']);
-  sections.forEach(sec => {
-    data.push([sec.title]); if (sec.subHeader) data.push([`  ${sec.subHeader}`]);
-    sec.items.forEach(it => {
-      const key = `${sec.id}_${it.n}`;
-      const ans = visit.data.answers[key] || '';
-      const rem = visit.data.remarks[key] || '';
-      const ov = visit.data.ov[key] || it.ov || '';
-      const photos = (visit.data.photos && visit.data.photos[key]) || [];
-      const photoInfo = photos.length > 0 ? `\n[${photos.length} photo(s) attached - download separately]` : '';
-      data.push([it.n, it.p, ans, rem + photoInfo, ov]);
+function exportExcel(){
+  const visit=getVisit(currentVisitId);if(!visit){alert('Koi visit loaded nahi.');return;}
+  const info=visit.data.info||{};const gps=visit.data.gps;
+  const wb=XLSX.utils.book_new();const data=[];
+  data.push([ORG_NAME]);data.push(['VISION CENTRE (VC) MONITORING CHECKLIST']);data.push([]);
+  data.push(['Filled By:',`${currentUser.name} (${currentUser.username}) - ${currentUser.designation}`]);
+  data.push(['VC Name:',info.vc_name||'']);data.push(['Address:',info.vc_address||'']);data.push(['Visit Date:',info.visit_date||'']);
+  data.push(['Visit Time:',info.visit_time||'']);data.push(['Visitor:',info.visitor_name||'']);
+  data.push(['VT/Optom:',info.vt_name||'']);data.push(['CHW:',info.chw_name||'']);
+  data.push(['VC Phone:',info.vc_phone||'']);data.push(['Counselor:',info.counselor_name||'']);
+  data.push(['GPS:',gps?`${gps.lat}, ${gps.lng} (${gps.source||'auto'})`:'Not captured']);
+  data.push(['Created:',formatDateTime12hr(visit.createdAt)]);data.push([]);
+  data.push(['Sl. No.','Parameter','Yes/No/Partial','Remarks','Observation/Validation']);
+  sections.forEach(sec=>{
+    data.push([sec.title]);if(sec.subHeader)data.push([`  ${sec.subHeader}`]);
+    sec.items.forEach(it=>{
+      const key=`${sec.id}_${it.n}`;
+      const ans=visit.data.answers[key]||'';
+      const rem=visit.data.remarks[key]||'';
+      const ov=visit.data.ov[key]||it.ov||'';
+      const photos=(visit.data.photos&&visit.data.photos[key])||[];
+      const photoInfo=photos.length>0?`\n[${photos.length} photo(s) attached - download separately]`:'';
+      data.push([it.n,it.p,ans,rem+photoInfo,ov]);
     });
     data.push([]);
   });
-  data.push(['Other Observations:', info.other_observations || '']); data.push(['Signature:', info.signature || '']); data.push(['Date:', info.signature_date || '']);
-  const ws = XLSX.utils.aoa_to_sheet(data); ws['!cols'] = [{wch:5}, {wch:45}, {wch:15}, {wch:40}, {wch:18}];
-  XLSX.utils.book_append_sheet(wb, ws, 'VC Checklist');
-  const vcName = (info.vc_name || 'VC').replace(/[^a-zA-Z0-9]/g, '_'); const date = info.visit_date || new Date().toISOString().split('T')[0];
-  XLSX.writeFile(wb, `DrShroff_VC_${currentUser.username}_${vcName}_${date}.xlsx`);
+  data.push(['Other Observations:',info.other_observations||'']);data.push(['Signature:',info.signature||'']);data.push(['Date:',info.signature_date||'']);
+  const ws=XLSX.utils.aoa_to_sheet(data);ws['!cols']=[{wch:5},{wch:45},{wch:15},{wch:40},{wch:18}];
+  XLSX.utils.book_append_sheet(wb,ws,'VC Checklist');
+  const vcName=(info.vc_name||'VC').replace(/[^a-zA-Z0-9]/g,'_');const date=info.visit_date||new Date().toISOString().split('T')[0];
+  XLSX.writeFile(wb,`DrShroff_VC_${currentUser.username}_${vcName}_${date}.xlsx`);
 }
-
-function openEmployeeDashboard() {
-  document.getElementById('dashboardSearch').value = '';
+function openEmployeeDashboard(){
+  document.getElementById('dashboardSearch').value='';
   renderDashboardContent('');
   document.getElementById('dashboardModal').classList.add('active');
 }
-
-function closeEmployeeDashboard() { document.getElementById('dashboardModal').classList.remove('active'); }
-
-function renderDashboardContent(searchTerm) {
-  const container = document.getElementById('allEmployeesContainer');
-  const users = getUsers(); const allEmployees = Object.values(users).filter(u => !u.isAdmin);
-  const search = searchTerm.toLowerCase().trim();
-  let html = '<div style="margin-bottom:15px;">';
-  let totalVisitsAll = 0, totalParamsAll = 0, totalAnsweredAll = 0;
-  allEmployees.forEach(emp => {
-    const empVisits = JSON.parse(localStorage.getItem(getVisitsKey(emp.username))) || {};
-    const visitCount = Object.keys(empVisits).length;
-    const visitsArray = Object.values(empVisits).sort((a,b) => b.createdAt - a.createdAt);
-    if (search) {
-      const empMatch = emp.name.toLowerCase().includes(search) || emp.username.toLowerCase().includes(search) || emp.designation.toLowerCase().includes(search);
-      const visitMatch = visitsArray.some(v => (v.data.info?.vc_name || '').toLowerCase().includes(search));
-      if (!empMatch && !visitMatch) return;
+function closeEmployeeDashboard(){document.getElementById('dashboardModal').classList.remove('active');}
+function renderDashboardContent(searchTerm){
+  const container=document.getElementById('allEmployeesContainer');
+  const users=getUsers();const allEmployees=Object.values(users).filter(u=>!u.isAdmin);
+  const search=searchTerm.toLowerCase().trim();
+  let html='<div style="margin-bottom:15px;">';
+  let totalVisitsAll=0,totalParamsAll=0,totalAnsweredAll=0;
+  allEmployees.forEach(emp=>{
+    const empVisits=JSON.parse(localStorage.getItem(getVisitsKey(emp.username)))||{};
+    const visitCount=Object.keys(empVisits).length;
+    const visitsArray=Object.values(empVisits).sort((a,b)=>b.createdAt-a.createdAt);
+    if(search){
+      const empMatch=emp.name.toLowerCase().includes(search)||emp.username.toLowerCase().includes(search)||emp.designation.toLowerCase().includes(search);
+      const visitMatch=visitsArray.some(v=>(v.data.info?.vc_name||'').toLowerCase().includes(search));
+      if(!empMatch&&!visitMatch)return;
     }
-    totalVisitsAll += visitCount;
-    visitsArray.forEach(v => { totalParamsAll += totalParams; totalAnsweredAll += Object.keys(v.data.answers || {}).length; });
-    html += `<div style="border:1px solid #dee2e6; border-radius:8px; margin-bottom:12px; overflow:hidden;">
-      <div style="background:linear-gradient(90deg, #2a5298, #1e3c72); color:#fff; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-        <div><strong style="font-size:14px;">👤 ${emp.name}</strong><div style="font-size:11px; opacity:0.9;">${emp.designation} (@${emp.username})</div></div>
-        <div style="background:rgba(255,255,255,0.2); padding:5px 10px; border-radius:20px; font-size:12px;">📋 <strong>${visitCount}</strong> Visit${visitCount!==1?'s':''}</div>
+    totalVisitsAll+=visitCount;
+    visitsArray.forEach(v=>{totalParamsAll+=totalParams;totalAnsweredAll+=Object.keys(v.data.answers||{}).length;});
+    html+=`<div style="border:1px solid #dee2e6;border-radius:8px;margin-bottom:12px;overflow:hidden;">
+      <div style="background:linear-gradient(90deg,#2a5298,#1e3c72);color:#fff;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+        <div><strong style="font-size:14px;">👤 ${emp.name}</strong><div style="font-size:11px;opacity:0.9;">${emp.designation} (@${emp.username})</div></div>
+        <div style="background:rgba(255,255,255,0.2);padding:5px 10px;border-radius:20px;font-size:12px;">📋 <strong>${visitCount}</strong> Visit${visitCount!==1?'s':''}</div>
       </div>
-      <div style="padding:10px; background:#f8f9fa;">`;
-    if (visitCount === 0) { html += '<p style="text-align:center; color:#6c757d; padding:15px; font-size:12px;">Abhi tak koi visit nahi.</p>'; }
-    else {
-      html += '<div class="table-wrapper"><table style="min-width:700px;"><thead><tr style="background:#e9ecef;"><th style="padding:6px; text-align:left; font-size:11px;">VC Name</th><th style="padding:6px; text-align:left; font-size:11px;">Date</th><th style="padding:6px; text-align:left; font-size:11px;">Created (Date & Time)</th><th style="padding:6px; text-align:center; font-size:11px;">Status</th><th style="padding:6px; text-align:center; font-size:11px;">Actions</th></tr></thead><tbody>';
-      visitsArray.forEach(visit => {
-        const vcName = visit.data.info?.vc_name || 'N/A';
-        if (search && !vcName.toLowerCase().includes(search)) return;
-        const visitDate = visit.data.info?.visit_date || 'N/A';
-        const createdStr = formatDateTime12hr(visit.createdAt);
-        const answeredCount = Object.keys(visit.data.answers || {}).length; const percentage = Math.round((answeredCount / totalParams) * 100);
-        let statusColor = percentage >= 80 ? '#28a745' : percentage >= 50 ? '#ffc107' : '#dc3545';
-        const isOwn = emp.username === currentUser.username;
-        html += `<tr style="border-bottom:1px solid #dee2e6; ${isOwn ? 'background:#d4edda;' : ''}">
-          <td style="padding:6px; font-size:12px;"><strong>${vcName}</strong></td>
-          <td style="padding:6px; font-size:12px;">${visitDate}</td>
-          <td style="padding:6px; font-size:11px; color:#495057;">${createdStr}</td>
-          <td style="padding:6px; text-align:center;"><span style="background:${statusColor}; color:#fff; padding:2px 8px; border-radius:10px; font-size:10px;">${percentage}%</span>${isOwn ? '<br><small style="color:#28a745; font-size:10px;">✓ Yours</small>' : ''}</td>
-          <td style="padding:6px; text-align:center;">
-            <button onclick="viewOtherVisit('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#007bff; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">👁️ View</button>
-            <button onclick="exportOtherVisitExcel('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#28a745; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">📊 Excel</button>
-            <button onclick="exportOtherVisitPDF('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#17a2b8; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">🖨️ PDF</button>
-            ${isOwn ? `<button onclick="deleteOtherVisit('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#dc3545; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">🗑️</button>` : ''}
+      <div style="padding:10px;background:#f8f9fa;">`;
+    if(visitCount===0){html+='<p style="text-align:center;color:#6c757d;padding:15px;font-size:12px;">Abhi tak koi visit nahi.</p>';}
+    else{
+      html+='<div class="table-wrapper"><table style="min-width:700px;"><thead><tr style="background:#e9ecef;"><th style="padding:6px;text-align:left;font-size:11px;">VC Name</th><th style="padding:6px;text-align:left;font-size:11px;">Date</th><th style="padding:6px;text-align:left;font-size:11px;">Created (Date & Time)</th><th style="padding:6px;text-align:center;font-size:11px;">Status</th><th style="padding:6px;text-align:center;font-size:11px;">Actions</th></tr></thead><tbody>';
+      visitsArray.forEach(visit=>{
+        const vcName=visit.data.info?.vc_name||'N/A';
+        if(search&&!vcName.toLowerCase().includes(search))return;
+        const visitDate=visit.data.info?.visit_date||'N/A';
+        const createdStr=formatDateTime12hr(visit.createdAt);
+        const answeredCount=Object.keys(visit.data.answers||{}).length;const percentage=Math.round((answeredCount/totalParams)*100);
+        let statusColor=percentage>=80?'#28a745':percentage>=50?'#ffc107':'#dc3545';
+        const isOwn=emp.username===currentUser.username;
+        html+=`<tr style="border-bottom:1px solid #dee2e6;${isOwn?'background:#d4edda;':''}">
+          <td style="padding:6px;font-size:12px;"><strong>${vcName}</strong></td>
+          <td style="padding:6px;font-size:12px;">${visitDate}</td>
+          <td style="padding:6px;font-size:11px;color:#495057;">${createdStr}</td>
+          <td style="padding:6px;text-align:center;"><span style="background:${statusColor};color:#fff;padding:2px 8px;border-radius:10px;font-size:10px;">${percentage}%</span>${isOwn?'<br><small style="color:#28a745;font-size:10px;">✓ Yours</small>':''}</td>
+          <td style="padding:6px;text-align:center;">
+            <button onclick="viewOtherVisit('${emp.username}','${visit.id}')" style="padding:4px 8px;background:#007bff;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px;margin:1px;">👁️ View</button>
+            <button onclick="exportOtherVisitExcel('${emp.username}','${visit.id}')" style="padding:4px 8px;background:#28a745;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px;margin:1px;"> Excel</button>
+            <button onclick="exportOtherVisitPDF('${emp.username}','${visit.id}')" style="padding:4px 8px;background:#17a2b8;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px;margin:1px;">🖨️ PDF</button>
+            ${isOwn?`<button onclick="deleteOtherVisit('${emp.username}','${visit.id}')" style="padding:4px 8px;background:#dc3545;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px;margin:1px;">🗑️</button>`:''}
           </td></tr>`;
       });
-      html += '</tbody></table></div>';
+      html+='</tbody></table></div>';
     }
-    html += '</div></div>';
+    html+='</div></div>';
   });
-  html += '</div>';
-  const avgPct = totalParamsAll > 0 ? Math.round((totalAnsweredAll / totalParamsAll) * 100) : 0;
-  const statsHtml = `<div class="stats-bar">
+  html+='</div>';
+  const avgPct=totalParamsAll>0?Math.round((totalAnsweredAll/totalParamsAll)*100):0;
+  const statsHtml=`<div class="stats-bar">
     <div class="stat-item"><div class="num">${allEmployees.length}</div><div class="lbl">Employees</div></div>
     <div class="stat-item"><div class="num">${totalVisitsAll}</div><div class="lbl">Total Visits</div></div>
     <div class="stat-item"><div class="num">${avgPct}%</div><div class="lbl">Avg Complete</div></div>
   </div>`;
-  container.innerHTML = statsHtml + html;
+  container.innerHTML=statsHtml+html;
 }
-
-function filterDashboard() { renderDashboardContent(document.getElementById('dashboardSearch').value); }
-
-function viewOtherVisit(username, visitId) {
-  closeEmployeeDashboard(); originalCurrentUser = {...currentUser}; viewingOtherEmployee = true;
-  const visits = JSON.parse(localStorage.getItem(getVisitsKey(username))) || {}; const visit = visits[visitId];
-  if (!visit) { alert('Visit not found!'); viewingOtherEmployee = false; return; }
-  currentUser = { ...currentUser, viewMode: true, viewModeOwner: username, viewModeVisitId: visitId };
-  currentVisitId = visitId;
-  const badge = document.getElementById('userBadge'); badge.innerHTML = `👁️ Viewing: ${visit.data.info?.vc_name || 'Visit'} (${username})`; badge.style.background = '#ffc107'; badge.style.color = '#000';
+function filterDashboard(){renderDashboardContent(document.getElementById('dashboardSearch').value);}
+function viewOtherVisit(username,visitId){
+  closeEmployeeDashboard();originalCurrentUser={...currentUser};viewingOtherEmployee=true;
+  const visits=JSON.parse(localStorage.getItem(getVisitsKey(username)))||{};const visit=visits[visitId];
+  if(!visit){alert('Visit not found!');viewingOtherEmployee=false;return;}
+  currentUser={...currentUser,viewMode:true,viewModeOwner:username,viewModeVisitId:visitId};
+  currentVisitId=visitId;
+  const badge=document.getElementById('userBadge');badge.innerHTML=`👁️ Viewing: ${visit.data.info?.vc_name||'Visit'} (${username})`;badge.style.background='#ffc107';badge.style.color='#000';
   document.getElementById('readOnlyBanner').classList.add('active');
-  const toolbar = document.querySelector('.toolbar'); const backButton = document.createElement('button'); backButton.id = 'backToDashboardBtn'; backButton.className = 'btn-load'; backButton.innerHTML = '↩️ Back'; backButton.onclick = backToMyVisits; toolbar.insertBefore(backButton, toolbar.firstChild);
-  loadCurrentVisitToForm(); makeFormReadOnly();
+  const toolbar=document.querySelector('.toolbar');const backButton=document.createElement('button');backButton.id='backToDashboardBtn';backButton.className='btn-load';backButton.innerHTML='↩️ Back';backButton.onclick=backToMyVisits;toolbar.insertBefore(backButton,toolbar.firstChild);
+  loadCurrentVisitToForm();makeFormReadOnly();
   alert(`📋 READ-ONLY MODE\n\nAap ${username} ki checklist dekh rahe hain.\nEdit/Delete nahi kar sakte.\nPhotos download kar sakte hain (⬇ button).\nPDF/Excel download kar sakte hain.`);
 }
-
-function makeFormReadOnly() {
-  const form = document.getElementById('checklistForm');
-  form.querySelectorAll('input, textarea, select').forEach(el => { el.disabled = true; el.style.background = '#e9ecef'; el.style.cursor = 'not-allowed'; });
-  form.querySelectorAll('.radio-group').forEach(group => { group.style.opacity = '0.6'; group.style.pointerEvents = 'none'; });
-  form.querySelectorAll('.photo-btn, .gps-btn').forEach(btn => btn.style.display = 'none');
-  document.getElementById('btnSave').disabled = true; document.getElementById('btnClear').disabled = true;
+function makeFormReadOnly(){
+  const form=document.getElementById('checklistForm');
+  form.querySelectorAll('input,textarea,select').forEach(el=>{el.disabled=true;el.style.background='#e9ecef';el.style.cursor='not-allowed';});
+  form.querySelectorAll('.radio-group').forEach(group=>{group.style.opacity='0.6';group.style.pointerEvents='none';});
+  form.querySelectorAll('.photo-btn,.gps-btn').forEach(btn=>btn.style.display='none');
+  document.getElementById('btnSave').disabled=true;document.getElementById('btnClear').disabled=true;
 }
-
-function backToMyVisits() {
-  if (!viewingOtherEmployee) return;
-  const backBtn = document.getElementById('backToDashboardBtn'); if (backBtn) backBtn.remove();
-  currentUser = {...originalCurrentUser}; viewingOtherEmployee = false;
-  const badge = document.getElementById('userBadge'); badge.textContent = `👤 ${currentUser.name}${currentUser.isAdmin?' (Admin)':''}`; if (currentUser.isAdmin) badge.classList.add('admin'); else badge.classList.remove('admin'); badge.style.background = ''; badge.style.color = '';
+function backToMyVisits(){
+  if(!viewingOtherEmployee)return;
+  const backBtn=document.getElementById('backToDashboardBtn');if(backBtn)backBtn.remove();
+  currentUser={...originalCurrentUser};viewingOtherEmployee=false;
+  const badge=document.getElementById('userBadge');badge.textContent=`👤 ${currentUser.name}${currentUser.isAdmin?' (Admin)':''}`;if(currentUser.isAdmin)badge.classList.add('admin');else badge.classList.remove('admin');badge.style.background='';badge.style.color='';
   document.getElementById('readOnlyBanner').classList.remove('active');
-  const form = document.getElementById('checklistForm');
-  form.querySelectorAll('input, textarea, select').forEach(el => { el.disabled = false; el.style.background = ''; el.style.cursor = ''; });
-  form.querySelectorAll('.radio-group').forEach(group => { group.style.opacity = '1'; group.style.pointerEvents = 'auto'; });
-  form.querySelectorAll('.photo-btn, .gps-btn').forEach(btn => btn.style.display = '');
-  document.getElementById('btnSave').disabled = false; document.getElementById('btnClear').disabled = false;
-  const meta = getMyMeta(); const visits = getMyVisits();
-  currentVisitId = (meta.currentVisitId && visits[meta.currentVisitId]) ? meta.currentVisitId : (Object.keys(visits)[0] || null);
-  if (currentVisitId) { refreshVisitSelector(); loadCurrentVisitToForm(); }
+  const form=document.getElementById('checklistForm');
+  form.querySelectorAll('input,textarea,select').forEach(el=>{el.disabled=false;el.style.background='';el.style.cursor='';});
+  form.querySelectorAll('.radio-group').forEach(group=>{group.style.opacity='1';group.style.pointerEvents='auto';});
+  form.querySelectorAll('.photo-btn,.gps-btn').forEach(btn=>btn.style.display='');
+  document.getElementById('btnSave').disabled=false;document.getElementById('btnClear').disabled=false;
+  const meta=getMyMeta();const visits=getMyVisits();
+  currentVisitId=(meta.currentVisitId&&visits[meta.currentVisitId])?meta.currentVisitId:(Object.keys(visits)[0]||null);
+  if(currentVisitId){refreshVisitSelector();loadCurrentVisitToForm();}
   alert('✅ Wapas apne visits par aa gaye.');
 }
-
-function exportOtherVisitExcel(username, visitId) {
-  const visits = JSON.parse(localStorage.getItem(getVisitsKey(username))) || {}; const visit = visits[visitId]; if (!visit) { alert('Visit not found!'); return; }
-  const info = visit.data.info || {}; const gps = visit.data.gps;
-  const wb = XLSX.utils.book_new(); const data = [];
-  data.push([ORG_NAME]); data.push(['VISION CENTRE (VC) MONITORING CHECKLIST']); data.push([]);
-  data.push(['Filled By:', `${visit.data.info?.visitor_name || username} (${username})`]);
-  data.push(['VC Name:', info.vc_name || '']); data.push(['Address:', info.vc_address || '']); data.push(['Visit Date:', info.visit_date || '']);
-  data.push(['Visit Time:', info.visit_time || '']); data.push(['VT/Optom:', info.vt_name || '']); data.push(['CHW:', info.chw_name || '']);
-  data.push(['GPS:', gps ? `${gps.lat}, ${gps.lng}` : 'Not captured']);
-  data.push(['Created:', formatDateTime12hr(visit.createdAt)]); data.push([]);
-  data.push(['Sl. No.', 'Parameter', 'Yes/No/Partial', 'Remarks', 'Observation/Validation']);
-  sections.forEach(sec => {
-    data.push([sec.title]); if (sec.subHeader) data.push([`  ${sec.subHeader}`]);
-    sec.items.forEach(it => {
-      const key = `${sec.id}_${it.n}`;
-      const ans = visit.data.answers[key] || '';
-      const rem = visit.data.remarks[key] || '';
-      const ov = visit.data.ov[key] || it.ov || '';
-      const photos = (visit.data.photos && visit.data.photos[key]) || [];
-      const photoInfo = photos.length > 0 ? `\n[${photos.length} photo(s) attached]` : '';
-      data.push([it.n, it.p, ans, rem + photoInfo, ov]);
+function exportOtherVisitExcel(username,visitId){
+  const visits=JSON.parse(localStorage.getItem(getVisitsKey(username)))||{};const visit=visits[visitId];if(!visit){alert('Visit not found!');return;}
+  const info=visit.data.info||{};const gps=visit.data.gps;
+  const wb=XLSX.utils.book_new();const data=[];
+  data.push([ORG_NAME]);data.push(['VISION CENTRE (VC) MONITORING CHECKLIST']);data.push([]);
+  data.push(['Filled By:',`${visit.data.info?.visitor_name||username} (${username})`]);
+  data.push(['VC Name:',info.vc_name||'']);data.push(['Address:',info.vc_address||'']);data.push(['Visit Date:',info.visit_date||'']);
+  data.push(['Visit Time:',info.visit_time||'']);data.push(['VT/Optom:',info.vt_name||'']);data.push(['CHW:',info.chw_name||'']);
+  data.push(['GPS:',gps?`${gps.lat}, ${gps.lng}`:'Not captured']);
+  data.push(['Created:',formatDateTime12hr(visit.createdAt)]);data.push([]);
+  data.push(['Sl. No.','Parameter','Yes/No/Partial','Remarks','Observation/Validation']);
+  sections.forEach(sec=>{
+    data.push([sec.title]);if(sec.subHeader)data.push([`  ${sec.subHeader}`]);
+    sec.items.forEach(it=>{
+      const key=`${sec.id}_${it.n}`;
+      const ans=visit.data.answers[key]||'';
+      const rem=visit.data.remarks[key]||'';
+      const ov=visit.data.ov[key]||it.ov||'';
+      const photos=(visit.data.photos&&visit.data.photos[key])||[];
+      const photoInfo=photos.length>0?`\n[${photos.length} photo(s) attached]`:'';
+      data.push([it.n,it.p,ans,rem+photoInfo,ov]);
     });
     data.push([]);
   });
-  data.push(['Other Observations:', info.other_observations || '']); data.push(['Signature:', info.signature || '']); data.push(['Date:', info.signature_date || '']);
-  const ws = XLSX.utils.aoa_to_sheet(data); ws['!cols'] = [{wch:5}, {wch:45}, {wch:15}, {wch:40}, {wch:18}];
-  XLSX.utils.book_append_sheet(wb, ws, 'VC Checklist');
-  const vcName = (info.vc_name || 'VC').replace(/[^a-zA-Z0-9]/g, '_'); const date = info.visit_date || new Date().toISOString().split('T')[0];
-  XLSX.writeFile(wb, `DrShroff_VC_${username}_${vcName}_${date}.xlsx`);
+  data.push(['Other Observations:',info.other_observations||'']);data.push(['Signature:',info.signature||'']);data.push(['Date:',info.signature_date||'']);
+  const ws=XLSX.utils.aoa_to_sheet(data);ws['!cols']=[{wch:5},{wch:45},{wch:15},{wch:40},{wch:18}];
+  XLSX.utils.book_append_sheet(wb,ws,'VC Checklist');
+  const vcName=(info.vc_name||'VC').replace(/[^a-zA-Z0-9]/g,'_');const date=info.visit_date||new Date().toISOString().split('T')[0];
+  XLSX.writeFile(wb,`DrShroff_VC_${username}_${vcName}_${date}.xlsx`);
 }
-
-function exportOtherVisitPDF(username, visitId) { viewOtherVisit(username, visitId); setTimeout(() => { if (confirm('PDF ke liye Print dialog khulega. "Save as PDF" select karein.')) window.print(); }, 500); }
-
-function deleteOtherVisit(username, visitId) {
-  if (username !== currentUser.username && !currentUser.isAdmin) { alert('❌ Aap sirf apni checklist delete kar sakte hain.'); return; }
-  if (!confirm('Ye visit permanently delete ho jayega. Sure?')) return;
-  const visits = JSON.parse(localStorage.getItem(getVisitsKey(username))) || {};
+function exportOtherVisitPDF(username,visitId){viewOtherVisit(username,visitId);setTimeout(()=>{if(confirm('PDF ke liye Print dialog khulega. "Save as PDF" select karein.'))window.print();},500);}
+function deleteOtherVisit(username,visitId){
+  if(username!==currentUser.username&&!currentUser.isAdmin){alert('❌ Aap sirf apni checklist delete kar sakte hain.');return;}
+  if(!confirm('Ye visit permanently delete ho jayega. Sure?'))return;
+  const visits=JSON.parse(localStorage.getItem(getVisitsKey(username)))||{};
   delete visits[visitId];
-  localStorage.setItem(getVisitsKey(username), JSON.stringify(visits));
+  localStorage.setItem(getVisitsKey(username),JSON.stringify(visits));
   renderDashboardContent(document.getElementById('dashboardSearch').value);
   alert('✅ Visit deleted.');
 }
-
-function renderEmployeeDashboard() {
-  const container = document.getElementById('employeeListContainer'); const users = getUsers();
-  const employees = Object.values(users).filter(u => !u.isAdmin && u.username !== currentUser.username);
-  if (employees.length === 0) { container.innerHTML = '<p style="text-align:center; color:#6c757d; padding:10px; font-size:12px;">Koi employee register nahi.</p>'; return; }
-  let html = '<div class="table-wrapper"><table style="min-width:400px;"><tr style="background:#e9ecef;"><th style="padding:5px; text-align:left; font-size:11px;">Username</th><th style="padding:5px; text-align:left; font-size:11px;">Name</th><th style="padding:5px; text-align:center; font-size:11px;">Visits</th><th style="padding:5px; text-align:center; font-size:11px;">Action</th></tr>';
-  employees.forEach(emp => {
-    const empVisits = JSON.parse(localStorage.getItem(getVisitsKey(emp.username))) || {}; const visitCount = Object.keys(empVisits).length;
-    html += `<tr style="border-bottom:1px solid #dee2e6;"><td style="padding:5px; font-size:11px;"><b>${emp.username}</b></td><td style="padding:5px; font-size:11px;">${emp.name}<br><span style="font-size:10px; color:#6c757d;">${emp.designation}</span></td><td style="padding:5px; text-align:center; font-size:11px;"><b>${visitCount}</b></td><td style="padding:5px; text-align:center;"><button onclick="deleteUserAccount('${emp.username}')" style="padding:3px 6px; background:#dc3545; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px;">🗑️ Delete User</button></td></tr>`;
+function renderEmployeeDashboard(){
+  const container=document.getElementById('employeeListContainer');const users=getUsers();
+  const employees=Object.values(users).filter(u=>!u.isAdmin&&u.username!==currentUser.username);
+  if(employees.length===0){container.innerHTML='<p style="text-align:center;color:#6c757d;padding:10px;font-size:12px;">Koi employee register nahi.</p>';return;}
+  let html='<div class="table-wrapper"><table style="min-width:400px;"><tr style="background:#e9ecef;"><th style="padding:5px;text-align:left;font-size:11px;">Username</th><th style="padding:5px;text-align:left;font-size:11px;">Name</th><th style="padding:5px;text-align:center;font-size:11px;">Visits</th><th style="padding:5px;text-align:center;font-size:11px;">Action</th></tr>';
+  employees.forEach(emp=>{
+    const empVisits=JSON.parse(localStorage.getItem(getVisitsKey(emp.username)))||{};const visitCount=Object.keys(empVisits).length;
+    html+=`<tr style="border-bottom:1px solid #dee2e6;"><td style="padding:5px;font-size:11px;"><b>${emp.username}</b></td><td style="padding:5px;font-size:11px;">${emp.name}<br><span style="font-size:10px;color:#6c757d;">${emp.designation}</span></td><td style="padding:5px;text-align:center;font-size:11px;"><b>${visitCount}</b></td><td style="padding:5px;text-align:center;"><button onclick="deleteEmployeeAccount('${emp.username}')" style="padding:3px 6px;background:#dc3545;color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:10px;">🗑️ Delete</button></td></tr>`;
   });
-  html += '</table></div>';
-  container.innerHTML = html;
+  html+='</table></div>';container.innerHTML=html;
 }
-
-function deleteUserAccount(username) {
-  if (!confirm(`Kya aap sure hain ki employee '${username}' ko delete karna chahte hain?`)) return;
-  const users = getUsers();
-  delete users[username];
-  saveUsers(users);
-  localStorage.removeItem(getVisitsKey(username));
-  localStorage.removeItem(getMetaKey(username));
-  renderEmployeeDashboard();
-  alert(`User '${username}' delete ho gaya.`);
+function deleteEmployeeAccount(username){
+  if(!confirm(`${username} ko delete karein? Saara data delete ho jayega!`))return;
+  if(!confirm('FINAL WARNING: Undo nahi hoga. Delete karein?'))return;
+  const users=getUsers();delete users[username];saveUsers(users);
+  localStorage.removeItem(getVisitsKey(username));localStorage.removeItem(getMetaKey(username));
+  renderEmployeeDashboard();alert(`✅ ${username} deleted.`);
 }
-
-function initApp() {
+function initApp(){
   initTimePickers();
-  buildSections();
-  const meta = getMyMeta();
-  const visits = getMyVisits();
-  if (meta.currentVisitId && visits[meta.currentVisitId]) {
-    currentVisitId = meta.currentVisitId;
-  } else {
-    const keys = Object.keys(visits);
-    if (keys.length > 0) currentVisitId = keys[0];
-    else createNewVisit();
-  }
-  refreshVisitSelector();
-  if (currentVisitId && visits[currentVisitId]) loadCurrentVisitToForm();
+  buildSections();const visits=getMyVisits();const meta=getMyMeta();
+  if(Object.keys(visits).length===0){createNewVisit();}
+  else{currentVisitId=(meta.currentVisitId&&visits[meta.currentVisitId])?meta.currentVisitId:Object.keys(visits)[0];refreshVisitSelector();loadCurrentVisitToForm();document.getElementById('saveStatus').textContent='✓ Visit loaded';document.getElementById('saveStatus').classList.add('saved');}
+  const today=new Date().toISOString().split('T')[0];const dateInput=document.querySelector('[name="visit_date"]');if(dateInput&&!dateInput.value)dateInput.value=today;
+  const visitorInput=document.querySelector('[name="visitor_name"]');
+  if(visitorInput&&!visitorInput.value)visitorInput.value=`${currentUser.name} - ${currentUser.designation}`;
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-  checkSession();
-});
+window.addEventListener('DOMContentLoaded',()=>{checkSession();});
 </script>
 </body>
 </html>
