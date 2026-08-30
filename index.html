@@ -97,13 +97,14 @@
   textarea, select { width: 100%; padding: 5px 8px; border: 1px solid #ced4da; border-radius: 4px; font-family: inherit; font-size: 12px; }
   textarea { min-height: 40px; resize: vertical; }
   
-  .photo-area { margin-top: 6px; }
-  .photo-btn { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; background: #6c757d; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 11px; margin-top: 5px; }
+  .photo-area { margin-top: 8px; padding: 8px; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ced4da; }
+  .photo-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #6c757d; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
   .photo-btn:hover { background: #5a6268; }
-  .photo-preview { display: inline-block; position: relative; margin: 5px 5px 0 0; border: 2px solid #28a745; border-radius: 6px; overflow: hidden; }
-  .photo-preview img { width: 90px; height: 90px; object-fit: cover; cursor: pointer; display: block; }
-  .photo-preview .del-photo { position: absolute; top: 2px; right: 2px; background: #dc3545; color: #fff; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
-  .photo-preview .download-photo { position: absolute; bottom: 2px; right: 2px; background: #007bff; color: #fff; border: none; width: 22px; height: 22px; border-radius: 50%; cursor: pointer; font-size: 12px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+  .photo-list { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .photo-preview { display: inline-block; position: relative; border: 3px solid #28a745; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.15); background: #fff; }
+  .photo-preview img { width: 100px; height: 100px; object-fit: cover; cursor: pointer; display: block; }
+  .photo-preview .del-photo { position: absolute; top: 3px; right: 3px; background: #dc3545; color: #fff; border: 2px solid #fff; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+  .photo-preview .download-photo { position: absolute; bottom: 3px; right: 3px; background: #007bff; color: #fff; border: 2px solid #fff; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center; }
   .photo-preview .download-photo:hover { background: #0056b3; }
   .photo-preview .del-photo:hover { background: #c82333; }
   
@@ -141,20 +142,26 @@
     .signature-section { grid-template-columns: 1fr; }
     .radio-group label { padding: 2px 6px; font-size: 10px; }
     .info-grid { grid-template-columns: 1fr; padding: 12px; }
+    .photo-preview img { width: 80px; height: 80px; }
   }
+  
   @media print {
     body { background: #fff; padding: 0; }
-    .toolbar, .footer-note, .visit-bar, .photo-btn, .gps-btn, .header-right, .read-only-banner, .photo-preview .del-photo, .photo-preview .download-photo { display: none !important; }
+    .toolbar, .footer-note, .visit-bar, .photo-btn, .gps-btn, .header-right, .read-only-banner, 
+    .photo-preview .del-photo, .photo-preview .download-photo { display: none !important; }
     .container { box-shadow: none; } .section-body.collapsed { display: block !important; }
     .section-header { background: #2a5298 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tr.answered-yes, tr.answered-no, tr.answered-partial, tr.sub-header td { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .photo-preview img { width: 80px; height: 80px; }
+    .photo-area { border: 1px solid #ccc; background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .photo-preview { border: 2px solid #28a745 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .photo-preview img { width: 90px; height: 90px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .table-wrapper { overflow: visible; }
     @page { margin: 0.5cm; size: landscape; }
   }
 </style>
 </head>
 <body>
+
 <!-- ============ LOGIN SCREEN ============ -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
@@ -214,6 +221,7 @@
     <div class="privacy-box">🔒 <strong>100% Private:</strong> Data sirf aapke device pe save hota hai.</div>
   </div>
 </div>
+
 <!-- ============ MAIN APP ============ -->
 <div class="container app-hidden" id="mainApp">
   <header>
@@ -232,7 +240,7 @@
     <div class="header-right">
       <span class="user-badge" id="userBadge">👤 User</span>
       <button class="btn-settings" id="settingsBtn" onclick="openSettings()">️ Settings</button>
-      <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+      <button class="btn-logout" onclick="doLogout()"> Logout</button>
     </div>
   </header>
   <div class="read-only-banner" id="readOnlyBanner">🔒 READ-ONLY MODE: Aap kisi aur ki checklist dekh rahe hain. Edit/Delete nahi kar sakte. Photos download kar sakte hain.</div>
@@ -321,6 +329,7 @@
   </form>
   <div class="footer-note">🏥 <strong>Dr. Shroff's Charity Eye Hospital</strong> | 🔐 Data stays on your device only.</div>
 </div>
+
 <!-- Modals -->
 <div class="modal-overlay" id="manageModal"><div class="modal"><div class="modal-header"><h3>📋 Manage My Visits</h3><button class="modal-close" onclick="closeManageModal()">×</button></div><div class="modal-body" id="visitList"></div></div></div>
 <div class="modal-overlay" id="photoModal" onclick="closePhotoModal()"><div class="modal" onclick="event.stopPropagation()"><div class="modal-header"><h3>🖼️ Photo</h3><button class="modal-close" onclick="closePhotoModal()">×</button></div><div class="modal-body" style="text-align:center;"><img id="photoViewerImg" src="" style="max-width:100%; max-height:80vh; border-radius:6px;"></div></div></div>
@@ -340,11 +349,13 @@
   <div class="settings-section" id="forgotStep2Section" style="display:none;"><h4>Step 2: Answer Security Question</h4><p id="forgotQuestionText" style="font-size:13px; color:#495057; margin-bottom:8px;"></p><label>Your Answer</label><input type="text" id="forgotAnswer" placeholder="Enter answer"><button class="btn-update" onclick="forgotStep2()" style="background:#007bff;">Verify →</button><div class="settings-msg" id="forgotMsg2"></div></div>
   <div class="settings-section" id="forgotStep3Section" style="display:none;"><h4>Step 3: Set New Password</h4><label>New Password (min 4 chars)</label><input type="password" id="forgotNewPass"><label>Confirm Password</label><input type="password" id="forgotConfirmPass"><button class="btn-update" onclick="forgotStep3()" style="background:#28a745;">✓ Reset Password</button><div class="settings-msg" id="forgotMsg3"></div></div>
 </div></div></div>
+
 <script>
 const ORG_NAME = "Dr. Shroff's Charity Eye Hospital";
 const USERS_KEY = 'vc_users_final';
 const SESSION_KEY = 'vc_session_final';
-const REMARKS_MAX = 500;
+const REMARKS_MAX = 1000;
+
 function formatDateTime12hr(date) {
   if (!date) return '';
   const d = new Date(date);
@@ -360,6 +371,7 @@ function formatDateTime12hr(date) {
   const hoursStr = String(hours).padStart(2, '0');
   return `${day}/${month}/${year}, ${hoursStr}:${minutes}:${seconds} ${ampm}`;
 }
+
 const sections = [
   { id: "B", title: "B. CLEANLINESS & WASTE MANAGEMENT", items: [
     {n:"1", p:"VC clean (floor, walls, table, equipment etc.)", ov:"Observation"},
@@ -459,14 +471,17 @@ const sections = [
     {n:"4", p:"CHW communication with patients in the community", ov:"Observation"}
   ]}
 ];
+
 let currentUser = null, currentVisitId = null, dirty = false, totalParams = 0;
 let viewingOtherEmployee = false, originalCurrentUser = null, forgotTempUser = null;
+
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password + '_vc_salt_2026');
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
+
 function getUsers() {
   try {
     const users = JSON.parse(localStorage.getItem(USERS_KEY)) || {};
@@ -477,14 +492,36 @@ function getUsers() {
     return users;
   } catch(e) { return {}; }
 }
+
 function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
 function getVisitsKey(u) { return `vc_visits_${u}_final`; }
 function getMetaKey(u) { return `vc_meta_${u}_final`; }
-function getMyVisits() { if (!currentUser) return {}; try { return JSON.parse(localStorage.getItem(getVisitsKey(currentUser.username))) || {}; } catch(e) { return {}; } }
-function saveMyVisits(v) { if (!currentUser) return; try { localStorage.setItem(getVisitsKey(currentUser.username), JSON.stringify(v)); } catch(e) { alert('Storage full!'); } }
-function getMyMeta() { if (!currentUser) return { currentVisitId: null }; try { return JSON.parse(localStorage.getItem(getMetaKey(currentUser.username))) || { currentVisitId: null }; } catch(e) { return { currentVisitId: null }; } }
-function saveMyMeta(m) { if (!currentUser) return; localStorage.setItem(getMetaKey(currentUser.username), JSON.stringify(m)); }
+
+function getMyVisits() { 
+  if (!currentUser) return {}; 
+  try { return JSON.parse(localStorage.getItem(getVisitsKey(currentUser.username))) || {}; } 
+  catch(e) { return {}; } 
+}
+
+function saveMyVisits(v) { 
+  if (!currentUser) return; 
+  try { localStorage.setItem(getVisitsKey(currentUser.username), JSON.stringify(v)); } 
+  catch(e) { alert('Storage full!'); } 
+}
+
+function getMyMeta() { 
+  if (!currentUser) return { currentVisitId: null }; 
+  try { return JSON.parse(localStorage.getItem(getMetaKey(currentUser.username))) || { currentVisitId: null }; } 
+  catch(e) { return { currentVisitId: null }; } 
+}
+
+function saveMyMeta(m) { 
+  if (!currentUser) return; 
+  localStorage.setItem(getMetaKey(currentUser.username), JSON.stringify(m)); 
+}
+
 function getVisit(id) { return getMyVisits()[id]; }
+
 function initTimePickers() {
   const hours = ['1','2','3','4','5','6','7','8','9','10','11','12'];
   ['time_from_h','time_to_h'].forEach(name => {
@@ -492,6 +529,7 @@ function initTimePickers() {
     if (sel) sel.innerHTML = '<option value="">H</option>' + hours.map(h => `<option value="${h}">${h}</option>`).join('');
   });
 }
+
 function updateTimeField() {
   const form = document.getElementById('checklistForm');
   const fh = form.querySelector('[name="time_from_h"]').value;
@@ -506,6 +544,7 @@ function updateTimeField() {
   form.querySelector('[name="visit_time"]').value = timeStr;
   markDirty();
 }
+
 function parseTimeToFields(timeStr) {
   if (!timeStr) return;
   const form = document.getElementById('checklistForm');
@@ -521,6 +560,7 @@ function parseTimeToFields(timeStr) {
     }
   }
 }
+
 function switchLoginTab(tab) {
   document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.login-form').forEach(f => f.classList.remove('active'));
@@ -528,9 +568,11 @@ function switchLoginTab(tab) {
   else { document.querySelectorAll('.login-tab')[1].classList.add('active'); document.getElementById('registerForm').classList.add('active'); }
   ['loginError','regError','regSuccess'].forEach(id => document.getElementById(id).style.display = 'none');
 }
+
 function showLoginError(msg) { const el = document.getElementById('loginError'); el.textContent = '❌ ' + msg; el.style.display = 'block'; setTimeout(() => el.style.display = 'none', 5000); }
-function showRegError(msg) { const el = document.getElementById('regError'); el.textContent = ' ' + msg; el.style.display = 'block'; document.getElementById('regSuccess').style.display = 'none'; setTimeout(() => el.style.display = 'none', 5000); }
+function showRegError(msg) { const el = document.getElementById('regError'); el.textContent = '❌ ' + msg; el.style.display = 'block'; document.getElementById('regSuccess').style.display = 'none'; setTimeout(() => el.style.display = 'none', 5000); }
 function showRegSuccess(msg) { const el = document.getElementById('regSuccess'); el.textContent = '✅ ' + msg; el.style.display = 'block'; document.getElementById('regError').style.display = 'none'; }
+
 async function doLogin() {
   const username = document.getElementById('loginUser').value.trim().toLowerCase();
   const password = document.getElementById('loginPass').value;
@@ -548,6 +590,7 @@ async function doLogin() {
   else sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
   enterApp();
 }
+
 async function doRegister() {
   const name = document.getElementById('regName').value.trim();
   const username = document.getElementById('regUser').value.trim().toLowerCase();
@@ -569,6 +612,7 @@ async function doRegister() {
   showRegSuccess('Account ban gaya! Ab login karo.');
   setTimeout(() => { switchLoginTab('login'); document.getElementById('loginUser').value = username; document.getElementById('loginPass').focus(); }, 1500);
 }
+
 function doLogout() {
   if (dirty && !confirm('Unsaved changes auto-save ho jayenge. Continue?')) return;
   if (dirty) manualSave();
@@ -578,6 +622,7 @@ function doLogout() {
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('loginPass').value = ''; document.getElementById('loginUser').value = '';
 }
+
 function enterApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('mainApp').classList.remove('app-hidden');
@@ -587,6 +632,7 @@ function enterApp() {
   document.getElementById('settingsBtn').style.display = 'inline-block';
   initApp();
 }
+
 async function checkSession() {
   const raw = localStorage.getItem(SESSION_KEY) || sessionStorage.getItem(SESSION_KEY);
   if (!raw) return;
@@ -596,6 +642,7 @@ async function checkSession() {
     if (user) { currentUser = { username: user.username, name: user.name, designation: user.designation, isAdmin: !!user.isAdmin }; enterApp(); }
   } catch(e) {}
 }
+
 function openForgotPassword() {
   document.getElementById('forgotUser').value = '';
   document.getElementById('forgotAnswer').value = '';
@@ -606,7 +653,9 @@ function openForgotPassword() {
   ['forgotMsg1','forgotMsg2','forgotMsg3'].forEach(id => { const el = document.getElementById(id); el.className = 'settings-msg'; el.textContent = ''; });
   document.getElementById('forgotModal').classList.add('active');
 }
+
 function closeForgotPassword() { document.getElementById('forgotModal').classList.remove('active'); }
+
 function forgotStep1() {
   const username = document.getElementById('forgotUser').value.trim().toLowerCase();
   const msg = document.getElementById('forgotMsg1');
@@ -621,6 +670,7 @@ function forgotStep1() {
   msg.textContent = '✅ Username verified. Ab answer do.';
   msg.className = 'settings-msg success';
 }
+
 function forgotStep2() {
   const answer = document.getElementById('forgotAnswer').value.trim().toLowerCase();
   const msg = document.getElementById('forgotMsg2');
@@ -630,6 +680,7 @@ function forgotStep2() {
   msg.textContent = '✅ Answer sahi! Ab naya password set karo.';
   msg.className = 'settings-msg success';
 }
+
 async function forgotStep3() {
   const newPass = document.getElementById('forgotNewPass').value;
   const confirmPass = document.getElementById('forgotConfirmPass').value;
@@ -644,6 +695,7 @@ async function forgotStep3() {
   msg.className = 'settings-msg success';
   setTimeout(() => { closeForgotPassword(); switchLoginTab('login'); document.getElementById('loginUser').value = forgotTempUser.username; }, 2000);
 }
+
 function openSettings() {
   if (!currentUser) return;
   document.getElementById('currentUsername').value = currentUser.username;
@@ -656,8 +708,10 @@ function openSettings() {
   else { dashboardSection.style.display = 'none'; }
   document.getElementById('settingsModal').classList.add('active');
 }
+
 function closeSettings() { document.getElementById('settingsModal').classList.remove('active'); }
 function showSettingsMsg(id, msg, isError) { const el = document.getElementById(id); el.textContent = (isError ? '❌ ' : '✅ ') + msg; el.className = 'settings-msg ' + (isError ? 'error' : 'success'); setTimeout(() => { el.className = 'settings-msg'; el.textContent = ''; }, 4000); }
+
 async function changeUsername() {
   const newUsername = document.getElementById('newUsername').value.trim().toLowerCase();
   const confirmPass = document.getElementById('confirmPassForUser').value;
@@ -677,8 +731,9 @@ async function changeUsername() {
   const session = { username: newUsername, ts: Date.now() }; localStorage.setItem(SESSION_KEY, JSON.stringify(session)); sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
   showSettingsMsg('usernameMsg', `Username changed: ${newUsername}`, false);
   document.getElementById('currentUsername').value = newUsername; document.getElementById('newUsername').value = ''; document.getElementById('confirmPassForUser').value = '';
-  document.getElementById('userBadge').textContent = `👤 ${currentUser.name} (Admin)`;
+  document.getElementById('userBadge').textContent = ` ${currentUser.name} (Admin)`;
 }
+
 async function changePassword() {
   const oldPass = document.getElementById('oldPassword').value; const newPass = document.getElementById('newPassword').value; const confirmPass = document.getElementById('confirmPassword').value;
   if (!oldPass || !newPass || !confirmPass) { showSettingsMsg('passwordMsg', 'Saare fields bharo', true); return; }
@@ -690,6 +745,7 @@ async function changePassword() {
   showSettingsMsg('passwordMsg', 'Password changed!', false);
   document.getElementById('oldPassword').value = ''; document.getElementById('newPassword').value = ''; document.getElementById('confirmPassword').value = '';
 }
+
 function updateProfile() {
   const name = document.getElementById('profileName').value.trim(); const desig = document.getElementById('profileDesig').value.trim();
   if (!name || !desig) { showSettingsMsg('profileMsg', 'Naam aur designation daalo', true); return; }
@@ -698,18 +754,16 @@ function updateProfile() {
   document.getElementById('userBadge').textContent = `👤 ${name}${currentUser.isAdmin?' (Admin)':''}`;
   showSettingsMsg('profileMsg', 'Profile updated!', false);
 }
+
 function updateVisitName() {
   if (!currentVisitId) return;
   const visits = getMyVisits();
   const visit = visits[currentVisitId];
   if (!visit) return;
-  
   const form = document.getElementById('checklistForm');
   const vcName = form.querySelector('[name="vc_name"]').value.trim();
   const visitDate = form.querySelector('[name="visit_date"]').value;
-  
   const createdTime = formatDateTime12hr(visit.createdAt);
-  
   if (vcName || visitDate) {
     visit.name = [currentUser.name, vcName, visitDate, createdTime].filter(x => x).join(' - ');
   } else {
@@ -718,6 +772,7 @@ function updateVisitName() {
   saveMyVisits(visits);
   refreshVisitSelector();
 }
+
 function buildSections() {
   const container = document.getElementById('sectionsContainer'); container.innerHTML = ''; totalParams = 0;
   sections.forEach(sec => {
@@ -759,6 +814,7 @@ function buildSections() {
   });
   document.getElementById('progressText').textContent = `0 / ${totalParams}`;
 }
+
 function updateCharCount(key, textarea) {
   const countEl = document.getElementById(`charCount_${key}`);
   if (countEl) {
@@ -768,9 +824,11 @@ function updateCharCount(key, textarea) {
     else countEl.classList.remove('warn');
   }
 }
+
 function toggleSection(header) { header.classList.toggle('collapsed'); header.nextElementSibling.classList.toggle('collapsed'); }
 function markDirty() { dirty = true; const s = document.getElementById('saveStatus'); s.textContent = 'Unsaved...'; s.classList.remove('saved'); }
 function onAnswer(radio) { markDirty(); const tr = radio.closest('tr'); tr.classList.remove('answered-yes','answered-no','answered-partial'); tr.classList.add('answered-' + radio.value.toLowerCase()); updateProgress(); }
+
 function updateProgress() {
   let answered = 0;
   sections.forEach(sec => sec.items.forEach(it => { if (document.querySelector(`input[name="${sec.id}_${it.n}"]:checked`)) answered++; }));
@@ -778,6 +836,7 @@ function updateProgress() {
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressText').textContent = `${answered} / ${totalParams} (${Math.round(pct)}%)`;
 }
+
 function compressImage(file, maxWidth=800, quality=0.7) {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -796,12 +855,16 @@ function compressImage(file, maxWidth=800, quality=0.7) {
     reader.readAsDataURL(file);
   });
 }
+
 async function handlePhotoUpload(event, key) {
   const file = event.target.files[0]; 
   if (!file) return;
   if (file.size > 10 * 1024 * 1024) { alert('Max 10MB!'); return; }
   
   try {
+    const list = document.getElementById(`photoList_${key}`);
+    if (list) list.innerHTML = '<div style="padding:10px; color:#6c757d;">⏳ Processing photo...</div>';
+    
     const compressed = await compressImage(file);
     const visit = getVisit(currentVisitId);
     if (!visit.data.photos) visit.data.photos = {}; 
@@ -815,21 +878,30 @@ async function handlePhotoUpload(event, key) {
     setTimeout(() => { if (currentVisitId) manualSave(); }, 1000);
   } catch (err) {
     alert('Photo upload error: ' + err.message);
+    renderPhotos(key);
   }
 }
+
 function renderPhotos(key) {
   const visit = getVisit(currentVisitId); 
   const list = document.getElementById(`photoList_${key}`); 
   if (!list) return;
   const photos = (visit.data.photos && visit.data.photos[key]) || [];
+  
+  if (photos.length === 0) {
+    list.innerHTML = '';
+    return;
+  }
+  
   list.innerHTML = photos.map((p, idx) => `
     <span class="photo-preview">
-      <img src="${p.data}" onclick="viewPhoto('${key}', ${idx})" title="Click to view full size">
+      <img src="${p.data}" onclick="viewPhoto('${key}', ${idx})" title="Click to view full size" alt="Photo ${idx + 1}">
       <button type="button" class="del-photo" onclick="deletePhoto('${key}', ${idx})" title="Delete">×</button>
-      <button type="button" class="download-photo" onclick="downloadSinglePhoto('${key}', ${idx})" title="Download">⬇</button>
+      <button type="button" class="download-photo" onclick="downloadSinglePhoto('${key}', ${idx})" title="Download"></button>
     </span>
   `).join('');
 }
+
 function renderAllPhotos() { sections.forEach(sec => sec.items.forEach(it => renderPhotos(`${sec.id}_${it.n}`))); }
 function viewPhoto(key, idx) { document.getElementById('photoViewerImg').src = getVisit(currentVisitId).data.photos[key][idx].data; document.getElementById('photoModal').classList.add('active'); }
 function closePhotoModal() { document.getElementById('photoModal').classList.remove('active'); }
@@ -845,12 +917,14 @@ function downloadSinglePhoto(key, idx) {
   link.click();
   document.body.removeChild(link);
 }
+
 function showGPSError(msg, showRetry=true) { 
   const errEl = document.getElementById('gpsError'); 
   errEl.innerHTML = ' ' + msg + (showRetry ? ' <button type="button" class="gps-btn" onclick="captureGPS()" style="padding:3px 8px;margin-left:5px;">Retry</button>' : ''); 
   errEl.classList.add('show');
 }
 function hideGPSError() { document.getElementById('gpsError').classList.remove('show'); }
+
 function captureGPS() {
   hideGPSError(); 
   if (!navigator.geolocation) { 
@@ -883,7 +957,9 @@ function captureGPS() {
     showGPSError(msg); 
   }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
 }
+
 function toggleManualGPS() { const box = document.getElementById('manualGPSBox'); box.style.display = box.style.display === 'none' ? 'block' : 'none'; const visit = getVisit(currentVisitId); if (visit && visit.data.gps) { document.getElementById('manualLat').value = visit.data.gps.lat; document.getElementById('manualLng').value = visit.data.gps.lng; } }
+
 function saveManualGPS() {
   const lat = document.getElementById('manualLat').value.trim(); const lng = document.getElementById('manualLng').value.trim();
   if (!lat || !lng || isNaN(lat) || isNaN(lng)) { alert('Invalid coordinates'); return; }
@@ -899,6 +975,7 @@ function saveManualGPS() {
   document.getElementById('manualGPSBox').style.display = 'none'; 
   markDirty();
 }
+
 function restoreGPS() {
   const visit = getVisit(currentVisitId); const coordsEl = document.getElementById('gpsCoords'); const linkEl = document.getElementById('gpsLink');
   if (visit && visit.data.gps) { 
@@ -914,6 +991,7 @@ function restoreGPS() {
   }
   hideGPSError();
 }
+
 function createNewVisit() {
   if (dirty && !confirm('Unsaved changes save ho jayenge. Continue?')) return;
   if (dirty) manualSave();
@@ -924,6 +1002,7 @@ function createNewVisit() {
   currentVisitId = id; resetForm(); refreshVisitSelector(); dirty = false;
   document.getElementById('saveStatus').textContent = '✓ New visit'; document.getElementById('saveStatus').classList.add('saved');
 }
+
 function duplicateVisit() {
   if (!currentVisitId) { alert('Pehle koi visit select karo'); return; }
   if (!confirm('Current visit ka duplicate banayein?')) return;
@@ -936,11 +1015,13 @@ function duplicateVisit() {
   currentVisitId = newId; loadCurrentVisitToForm(); refreshVisitSelector();
   alert('✅ Visit duplicated! Ab isme changes karke save karo.');
 }
+
 function switchVisit(id) {
   if (!id) return; if (dirty && !confirm('Unsaved changes auto-save ho jayenge.')) { refreshVisitSelector(); return; }
   if (dirty) manualSave(); const meta = getMyMeta(); meta.currentVisitId = id; saveMyMeta(meta); currentVisitId = id; loadCurrentVisitToForm(); dirty = false;
   document.getElementById('saveStatus').textContent = '✓ Visit loaded'; document.getElementById('saveStatus').classList.add('saved');
 }
+
 function loadCurrentVisitToForm() {
   const visit = getVisit(currentVisitId); if (!visit) return; const form = document.getElementById('checklistForm'); const data = visit.data;
   if (data.info) Object.keys(data.info).forEach(k => { const el = form.querySelector(`[name="${k}"]`); if (el) el.value = data.info[k] || ''; });
@@ -950,11 +1031,14 @@ function loadCurrentVisitToForm() {
   if (data.ov) Object.keys(data.ov).forEach(key => { const el = form.querySelector(`[name="ov_${key}"]`); if (el) el.value = data.ov[key]; });
   renderAllPhotos(); restoreGPS(); updateProgress();
 }
+
 function resetForm() { document.getElementById('checklistForm').reset(); document.querySelectorAll('tr').forEach(tr => tr.classList.remove('answered-yes','answered-no','answered-partial')); renderAllPhotos(); restoreGPS(); updateProgress(); }
+
 function refreshVisitSelector() {
   const visits = getMyVisits(); const sel = document.getElementById('visitSelector'); sel.innerHTML = '<option value="">-- Select Visit --</option>';
   Object.values(visits).sort((a,b) => b.createdAt - a.createdAt).forEach(v => { const opt = document.createElement('option'); opt.value = v.id; opt.textContent = v.name; if (v.id === currentVisitId) opt.selected = true; sel.appendChild(opt); });
 }
+
 function openManageModal() {
   const visits = getMyVisits(); const list = document.getElementById('visitList'); const arr = Object.values(visits).sort((a,b) => b.createdAt - a.createdAt);
   if (arr.length === 0) { list.innerHTML = '<p style="text-align:center;color:#6c757d; padding:20px;">Koi visit nahi. "➕ New" click karo.</p>'; }
@@ -977,9 +1061,11 @@ function openManageModal() {
   }
   document.getElementById('manageModal').classList.add('active');
 }
+
 function closeManageModal() { document.getElementById('manageModal').classList.remove('active'); }
 function loadVisitFromModal(id) { closeManageModal(); switchVisit(id); }
 function renameVisit(id) { const visits = getMyVisits(); const newName = prompt('Naya naam:', visits[id].name); if (newName && newName.trim()) { visits[id].name = newName.trim(); saveMyVisits(visits); refreshVisitSelector(); openManageModal(); } }
+
 function deleteVisit(id) {
   const visit = getVisit(id); if (!visit) return;
   if (visit.owner !== currentUser.username && !currentUser.isAdmin) { alert('❌ Aap sirf apni checklist delete kar sakte hain.'); return; }
@@ -990,7 +1076,9 @@ function deleteVisit(id) {
   if (meta.currentVisitId === id) { const remaining = Object.keys(visits); meta.currentVisitId = remaining.length ? remaining[0] : null; saveMyMeta(meta); if (meta.currentVisitId) { currentVisitId = meta.currentVisitId; loadCurrentVisitToForm(); } else { createNewVisit(); return; } }
   refreshVisitSelector(); openManageModal();
 }
+
 function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
 function collectData() {
   const visit = getVisit(currentVisitId); if (!visit) return null;
   visit.data.savedAt = new Date().toISOString(); visit.data.info = {}; visit.data.answers = {}; visit.data.remarks = {}; visit.data.ov = {};
@@ -998,21 +1086,21 @@ function collectData() {
   form.querySelectorAll('.info-grid input, .info-grid select, .signature-section input, .signature-section textarea').forEach(el => { if (el.name) visit.data.info[el.name] = el.value; });
   visit.data.info.other_observations = form.querySelector('[name="other_observations"]').value;
   sections.forEach(sec => sec.items.forEach(it => { const key = `${sec.id}_${it.n}`; const checked = document.querySelector(`input[name="${key}"]:checked`); if (checked) visit.data.answers[key] = checked.value; const rem = form.querySelector(`[name="remark_${key}"]`); if (rem && rem.value) visit.data.remarks[key] = rem.value; const ov = form.querySelector(`[name="ov_${key}"]`); if (ov && ov.value) visit.data.ov[key] = ov.value; }));
-  
   const vcName = visit.data.info.vc_name || ''; 
   const visitDate = visit.data.info.visit_date || '';
   const createdTime = formatDateTime12hr(visit.createdAt);
-  
   if (vcName || visitDate) {
     visit.name = [currentUser.name, vcName, visitDate, createdTime].filter(x=>x).join(' - ');
   }
   return visit;
 }
+
 function manualSave() {
   if (!currentVisitId) { createNewVisit(); return; }
   const visit = collectData(); const visits = getMyVisits(); visits[currentVisitId] = visit; saveMyVisits(visits); refreshVisitSelector(); dirty = false;
   const s = document.getElementById('saveStatus'); s.textContent = '✓ Saved ' + new Date().toLocaleTimeString(); s.classList.add('saved');
 }
+
 function clearCurrentVisit() {
   if (!confirm('Current visit ka sab data clear ho jayega. Sure?')) return;
   if (!confirm('Really sure? Photos bhi delete ho jayengi.')) return;
@@ -1020,8 +1108,10 @@ function clearCurrentVisit() {
   const visits = getMyVisits(); visits[currentVisitId] = visit; saveMyVisits(visits); resetForm(); dirty = false;
   document.getElementById('saveStatus').textContent = 'Cleared'; document.getElementById('saveStatus').classList.remove('saved');
 }
+
 setInterval(() => { if (dirty && currentVisitId) manualSave(); }, 5000);
 window.addEventListener('beforeunload', () => { if (dirty && currentVisitId) manualSave(); });
+
 function exportMyJSON() {
   const visits = getMyVisits(); if (Object.keys(visits).length === 0) { alert('Koi visit nahi.'); return; }
   const exportData = { version: 'vc_final', org: ORG_NAME, exportedAt: new Date().toISOString(), exportedBy: currentUser.name, ownerUsername: currentUser.username, totalVisits: Object.keys(visits).length, visits: visits };
@@ -1029,6 +1119,7 @@ function exportMyJSON() {
   a.href = url; a.download = `DrShroff_VC_${currentUser.username}_${new Date().toISOString().split('T')[0]}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
   alert(`✅ ${exportData.totalVisits} visit(s) exported.`);
 }
+
 function importJSON(event) {
   const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader(); reader.onload = (e) => {
@@ -1041,6 +1132,7 @@ function importJSON(event) {
     event.target.value = '';
   }; reader.readAsText(file);
 }
+
 function exportExcel() {
   const visit = getVisit(currentVisitId); if (!visit) { alert('Koi visit loaded nahi.'); return; }
   const info = visit.data.info || {}; const gps = visit.data.gps;
@@ -1073,12 +1165,15 @@ function exportExcel() {
   const vcName = (info.vc_name || 'VC').replace(/[^a-zA-Z0-9]/g, '_'); const date = info.visit_date || new Date().toISOString().split('T')[0];
   XLSX.writeFile(wb, `DrShroff_VC_${currentUser.username}_${vcName}_${date}.xlsx`);
 }
+
 function openEmployeeDashboard() {
   document.getElementById('dashboardSearch').value = '';
   renderDashboardContent('');
   document.getElementById('dashboardModal').classList.add('active');
 }
+
 function closeEmployeeDashboard() { document.getElementById('dashboardModal').classList.remove('active'); }
+
 function renderDashboardContent(searchTerm) {
   const container = document.getElementById('allEmployeesContainer');
   const users = getUsers(); const allEmployees = Object.values(users).filter(u => !u.isAdmin);
@@ -1098,7 +1193,7 @@ function renderDashboardContent(searchTerm) {
     visitsArray.forEach(v => { totalParamsAll += totalParams; totalAnsweredAll += Object.keys(v.data.answers || {}).length; });
     html += `<div style="border:1px solid #dee2e6; border-radius:8px; margin-bottom:12px; overflow:hidden;">
       <div style="background:linear-gradient(90deg, #2a5298, #1e3c72); color:#fff; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-        <div><strong style="font-size:14px;"> ${emp.name}</strong><div style="font-size:11px; opacity:0.9;">${emp.designation} (@${emp.username})</div></div>
+        <div><strong style="font-size:14px;">👤 ${emp.name}</strong><div style="font-size:11px; opacity:0.9;">${emp.designation} (@${emp.username})</div></div>
         <div style="background:rgba(255,255,255,0.2); padding:5px 10px; border-radius:20px; font-size:12px;">📋 <strong>${visitCount}</strong> Visit${visitCount!==1?'s':''}</div>
       </div>
       <div style="padding:10px; background:#f8f9fa;">`;
@@ -1119,7 +1214,7 @@ function renderDashboardContent(searchTerm) {
           <td style="padding:6px; font-size:11px; color:#495057;">${createdStr}</td>
           <td style="padding:6px; text-align:center;"><span style="background:${statusColor}; color:#fff; padding:2px 8px; border-radius:10px; font-size:10px;">${percentage}%</span>${isOwn ? '<br><small style="color:#28a745; font-size:10px;">✓ Yours</small>' : ''}</td>
           <td style="padding:6px; text-align:center;">
-            <button onclick="viewOtherVisit('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#007bff; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">️ View</button>
+            <button onclick="viewOtherVisit('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#007bff; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">👁️ View</button>
             <button onclick="exportOtherVisitExcel('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#28a745; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">📊 Excel</button>
             <button onclick="exportOtherVisitPDF('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#17a2b8; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">🖨️ PDF</button>
             ${isOwn ? `<button onclick="deleteOtherVisit('${emp.username}', '${visit.id}')" style="padding:4px 8px; background:#dc3545; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px; margin:1px;">🗑️</button>` : ''}
@@ -1138,7 +1233,9 @@ function renderDashboardContent(searchTerm) {
   </div>`;
   container.innerHTML = statsHtml + html;
 }
+
 function filterDashboard() { renderDashboardContent(document.getElementById('dashboardSearch').value); }
+
 function viewOtherVisit(username, visitId) {
   closeEmployeeDashboard(); originalCurrentUser = {...currentUser}; viewingOtherEmployee = true;
   const visits = JSON.parse(localStorage.getItem(getVisitsKey(username))) || {}; const visit = visits[visitId];
@@ -1151,6 +1248,7 @@ function viewOtherVisit(username, visitId) {
   loadCurrentVisitToForm(); makeFormReadOnly();
   alert(`📋 READ-ONLY MODE\n\nAap ${username} ki checklist dekh rahe hain.\nEdit/Delete nahi kar sakte.\nPhotos download kar sakte hain (⬇ button).\nPDF/Excel download kar sakte hain.`);
 }
+
 function makeFormReadOnly() {
   const form = document.getElementById('checklistForm');
   form.querySelectorAll('input, textarea, select').forEach(el => { el.disabled = true; el.style.background = '#e9ecef'; el.style.cursor = 'not-allowed'; });
@@ -1158,6 +1256,7 @@ function makeFormReadOnly() {
   form.querySelectorAll('.photo-btn, .gps-btn').forEach(btn => btn.style.display = 'none');
   document.getElementById('btnSave').disabled = true; document.getElementById('btnClear').disabled = true;
 }
+
 function backToMyVisits() {
   if (!viewingOtherEmployee) return;
   const backBtn = document.getElementById('backToDashboardBtn'); if (backBtn) backBtn.remove();
@@ -1174,6 +1273,7 @@ function backToMyVisits() {
   if (currentVisitId) { refreshVisitSelector(); loadCurrentVisitToForm(); }
   alert('✅ Wapas apne visits par aa gaye.');
 }
+
 function exportOtherVisitExcel(username, visitId) {
   const visits = JSON.parse(localStorage.getItem(getVisitsKey(username))) || {}; const visit = visits[visitId]; if (!visit) { alert('Visit not found!'); return; }
   const info = visit.data.info || {}; const gps = visit.data.gps;
@@ -1204,7 +1304,9 @@ function exportOtherVisitExcel(username, visitId) {
   const vcName = (info.vc_name || 'VC').replace(/[^a-zA-Z0-9]/g, '_'); const date = info.visit_date || new Date().toISOString().split('T')[0];
   XLSX.writeFile(wb, `DrShroff_VC_${username}_${vcName}_${date}.xlsx`);
 }
+
 function exportOtherVisitPDF(username, visitId) { viewOtherVisit(username, visitId); setTimeout(() => { if (confirm('PDF ke liye Print dialog khulega. "Save as PDF" select karein.')) window.print(); }, 500); }
+
 function deleteOtherVisit(username, visitId) {
   if (username !== currentUser.username && !currentUser.isAdmin) { alert('❌ Aap sirf apni checklist delete kar sakte hain.'); return; }
   if (!confirm('Ye visit permanently delete ho jayega. Sure?')) return;
@@ -1214,6 +1316,7 @@ function deleteOtherVisit(username, visitId) {
   renderDashboardContent(document.getElementById('dashboardSearch').value);
   alert('✅ Visit deleted.');
 }
+
 function renderEmployeeDashboard() {
   const container = document.getElementById('employeeListContainer'); const users = getUsers();
   const employees = Object.values(users).filter(u => !u.isAdmin && u.username !== currentUser.username);
@@ -1221,24 +1324,42 @@ function renderEmployeeDashboard() {
   let html = '<div class="table-wrapper"><table style="min-width:400px;"><tr style="background:#e9ecef;"><th style="padding:5px; text-align:left; font-size:11px;">Username</th><th style="padding:5px; text-align:left; font-size:11px;">Name</th><th style="padding:5px; text-align:center; font-size:11px;">Visits</th><th style="padding:5px; text-align:center; font-size:11px;">Action</th></tr>';
   employees.forEach(emp => {
     const empVisits = JSON.parse(localStorage.getItem(getVisitsKey(emp.username))) || {}; const visitCount = Object.keys(empVisits).length;
-    html += `<tr style="border-bottom:1px solid #dee2e6;"><td style="padding:5px; font-size:11px;"><b>${emp.username}</b></td><td style="padding:5px; font-size:11px;">${emp.name}<br><span style="font-size:10px; color:#6c757d;">${emp.designation}</span></td><td style="padding:5px; text-align:center; font-size:11px;"><b>${visitCount}</b></td><td style="padding:5px; text-align:center;"><button onclick="deleteEmployeeAccount('${emp.username}')" style="padding:3px 6px; background:#dc3545; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px;">🗑️ Delete</button></td></tr>`;
+    html += `<tr style="border-bottom:1px solid #dee2e6;"><td style="padding:5px; font-size:11px;"><b>${emp.username}</b></td><td style="padding:5px; font-size:11px;">${emp.name}<br><span style="font-size:10px; color:#6c757d;">${emp.designation}</span></td><td style="padding:5px; text-align:center; font-size:11px;"><b>${visitCount}</b></td><td style="padding:5px; text-align:center;"><button onclick="deleteUserAccount('${emp.username}')" style="padding:3px 6px; background:#dc3545; color:#fff; border:none; border-radius:3px; cursor:pointer; font-size:10px;">🗑️ Delete User</button></td></tr>`;
   });
-  html += '</table></div>'; container.innerHTML = html;
+  html += '</table></div>';
+  container.innerHTML = html;
 }
-function deleteEmployeeAccount(username) {
-  if (!confirm(`${username} ko delete karein? Saara data delete ho jayega!`)) return;
-  if (!confirm('FINAL WARNING: Undo nahi hoga. Delete karein?')) return;
-  const users = getUsers(); delete users[username]; saveUsers(users);
-  localStorage.removeItem(getVisitsKey(username)); localStorage.removeItem(getMetaKey(username));
-  renderEmployeeDashboard(); alert(`✅ ${username} deleted.`);
+
+function deleteUserAccount(username) {
+  if (!confirm(`Kya aap sure hain ki employee '${username}' ko delete karna chahte hain?`)) return;
+  const users = getUsers();
+  delete users[username];
+  saveUsers(users);
+  localStorage.removeItem(getVisitsKey(username));
+  localStorage.removeItem(getMetaKey(username));
+  renderEmployeeDashboard();
+  alert(`User '${username}' delete ho gaya.`);
 }
+
 function initApp() {
   initTimePickers();
-  buildSections(); const visits = getMyVisits(); const meta = getMyMeta();
-  if (Object.keys(visits).length === 0) { createNewVisit(); }
-  else { currentVisitId = (meta.currentVisitId && visits[meta.currentVisitId]) ? meta.currentVisitId : Object.keys(visits)[0]; refreshVisitSelector(); loadCurrentVisitToForm(); document.getElementById('saveStatus').textContent = '✓ Visit loaded'; document.getElementById('saveStatus').classList.add('saved'); }
+  buildSections();
+  const meta = getMyMeta();
+  const visits = getMyVisits();
+  if (meta.currentVisitId && visits[meta.currentVisitId]) {
+    currentVisitId = meta.currentVisitId;
+  } else {
+    const keys = Object.keys(visits);
+    if (keys.length > 0) currentVisitId = keys[0];
+    else createNewVisit();
+  }
+  refreshVisitSelector();
+  if (currentVisitId && visits[currentVisitId]) loadCurrentVisitToForm();
 }
-checkSession();
+
+window.addEventListener('DOMContentLoaded', () => {
+  checkSession();
+});
 </script>
 </body>
 </html>
