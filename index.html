@@ -248,11 +248,11 @@ tr.answered-yes,tr.answered-no,tr.answered-partial,tr.sub-header td{-webkit-prin
     <button class="btn-save" id="btnSave" onclick="manualSave()">💾 Save</button>
     <button class="btn-excel" onclick="exportExcel()">📊 Excel</button>
     <button class="btn-print" onclick="window.print()">️ PDF</button>
-    <button class="btn-dashboard" onclick="openEmployeeDashboard()"> Dashboard</button>
+    <button class="btn-dashboard" onclick="openEmployeeDashboard()">👥 Dashboard</button>
     <button class="btn-export-j" onclick="exportMyJSON()"> Backup</button>
     <button class="btn-load" onclick="document.getElementById('importJSONInput').click()">📥 Import</button>
     <input type="file" id="importJSONInput" accept=".json" style="display:none" onchange="importJSON(event)">
-    <button class="btn-clear" id="btnClear" onclick="clearCurrentVisit()">🗑️ Clear</button>
+    <button class="btn-clear" id="btnClear" onclick="clearCurrentVisit()">️ Clear</button>
     <div class="progress-wrap">
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
       <span class="progress-text" id="progressText">0 / 0</span>
@@ -292,10 +292,10 @@ tr.answered-yes,tr.answered-no,tr.answered-partial,tr.sub-header td{-webkit-prin
       <div><label>Name of Counselor (if any)</label><input type="text" name="counselor_name" oninput="markDirty()"></div>
       <div class="gps-box">
         <strong>📍 GPS:</strong>
-        <button type="button" class="gps-btn" onclick="captureGPS()">📡 Auto</button>
-        <button type="button" class="gps-btn" onclick="toggleManualGPS()" style="background:#6c757d;">✏️ Manual</button>
+        <button type="button" class="gps-btn" onclick="captureGPS()"> Auto</button>
+        <button type="button" class="gps-btn" onclick="toggleManualGPS()" style="background:#6c757d;">️ Manual</button>
         <span class="gps-coords" id="gpsCoords">Not captured</span>
-        <a href="#" class="gps-link" id="gpsLink" target="_blank" style="display:none;">️ Maps</a>
+        <a href="#" class="gps-link" id="gpsLink" target="_blank" style="display:none;">🗺️ Maps</a>
         <div id="manualGPSBox" style="display:none;width:100%;margin-top:8px;padding:8px;background:#fff;border-radius:4px;">
           <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
             <label style="font-size:11px;">Lat:</label><input type="text" id="manualLat" placeholder="28.6139" style="width:110px;padding:4px 6px;border:1px solid #ced4da;border-radius:4px;">
@@ -327,20 +327,19 @@ tr.answered-yes,tr.answered-no,tr.answered-partial,tr.sub-header td{-webkit-prin
 <div class="modal-overlay" id="settingsModal"><div class="modal"><div class="modal-header"><h3>⚙️ Settings</h3><button class="modal-close" onclick="closeSettings()">×</button></div><div class="modal-body">
   <div class="settings-section"><h4>👤 Update Profile</h4><label>Full Name</label><input type="text" id="profileName"><label>Designation</label><input type="text" id="profileDesig"><button class="btn-update" onclick="updateProfile()">✓ Update</button><div class="settings-msg" id="profileMsg"></div></div>
   <div class="settings-section"><h4>🔑 Change Username</h4><label>Current</label><input type="text" id="currentUsername" readonly style="background:#e9ecef;"><label>New Username</label><input type="text" id="newUsername"><label>Confirm Password</label><input type="password" id="confirmPassForUser"><button class="btn-update" onclick="changeUsername()">✓ Update</button><div class="settings-msg" id="usernameMsg"></div></div>
-  <div class="settings-section"><h4> Change Password</h4><label>Current Password</label><input type="password" id="oldPassword"><label>New Password</label><input type="password" id="newPassword"><label>Confirm New</label><input type="password" id="confirmPassword"><button class="btn-update" onclick="changePassword()">✓ Update</button><div class="settings-msg" id="passwordMsg"></div></div>
+  <div class="settings-section"><h4>🔒 Change Password</h4><label>Current Password</label><input type="password" id="oldPassword"><label>New Password</label><input type="password" id="newPassword"><label>Confirm New</label><input type="password" id="confirmPassword"><button class="btn-update" onclick="changePassword()">✓ Update</button><div class="settings-msg" id="passwordMsg"></div></div>
   <div class="settings-section" id="adminDashboardSection" style="display:none;">
     <h4>👑 Admin: Manage Employees</h4>
     <div id="employeeListContainer"></div>
     <button class="btn-update" onclick="renderEmployeeDashboard()" style="background:#17a2b8;margin-top:8px;">🔄 Refresh List</button>
     
-    <!-- Admin Features Info Box -->
     <div style="background:#e7f3ff; padding:10px; border-radius:6px; margin-top:15px; font-size:12px; color:#004085; border:1px solid #b3d9ff;">
-      <strong style="display:block; margin-bottom:5px; font-size:13px;"> Admin Capabilities:</strong>
+      <strong style="display:block; margin-bottom:5px; font-size:13px;">🛡️ Admin Capabilities:</strong>
       <ul style="margin:0; padding-left:20px; line-height:1.6;">
-        <li>📋 <strong>Employee List:</strong> View all registered employees.</li>
+        <li> <strong>Employee List:</strong> View all registered employees.</li>
         <li> <strong>Visit Count:</strong> See total visits per employee.</li>
-        <li>👁️ <strong>Read-Only View:</strong> Open any employee's checklist.</li>
-        <li> <strong>Photo Proofs:</strong> View & download uploaded photos.</li>
+        <li>️ <strong>Read-Only View:</strong> Open any employee's checklist.</li>
+        <li>📸 <strong>Photo Proofs:</strong> View & download uploaded photos.</li>
         <li>📍 <strong>GPS Tracking:</strong> View exact coordinates & Maps link.</li>
         <li>📥 <strong>Reports:</strong> Download Excel/PDF of any visit.</li>
         <li>🗑️ <strong>Delete Access:</strong> Remove employee accounts/data.</li>
@@ -350,7 +349,7 @@ tr.answered-yes,tr.answered-no,tr.answered-partial,tr.sub-header td{-webkit-prin
 </div></div></div>
 <div class="modal-overlay" id="dashboardModal"><div class="modal"><div class="modal-header"><h3>👥 Employee Dashboard</h3><button class="modal-close" onclick="closeEmployeeDashboard()">×</button></div><div class="modal-body">
   <div style="background:#e7f3ff;padding:10px;border-radius:6px;margin-bottom:12px;font-size:12px;"><strong>ℹ️ Note:</strong> Sab employees ki checklists yahan hain. VIEW/PDF/Excel sab kar sakte hain. <strong>Edit/Delete sirf apni checklist ka</strong> kar sakte hain.</div>
-  <input type="text" class="dashboard-search" id="dashboardSearch" placeholder="🔍 Search by employee name, username, or VC name..." oninput="filterDashboard()">
+  <input type="text" class="dashboard-search" id="dashboardSearch" placeholder=" Search by employee name, username, or VC name..." oninput="filterDashboard()">
   <div id="allEmployeesContainer"></div>
 </div></div></div>
 <div class="modal-overlay" id="forgotModal"><div class="modal" style="max-width:450px;"><div class="modal-header"><h3>🔑 Forgot Password</h3><button class="modal-close" onclick="closeForgotPassword()">×</button></div><div class="modal-body">
@@ -366,6 +365,7 @@ const REMARKS_MAX=1000;
 const MAX_PHOTO_SIZE=10*1024*1024;
 let visitsCache = null;
 let visitsCacheUsername = null;
+let currentlyLoadedVisit = null;
 function formatDateTime12hr(date){
   if(!date)return'';
   const d=new Date(date);
@@ -572,7 +572,7 @@ function switchLoginTab(tab){
   else{document.querySelectorAll('.login-tab')[1].classList.add('active');document.getElementById('registerForm').classList.add('active');}
   ['loginError','regError','regSuccess'].forEach(id=>document.getElementById(id).style.display='none');
 }
-function showLoginError(msg){const el=document.getElementById('loginError');el.textContent=' '+msg;el.style.display='block';setTimeout(()=>el.style.display='none',5000);}
+function showLoginError(msg){const el=document.getElementById('loginError');el.textContent='❌ '+msg;el.style.display='block';setTimeout(()=>el.style.display='none',5000);}
 function showRegError(msg){const el=document.getElementById('regError');el.textContent='❌ '+msg;el.style.display='block';document.getElementById('regSuccess').style.display='none';setTimeout(()=>el.style.display='none',5000);}
 function showRegSuccess(msg){const el=document.getElementById('regSuccess');el.textContent='✅ '+msg;el.style.display='block';document.getElementById('regError').style.display='none';}
 async function doLogin(){
@@ -627,6 +627,7 @@ function doLogout(){
   sessionStorage.removeItem(SESSION_KEY);
   currentUser=null;
   currentVisitId=null;
+  currentlyLoadedVisit = null;
   clearVisitsCache();
   document.getElementById('mainApp').classList.add('app-hidden');
   document.getElementById('loginScreen').style.display='flex';
@@ -679,7 +680,7 @@ function forgotStep1(){
 function forgotStep2(){
   const answer=document.getElementById('forgotAnswer').value.trim().toLowerCase();
   const msg=document.getElementById('forgotMsg2');
-  if(!answer){msg.textContent=' Answer daalo';msg.className='settings-msg error';return;}
+  if(!answer){msg.textContent='❌ Answer daalo';msg.className='settings-msg error';return;}
   if(answer!==forgotTempUser.securityA){msg.textContent='❌ Answer galat hai.';msg.className='settings-msg error';return;}
   document.getElementById('forgotStep3Section').style.display='block';
   msg.textContent='✅ Answer sahi! Ab naya password set karo.';
@@ -778,7 +779,7 @@ function buildSections(){
             <div class="photo-buttons">
               <input type="file" accept="image/*" capture="environment" style="display:none" id="photoCamera_${key}" onchange="handlePhotoUpload(event,'${key}')">
               <input type="file" accept="image/*" style="display:none" id="photoGallery_${key}" onchange="handlePhotoUpload(event,'${key}')">
-              <button type="button" class="photo-btn-camera" onclick="document.getElementById('photoCamera_${key}').click()">📷 Camera</button>
+              <button type="button" class="photo-btn-camera" onclick="document.getElementById('photoCamera_${key}').click()"> Camera</button>
               <button type="button" class="photo-btn-gallery" onclick="document.getElementById('photoGallery_${key}').click()">🖼️ Gallery</button>
             </div>
             <div class="photo-list" id="photoList_${key}"></div>
@@ -843,7 +844,7 @@ function compressImage(file,maxWidth=600,quality=0.6){
 async function handlePhotoUpload(event,key){
   const file=event.target.files[0];
   if(!file)return;
-  if(file.size>MAX_PHOTO_SIZE){alert('❌ Photo size 10MB se zyada hai! Please choti photo select karein.');event.target.value='';return;}
+  if(file.size>MAX_PHOTO_SIZE){alert(' Photo size 10MB se zyada hai! Please choti photo select karein.');event.target.value='';return;}
   if(!file.type.startsWith('image/')){alert('❌ Please sirf image file select karein.');event.target.value='';return;}
   
   try{
@@ -875,13 +876,13 @@ async function handlePhotoUpload(event,key){
   }
 }
 function renderPhotos(key){
-  const visit=getVisit(currentVisitId);
+  const visit = currentlyLoadedVisit;
   const list=document.getElementById(`photoList_${key}`);
   if(!list){
     console.error('Photo list element not found for key:',key);
     return;
   }
-  const photos=(visit.data.photos&&visit.data.photos[key])||[];
+  const photos=(visit && visit.data.photos && visit.data.photos[key])||[];
   
   if(photos.length===0){
     list.innerHTML='';
@@ -897,12 +898,29 @@ function renderPhotos(key){
   `).join('');
 }
 function renderAllPhotos(){sections.forEach(sec=>sec.items.forEach(it=>renderPhotos(`${sec.id}_${it.n}`)));}
-function viewPhoto(key,idx){document.getElementById('photoViewerImg').src=getVisit(currentVisitId).data.photos[key][idx].data;document.getElementById('photoModal').classList.add('active');}
+function viewPhoto(key,idx){
+  if(!currentlyLoadedVisit || !currentlyLoadedVisit.data.photos || !currentlyLoadedVisit.data.photos[key]) return;
+  document.getElementById('photoViewerImg').src = currentlyLoadedVisit.data.photos[key][idx].data;
+  document.getElementById('photoModal').classList.add('active');
+}
 function closePhotoModal(){document.getElementById('photoModal').classList.remove('active');}
-function deletePhoto(key,idx){if(!confirm('Delete photo?'))return;const visits=getMyVisits();const visit=visits[currentVisitId];if(visit&&visit.data.photos&&visit.data.photos[key]){visit.data.photos[key].splice(idx,1);saveMyVisits(visits);}markDirty();renderPhotos(key);}
+function deletePhoto(key,idx){
+  if(!confirm('Delete photo?'))return;
+  if(!currentlyLoadedVisit) return;
+  if(currentlyLoadedVisit.data.photos && currentlyLoadedVisit.data.photos[key]){
+    currentlyLoadedVisit.data.photos[key].splice(idx,1);
+    if(!viewingOtherEmployee) {
+      const visits = getMyVisits();
+      visits[currentVisitId] = currentlyLoadedVisit;
+      saveMyVisits(visits);
+    }
+  }
+  markDirty();
+  renderPhotos(key);
+}
 function downloadSinglePhoto(key,idx){
-  const visit=getVisit(currentVisitId);
-  const photo=visit.data.photos[key][idx];
+  if(!currentlyLoadedVisit || !currentlyLoadedVisit.data.photos || !currentlyLoadedVisit.data.photos[key]) return;
+  const photo = currentlyLoadedVisit.data.photos[key][idx];
   if(!photo)return;
   const link=document.createElement('a');
   link.href=photo.data;
@@ -929,6 +947,7 @@ function captureGPS(){
     if(visit){
       visit.data.gps={lat,lng,acc,ts:Date.now(),source:'auto'};
       saveMyVisits(visits);
+      currentlyLoadedVisit = visit;
     }
     document.getElementById('gpsCoords').textContent=`✅ ${lat}, ${lng} (±${acc}m)`;
     document.getElementById('gpsLink').href=`https://www.google.com/maps?q=${lat},${lng}&z=18`;
@@ -947,7 +966,15 @@ function captureGPS(){
     showGPSError(msg);
   },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
-function toggleManualGPS(){const box=document.getElementById('manualGPSBox');box.style.display=box.style.display==='none'?'block':'none';const visit=getVisit(currentVisitId);if(visit&&visit.data.gps){document.getElementById('manualLat').value=visit.data.gps.lat;document.getElementById('manualLng').value=visit.data.gps.lng;}}
+function toggleManualGPS(){
+  if(!currentlyLoadedVisit) return;
+  const box=document.getElementById('manualGPSBox');
+  box.style.display=box.style.display==='none'?'block':'none';
+  if(currentlyLoadedVisit.data.gps){
+    document.getElementById('manualLat').value=currentlyLoadedVisit.data.gps.lat;
+    document.getElementById('manualLng').value=currentlyLoadedVisit.data.gps.lng;
+  }
+}
 function saveManualGPS(){
   const lat=document.getElementById('manualLat').value.trim();const lng=document.getElementById('manualLng').value.trim();
   if(!lat||!lng||isNaN(lat)||isNaN(lng)){alert('Invalid coordinates');return;}
@@ -957,6 +984,7 @@ function saveManualGPS(){
   if(visit){
     visit.data.gps={lat,lng,acc:'manual',ts:Date.now(),source:'manual'};
     saveMyVisits(visits);
+    currentlyLoadedVisit = visit;
   }
   document.getElementById('gpsCoords').textContent=`✅ ${lat}, ${lng} (Manual)`;
   document.getElementById('gpsLink').href=`https://www.google.com/maps?q=${lat},${lng}&z=18`;
@@ -964,8 +992,9 @@ function saveManualGPS(){
   hideGPSError();document.getElementById('manualGPSBox').style.display='none';markDirty();
 }
 function restoreGPS(){
-  const visit=getVisit(currentVisitId);const coordsEl=document.getElementById('gpsCoords');const linkEl=document.getElementById('gpsLink');
-  if(visit&&visit.data.gps){
+  const visit = currentlyLoadedVisit;
+  const coordsEl=document.getElementById('gpsCoords');const linkEl=document.getElementById('gpsLink');
+  if(visit && visit.data.gps){
     const{lat,lng,acc,source}=visit.data.gps;
     coordsEl.textContent=`✅ ${lat}, ${lng} (${source==='manual'?'Manual':`±${acc}m`})`;
     linkEl.href=`https://www.google.com/maps?q=${lat},${lng}&z=18`;
@@ -975,6 +1004,29 @@ function restoreGPS(){
   }else{coordsEl.textContent='Not captured';linkEl.style.display='none';}
   hideGPSError();
 }
+function loadVisitToForm(visit){
+  if(!visit) return;
+  currentlyLoadedVisit = visit;
+  
+  const form=document.getElementById('checklistForm');
+  const data=visit.data;
+  
+  form.reset();
+  document.querySelectorAll('tr').forEach(tr=>tr.classList.remove('answered-yes','answered-no','answered-partial'));
+  
+  if(data.info)Object.keys(data.info).forEach(k=>{const el=form.querySelector(`[name="${k}"]`);if(el)el.value=data.info[k]||'';});
+  parseTimeToFields(data.info?.visit_time||'');
+  if(data.answers)Object.keys(data.answers).forEach(key=>{const radio=document.querySelector(`input[name="${key}"][value="${data.answers[key]}"]`);if(radio){radio.checked=true;const tr=radio.closest('tr');tr.classList.remove('answered-yes','answered-no','answered-partial');tr.classList.add('answered-'+data.answers[key].toLowerCase());}});
+  if(data.remarks)Object.keys(data.remarks).forEach(key=>{const el=form.querySelector(`[name="remark_${key}"]`);if(el){el.value=data.remarks[key];updateCharCount(key,el);}});
+  if(data.ov)Object.keys(data.ov).forEach(key=>{const el=form.querySelector(`[name="ov_${key}"]`);if(el)el.value=data.ov[key];});
+  
+  renderAllPhotos();
+  restoreGPS();
+  updateProgress();
+}
+function loadCurrentVisitToForm(){
+  loadVisitToForm(getVisit(currentVisitId));
+}
 function createNewVisit(){
   if(dirty&&!confirm('Unsaved changes save ho jayenge. Continue?'))return;
   if(dirty)manualSave();
@@ -982,7 +1034,9 @@ function createNewVisit(){
   const timeStr=formatDateTime12hr(Date.now());
   visits[id]={id,name:`${currentUser.name} - ${timeStr}`,owner:currentUser.username,createdAt:Date.now(),data:{info:{},answers:{},remarks:{},ov:{},photos:{},gps:null}};
   saveMyVisits(visits);const meta=getMyMeta();meta.currentVisitId=id;saveMyMeta(meta);
-  currentVisitId=id;resetForm();refreshVisitSelector();dirty=false;
+  currentVisitId=id;
+  loadCurrentVisitToForm();
+  refreshVisitSelector();dirty=false;
   document.getElementById('saveStatus').textContent='✓ New visit';document.getElementById('saveStatus').classList.add('saved');
 }
 function duplicateVisit(){
@@ -999,17 +1053,10 @@ function duplicateVisit(){
 }
 function switchVisit(id){
   if(!id)return;if(dirty&&!confirm('Unsaved changes auto-save ho jayenge.')){refreshVisitSelector();return;}
-  if(dirty)manualSave();const meta=getMyMeta();meta.currentVisitId=id;saveMyMeta(meta);currentVisitId=id;loadCurrentVisitToForm();dirty=false;
+  if(dirty)manualSave();const meta=getMyMeta();meta.currentVisitId=id;saveMyMeta(meta);currentVisitId=id;
+  loadCurrentVisitToForm();
+  dirty=false;
   document.getElementById('saveStatus').textContent='✓ Visit loaded';document.getElementById('saveStatus').classList.add('saved');
-}
-function loadCurrentVisitToForm(){
-  const visit=getVisit(currentVisitId);if(!visit)return;const form=document.getElementById('checklistForm');const data=visit.data;
-  if(data.info)Object.keys(data.info).forEach(k=>{const el=form.querySelector(`[name="${k}"]`);if(el)el.value=data.info[k]||'';});
-  parseTimeToFields(data.info?.visit_time||'');
-  if(data.answers)Object.keys(data.answers).forEach(key=>{const radio=document.querySelector(`input[name="${key}"][value="${data.answers[key]}"]`);if(radio){radio.checked=true;const tr=radio.closest('tr');tr.classList.remove('answered-yes','answered-no','answered-partial');tr.classList.add('answered-'+data.answers[key].toLowerCase());}});
-  if(data.remarks)Object.keys(data.remarks).forEach(key=>{const el=form.querySelector(`[name="remark_${key}"]`);if(el){el.value=data.remarks[key];updateCharCount(key,el);}});
-  if(data.ov)Object.keys(data.ov).forEach(key=>{const el=form.querySelector(`[name="ov_${key}"]`);if(el)el.value=data.ov[key];});
-  renderAllPhotos();restoreGPS();updateProgress();
 }
 function resetForm(){document.getElementById('checklistForm').reset();document.querySelectorAll('tr').forEach(tr=>tr.classList.remove('answered-yes','answered-no','answered-partial'));renderAllPhotos();restoreGPS();updateProgress();}
 function refreshVisitSelector(){
@@ -1053,7 +1100,8 @@ function deleteVisit(id){
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function collectData(){
-  const visit=getVisit(currentVisitId);if(!visit)return null;
+  const visit=currentlyLoadedVisit || getVisit(currentVisitId);
+  if(!visit)return null;
   visit.data.savedAt=new Date().toISOString();visit.data.info={};visit.data.answers={};visit.data.remarks={};visit.data.ov={};
   const form=document.getElementById('checklistForm');
   form.querySelectorAll('.info-grid input,.info-grid select,.signature-section input,.signature-section textarea').forEach(el=>{if(el.name)visit.data.info[el.name]=el.value;});
@@ -1088,7 +1136,7 @@ function clearCurrentVisit(){
     visit.data={info:{},answers:{},remarks:{},ov:{},photos:{},gps:null};
     saveMyVisits(visits);
   }
-  resetForm();dirty=false;
+  loadCurrentVisitToForm();dirty=false;
   document.getElementById('saveStatus').textContent='Cleared';document.getElementById('saveStatus').classList.remove('saved');
 }
 setInterval(()=>{if(dirty&&currentVisitId)manualSave();},5000);
@@ -1113,7 +1161,8 @@ function importJSON(event){
   };reader.readAsText(file);
 }
 function exportExcel(){
-  const visit=getVisit(currentVisitId);if(!visit){alert('Koi visit loaded nahi.');return;}
+  const visit=currentlyLoadedVisit || getVisit(currentVisitId);
+  if(!visit){alert('Koi visit loaded nahi.');return;}
   const info=visit.data.info||{};
   const gps=visit.data.gps||null;
   const wb=XLSX.utils.book_new();const data=[];
@@ -1175,7 +1224,7 @@ function renderDashboardContent(searchTerm){
     html+=`<div style="border:1px solid #dee2e6;border-radius:8px;margin-bottom:12px;overflow:hidden;">
       <div style="background:linear-gradient(90deg,#2a5298,#1e3c72);color:#fff;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
         <div><strong style="font-size:14px;">👤 ${emp.name}</strong><div style="font-size:11px;opacity:0.9;">${emp.designation} (@${emp.username})</div></div>
-        <div style="background:rgba(255,255,255,0.2);padding:5px 10px;border-radius:20px;font-size:12px;">📋 <strong>${visitCount}</strong> Visit${visitCount!==1?'s':''}</div>
+        <div style="background:rgba(255,255,255,0.2);padding:5px 10px;border-radius:20px;font-size:12px;"> <strong>${visitCount}</strong> Visit${visitCount!==1?'s':''}</div>
       </div>
       <div style="padding:10px;background:#f8f9fa;">`;
     if(visitCount===0){html+='<p style="text-align:center;color:#6c757d;padding:15px;font-size:12px;">Abhi tak koi visit nahi.</p>';}
@@ -1216,15 +1265,22 @@ function renderDashboardContent(searchTerm){
 }
 function filterDashboard(){renderDashboardContent(document.getElementById('dashboardSearch').value);}
 function viewOtherVisit(username,visitId){
-  closeEmployeeDashboard();originalCurrentUser={...currentUser};viewingOtherEmployee=true;
-  const visits=JSON.parse(localStorage.getItem(getVisitsKey(username)))||{};const visit=visits[visitId];
-  if(!visit){alert('Visit not found!');viewingOtherEmployee=false;return;}
-  currentUser={...currentUser,viewMode:true,viewModeOwner:username,viewModeVisitId:visitId};
+  closeEmployeeDashboard();
+  originalCurrentUser={...currentUser};
+  viewingOtherEmployee=true;
+  
+  const targetVisits = JSON.parse(localStorage.getItem(getVisitsKey(username))) || {};
+  const targetVisit = targetVisits[visitId];
+  
+  if(!targetVisit){alert('Visit not found!');viewingOtherEmployee=false;return;}
+  
   currentVisitId=visitId;
-  const badge=document.getElementById('userBadge');badge.innerHTML=`️ Viewing: ${visit.data.info?.vc_name||'Visit'} (${username})`;badge.style.background='#ffc107';badge.style.color='#000';
+  const badge=document.getElementById('userBadge');badge.innerHTML=`👁️ Viewing: ${targetVisit.data.info?.vc_name||'Visit'} (${username})`;badge.style.background='#ffc107';badge.style.color='#000';
   document.getElementById('readOnlyBanner').classList.add('active');
-  const toolbar=document.querySelector('.toolbar');const backButton=document.createElement('button');backButton.id='backToDashboardBtn';backButton.className='btn-load';backButton.innerHTML='️ Back';backButton.onclick=backToMyVisits;toolbar.insertBefore(backButton,toolbar.firstChild);
-  loadCurrentVisitToForm();makeFormReadOnly();
+  const toolbar=document.querySelector('.toolbar');const backButton=document.createElement('button');backButton.id='backToDashboardBtn';backButton.className='btn-load';backButton.innerHTML='↩️ Back';backButton.onclick=backToMyVisits;toolbar.insertBefore(backButton,toolbar.firstChild);
+  
+  loadVisitToForm(targetVisit);
+  makeFormReadOnly();
   alert(`📋 READ-ONLY MODE\n\nAap ${username} ki checklist dekh rahe hain.\nEdit/Delete nahi kar sakte.\nPhotos download kar sakte hain (⬇ button).\nPDF/Excel download kar sakte hain.`);
 }
 function makeFormReadOnly(){
@@ -1233,7 +1289,6 @@ function makeFormReadOnly(){
   form.querySelectorAll('.radio-group').forEach(group=>{group.style.opacity='0.6';group.style.pointerEvents='none';});
   form.querySelectorAll('.photo-btn-camera,.photo-btn-gallery,.gps-btn').forEach(btn=>btn.style.display='none');
   
-  // ✅ SECURITY FIX: Hide Delete buttons in Read-Only mode, keep Download buttons
   form.querySelectorAll('.photo-preview .del-photo').forEach(btn=>btn.style.display='none');
   
   document.getElementById('btnSave').disabled=true;document.getElementById('btnClear').disabled=true;
@@ -1242,14 +1297,13 @@ function backToMyVisits(){
   if(!viewingOtherEmployee)return;
   const backBtn=document.getElementById('backToDashboardBtn');if(backBtn)backBtn.remove();
   currentUser={...originalCurrentUser};viewingOtherEmployee=false;
-  const badge=document.getElementById('userBadge');badge.textContent=` ${currentUser.name}${currentUser.isAdmin?' (Admin)':''}`;if(currentUser.isAdmin)badge.classList.add('admin');else badge.classList.remove('admin');badge.style.background='';badge.style.color='';
+  const badge=document.getElementById('userBadge');badge.textContent=`👤 ${currentUser.name}${currentUser.isAdmin?' (Admin)':''}`;if(currentUser.isAdmin)badge.classList.add('admin');else badge.classList.remove('admin');badge.style.background='';badge.style.color='';
   document.getElementById('readOnlyBanner').classList.remove('active');
   const form=document.getElementById('checklistForm');
   form.querySelectorAll('input,textarea,select').forEach(el=>{el.disabled=false;el.style.background='';el.style.cursor='';});
   form.querySelectorAll('.radio-group').forEach(group=>{group.style.opacity='1';group.style.pointerEvents='auto';});
   form.querySelectorAll('.photo-btn-camera,.photo-btn-gallery,.gps-btn').forEach(btn=>btn.style.display='');
   
-  // ✅ SECURITY FIX: Show Delete buttons again when back to own visit
   form.querySelectorAll('.photo-preview .del-photo').forEach(btn=>btn.style.display='flex');
   
   document.getElementById('btnSave').disabled=false;document.getElementById('btnClear').disabled=false;
@@ -1259,7 +1313,9 @@ function backToMyVisits(){
   alert('✅ Wapas apne visits par aa gaye.');
 }
 function exportOtherVisitExcel(username,visitId){
-  const visits=JSON.parse(localStorage.getItem(getVisitsKey(username)))||{};const visit=visits[visitId];if(!visit){alert('Visit not found!');return;}
+  const targetVisits = JSON.parse(localStorage.getItem(getVisitsKey(username))) || {};
+  const visit = targetVisits[visitId];
+  if(!visit){alert('Visit not found!');return;}
   const info=visit.data.info||{};
   const gps=visit.data.gps||null;
   const wb=XLSX.utils.book_new();const data=[];
