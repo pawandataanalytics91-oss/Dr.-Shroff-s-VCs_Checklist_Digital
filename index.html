@@ -1427,10 +1427,9 @@ function deleteEmployeeAccount(username){
   renderEmployeeDashboard();alert(`✅ ${username} deleted.`);
 }
 
-// ✅ SHARE VIA WHATSAPP - MOBILE & DESKTOP DONO KE LIYE
 async function shareWhatsApp() {
   if(!currentlyLoadedVisit && !currentVisitId) {
-    alert(' Pehle koi visit select karein!');
+    alert('❌ Pehle koi visit select karein!');
     return;
   }
   
@@ -1452,40 +1451,25 @@ async function shareWhatsApp() {
     const percentage = Math.round((answeredCount/totalParams)*100);
     const photoCount = visit.data.photos ? Object.values(visit.data.photos).reduce((s,a)=>s+a.length,0) : 0;
     
-    const shareText = `🏥 *Dr. Shroff's VC Monitoring Report*\n\n📋 *Visit Details:*\n• VC Name: ${vcName}\n• Date: ${visitDate}\n• Completed: ${percentage}% (${answeredCount}/${totalParams})\n• Photos: ${photoCount}\n\n📎 Excel report download ho gayi hai. Please attach karke send karein.`;
+    const shareText = ` *Dr. Shroff's VC Monitoring Report*\n\n📋 *Visit Details:*\n• VC Name: ${vcName}\n• Date: ${visitDate}\n• Completed: ${percentage}% (${answeredCount}/${totalParams})\n• Photos: ${photoCount}\n\n📎 Excel report download ho gayi hai. Please attach karke send karein.`;
 
-    // Excel file download karein
     const fileName = `${vcName}_Report_${visitDate}.xlsx`;
     downloadFile(excelBlob, fileName);
     
     alert(`✅ Excel file download ho gayi: ${fileName}\n\nAb WhatsApp khulega. File manually attach karke send karein.`);
     
-    // 1 second baad WhatsApp kholein
     setTimeout(() => {
       const encodedText = encodeURIComponent(shareText);
-      
-      // Mobile device detect karein
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       
       if(isMobile) {
-        // 📱 MOBILE - Direct WhatsApp App kholein
-        // Pehle app try karein, agar nahi khula toh wa.me use karein
-        const whatsappAppUrl = `whatsapp://send?text=${encodedText}`;
-        const whatsappWebUrl = `https://wa.me/?text=${encodedText}`;
-        
-        // Try to open app
-        window.location.href = whatsappAppUrl;
-        
-        // Agar app nahi khula 2 second mein, toh web version kholein
+        window.location.href = `whatsapp://send?text=${encodedText}`;
         setTimeout(() => {
-          if(document.hidden === false) {
-            // User abhi bhi same page par hai, matlab app nahi khula
-            window.open(whatsappWebUrl, '_blank');
+          if(document.visibilityState === 'visible') {
+            window.open(`https://wa.me/?text=${encodedText}`, '_blank');
           }
         }, 2000);
-        
       } else {
-        // 💻 DESKTOP - WhatsApp Web kholein
         window.open(`https://web.whatsapp.com/send?text=${encodedText}`, '_blank');
       }
     }, 1000);
