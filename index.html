@@ -217,10 +217,7 @@ tr.answered-yes,tr.answered-no,tr.answered-partial,tr.sub-header td{-webkit-prin
       <div class="login-success" id="regSuccess"></div>
     </div>
     <div class="privacy-box">🔒 <strong>100% Private:</strong> Data sirf aapke device pe save hota hai.</div>
-<div style="margin-top:15px; padding:10px; background:#f0f4ff; border-radius:6px; font-size:11px; color:#4a5568; text-align:center; border-top:1px solid #e2e8f0;">
-  <strong>Developed by Mr. Pawan Kumar</strong><br>
-  <span style="opacity:0.8;">Public Health Department</span>
-</div>
+  </div>
 </div>
 <div class="container app-hidden" id="mainApp">
   <header>
@@ -1427,120 +1424,91 @@ function deleteEmployeeAccount(username){
   renderEmployeeDashboard();alert(`✅ ${username} deleted.`);
 }
 
+// SHARE VIA WHATSAPP
 async function shareWhatsApp() {
   if(!currentlyLoadedVisit && !currentVisitId) {
-    alert('Pehle koi visit select karein!');
+    alert('❌ Pehle koi visit select karein!');
     return;
   }
   
-  var visit = currentlyLoadedVisit || getVisit(currentVisitId);
+  const visit = currentlyLoadedVisit || getVisit(currentVisitId);
   if(!visit) {
-    alert('Visit not found!');
+    alert('❌ Visit not found!');
     return;
   }
   
-  if(dirty) {
-    manualSave();
-  }
+  if(dirty) manualSave();
   
   try {
-    var excelBlob = await generateExcelBlob(visit);
-    var vcName = visit.data.info.vc_name || 'VC_Visit';
-    var visitDate = visit.data.info.visit_date || 'N/A';
-    var answeredCount = Object.keys(visit.data.answers||{}).length;
-    var percentage = Math.round((answeredCount/totalParams)*100);
-    var photoCount = 0;
-    if(visit.data.photos) {
-      var photoValues = Object.values(visit.data.photos);
-      for(var i=0; i<photoValues.length; i++) {
-        photoCount += photoValues[i].length;
+    const excelBlob = generateExcelBlob(visit);
+    const vcName = visit.data.info?.vc_name || 'VC_Visit';
+    const visitDate = visit.data.info?.visit_date || 'N/A';
+    const answeredCount = Object.keys(visit.data.answers||{}).length;
+    const percentage = Math.round((answeredCount/totalParams)*100);
+    
+    const shareText = `🏥 *Dr. Shroff's VC Monitoring Report*\n\n📋 *Visit Details:*\n• VC Name: ${vcName}\n• Date: ${visitDate}\n• Completed: ${percentage}% (${answeredCount}/${totalParams})\n• Photos: ${visit.data.photos ? Object.values(visit.data.photos).reduce((s,a)=>s+a.length,0) : 0}\n\n📎 Excel report attached below.`;
+    
+    if(navigator.share && navigator.canShare) {
+      const excelFile = new File([excelBlob], `${vcName}_Report.xlsx`, {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+      
+      if(navigator.canShare({files: [excelFile]})) {
+        await navigator.share({
+          title: 'VC Monitoring Report',
+          text: shareText,
+          files: [excelFile]
+        });
+        alert('✅ Report share ho gayi!');
+        return;
       }
     }
     
-    var shareText = 'Dr. Shroffs VC Monitoring Report\n\n';
-    shareText += 'Visit Details:\n';
-    shareText += 'VC Name: ' + vcName + '\n';
-    shareText += 'Date: ' + visitDate + '\n';
-    shareText += 'Completed: ' + percentage + '% (' + answeredCount + '/' + totalParams + ')\n';
-    shareText += 'Photos: ' + photoCount + '\n\n';
-    shareText += 'Excel report download ho gayi hai. Please attach karke send karein.';
-
-    var fileName = vcName + '_Report_' + visitDate + '.xlsx';
-    downloadFile(excelBlob, fileName);
-    
-    alert('Excel file download ho gayi: ' + fileName + '\n\nAb WhatsApp khulega. File manually attach karke send karein.');
-    
-    setTimeout(function() {
-      var encodedText = encodeURIComponent(shareText);
-      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if(isMobile) {
-        window.location.href = 'whatsapp://send?text=' + encodedText;
-        setTimeout(function() {
-          if(document.visibilityState === 'visible') {
-            window.open('https://wa.me/?text=' + encodedText, '_blank');
-          }
-        }, 2000);
-      } else {
-        window.open('https://web.whatsapp.com/send?text=' + encodedText, '_blank');
-      }
+    downloadFile(excelBlob, `${vcName}_Report.xlsx`);
+    setTimeout(() => {
+      const encodedText = encodeURIComponent(shareText);
+      window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
     }, 1000);
     
   } catch(err) {
-    console.error('WhatsApp share error:', err);
-    alert('Error: ' + err.message);
+    console.error('Share error:', err);
+    if(err.name !== 'AbortError') {
+      alert('❌ Error: ' + err.message);
+    }
   }
 }
 
+// SHARE VIA EMAIL
 async function shareEmail() {
   if(!currentlyLoadedVisit && !currentVisitId) {
-    alert('Pehle koi visit select karein!');
+    alert('❌ Pehle koi visit select karein!');
     return;
   }
   
-  var visit = currentlyLoadedVisit || getVisit(currentVisitId);
+  const visit = currentlyLoadedVisit || getVisit(currentVisitId);
   if(!visit) {
-    alert('Visit not found!');
+    alert('❌ Visit not found!');
     return;
   }
   
-  if(dirty) {
-    manualSave();
-  }
+  if(dirty) manualSave();
   
   try {
-    var excelBlob = await generateExcelBlob(visit);
-    var vcName = visit.data.info.vc_name || 'VC Visit';
-    var visitDate = visit.data.info.visit_date || 'N/A';
-    var answeredCount = Object.keys(visit.data.answers||{}).length;
-    var percentage = Math.round((answeredCount/totalParams)*100);
+    const excelBlob = generateExcelBlob(visit);
+    const vcName = visit.data.info?.vc_name || 'VC Visit';
+    const visitDate = visit.data.info?.visit_date || 'N/A';
+    const answeredCount = Object.keys(visit.data.answers||{}).length;
+    const percentage = Math.round((answeredCount/totalParams)*100);
     
-    var subject = 'VC Monitoring Report - ' + vcName + ' - ' + visitDate;
+    const subject = encodeURIComponent(`VC Monitoring Report - ${vcName} (${visitDate})`);
+    const body = encodeURIComponent(`Dr. Shroff's VC Monitoring Report\n\nVC Name: ${vcName}\nDate: ${visitDate}\nCompleted: ${percentage}% (${answeredCount}/${totalParams})\n\nNote: Excel file standard download folder me save kar li gayi hai, kripya email me manually attach karein.`);
     
-    var body = 'Dear Sir/Ma\'am,\n\n';
-    body += 'Please find attached the Vision Centre monitoring report.\n\n';
-    body += 'VISIT DETAILS:\n';
-    body += 'VC Name: ' + vcName + '\n';
-    body += 'Visit Date: ' + visitDate + '\n';
-    body += 'Completion: ' + percentage + '% (' + answeredCount + '/' + totalParams + ')\n';
-    body += 'GPS Location: ' + (visit.data.gps ? visit.data.gps.lat + ', ' + visit.data.gps.lng : 'Not captured') + '\n\n';
-    body += 'Excel report is attached with this email.\n\n';
-    body += 'Regards,\n';
-    body += currentUser.name + '\n';
-    body += currentUser.designation + '\n';
-    body += 'Dr. Shroff\'s Charity Eye Hospital';
-    
-    var fileName = vcName + '_Report_' + visitDate + '.xlsx';
-    downloadFile(excelBlob, fileName);
-    
-    setTimeout(function() {
-      window.location.href = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-      alert('Excel file download ho gayi hai. Ab email compose karein aur file attach karke send karein.');
-    }, 500);
+    downloadFile(excelBlob, `${vcName}_Report.xlsx`);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
     
   } catch(err) {
-    console.error('Email error:', err);
-    alert('Error: ' + err.message);
+    console.error('Email Share error:', err);
+    alert('❌ Error: ' + err.message);
   }
 }
 
